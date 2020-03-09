@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="请输入工序名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.title" placeholder="请输入设备名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
 
       <el-select v-model="listQuery.useFlag" placeholder="状态" clearable class="filter-item" style="width: 130px">
         <el-option v-for="item in useFlagOptions" :key="item.key" :label="item.display_name" :value="item.key" />
@@ -30,24 +30,29 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="工序id" prop="id" sortable="custom" align="center" :class-name="getSortClass('id')">
+      <el-table-column label="设备id" prop="id" sortable="custom" align="center" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.operationId }}</span>
+          <span>{{ row.machineId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="工序code" align="center">
+      <el-table-column label="设备code" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.operationCode }}</span>
+          <span>{{ row.machineCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="工序名称" align="center">
+      <el-table-column label="设备名称" align="center" min-width="120px">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleUpdate(row)">{{ row.operationName }}</span>
+          <span class="link-type" @click="handleUpdate(row)">{{ row.machineName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="工序类别" align="center">
+      <el-table-column label="模板image目录" min-width="200px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.operationType }}</span>
+          <span>{{ row.imageModelPath }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="模板image数量" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.imageModelNum }}</span>
         </template>
       </el-table-column>
       <el-table-column label="启用状态" align="center">
@@ -70,7 +75,7 @@
           <span>{{ row.endDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="说明" min-width="200px" align="center">
+      <el-table-column label="说明" min-width="50px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.note }}</span>
         </template>
@@ -93,15 +98,19 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="50%">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="125px" style="width: 600px; margin-left:50px;">
 
-        <el-form-item label="工序code" prop="operationCode">
-          <el-input v-model="temp.operationCode" type="text" placeholder="请输入工序code" />
+        <el-form-item label="设备code" prop="machineCode">
+          <el-input v-model="temp.machineCode" type="text" placeholder="请输入设备code" />
         </el-form-item>
-        <el-form-item label="工序name" prop="operationName">
-          <el-input v-model="temp.operationName" type="text" placeholder="请输入工序name" />
+        <el-form-item label="设备name" prop="machineName">
+          <el-input v-model="temp.machineName" type="text" placeholder="请输入设备name" />
         </el-form-item>
-        <el-form-item label="工序类别" prop="operationType">
-          <el-input v-model="temp.operationType" type="text" placeholder="请输入工序类别" />
+        <el-form-item label="模板image目录" prop="imageModelPath">
+          <el-input v-model="temp.imageModelPath" :autosize="{ minRows: 2, maxRows: 5}" type="textarea" placeholder="请输入模板image目录" />
         </el-form-item>
+        <el-form-item label="模板image数量" prop="imageModelNum">
+          <el-input-number v-model="temp.imageModelNum" :min="0" label="描述文字" />
+        </el-form-item>
+
         <el-form-item label="启用状态" prop="useFlag">
           <el-switch v-model="temp.useFlag" active-color="#13ce66" inactive-color="#ff4949" />
         </el-form-item>
@@ -114,7 +123,7 @@
         </el-form-item>
 
         <el-form-item label="备注">
-          <el-input v-model="temp.note" style="width:220px;" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入备注" />
+          <el-input v-model="temp.note" style="width:220px;" :autosize="{ minRows: 2, maxRows: 5}" type="textarea" placeholder="请输入备注" />
         </el-form-item>
 
       </el-form>
@@ -142,12 +151,12 @@
 
 <script>
 
-import { fetchList, fetchPv, createOperation, updateOperation, updateUseFlag, deleteOperation } from '@/api/operation'
+import { fetchList, fetchPv, createMachine, updateMachine, updateUseFlag, deleteMachine } from '@/api/machine'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
-const operationTypeOptions = []
+const machineTypeOptions = []
 
 const useFlagOptions = [
   { key: '0', display_name: '禁用' },
@@ -155,13 +164,13 @@ const useFlagOptions = [
 ]
 
 // arr to obj, such as { CN : "China", US : "USA" }
-const calendarTypeKeyValue = operationTypeOptions.reduce((acc, cur) => {
+const calendarTypeKeyValue = machineTypeOptions.reduce((acc, cur) => {
   acc[cur.key] = cur.display_name
   return acc
 }, {})
 
 export default {
-  name: 'OperationTable',
+  name: 'MachineTable',
   components: { Pagination },
   directives: { waves },
   filters: {
@@ -197,29 +206,29 @@ export default {
       statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
       temp: {
-        operationId: undefined,
-        operationCode: '',
-        operationName: '',
-        operationType: '',
+        machineId: undefined,
+        machineCode: '',
+        machineName: '',
         useFlag: true,
         startDate: new Date(),
         endDate: '',
-        note: ''
+        note: '',
+        imageModelNum: '',
+        imageModelPath: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: '修改工序',
-        create: '添加工序'
+        update: '修改设备',
+        create: '添加设备'
       },
       dialogPvVisible: false,
       pvData: [],
       rules: {
         // type: [{ required: true, message: 'type is required', trigger: 'change' }],
         // timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        operationCode: [{ required: true, message: '请填写工序code', trigger: 'blur' }],
-        operationName: [{ required: true, message: '请填写工序name', trigger: 'blur' }],
-        operationType: [{ required: true, message: '请填写工序类别', trigger: 'blur' }],
+        machineCode: [{ required: true, message: '请填写设备code', trigger: 'blur' }],
+        machineName: [{ required: true, message: '请填写设备name', trigger: 'blur' }],
         startDate: [{ type: 'date', required: true, message: '请填写开始时间', trigger: 'change' }]
         // endDate: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }]
 
@@ -248,8 +257,8 @@ export default {
     /*     getMachineTypes() {
       fetchMachineTypeList().then(response => {
         console.log('tag', response.data)
-        this.operationTypeOptions = response.data
-        console.log('tag', this.operationTypeOptions)
+        this.machineTypeOptions = response.data
+        console.log('tag', this.machineTypeOptions)
       })
     }, */
     // 立即刷新数据列表
@@ -271,9 +280,9 @@ export default {
         }, 1 * 1000)
       })
     },
-    // 工序禁用启用操作
+    // 设备禁用启用操作
     handleModifyUseFlag(row, useFlag) {
-      updateUseFlag(row.operationId).then(response => {
+      updateUseFlag(row.machineId).then(response => {
         this.$message({
           message: response.message,
           type: 'success'
@@ -308,14 +317,15 @@ export default {
     // 重置temp实体类变量属性
     resetTemp() {
       this.temp = {
-        operationId: undefined,
-        operationCode: '',
-        operationName: '',
-        operationType: '',
+        machineId: undefined,
+        machineCode: '',
+        machineName: '',
         useFlag: true,
         startDate: new Date(),
         endDate: '',
-        note: ''
+        note: '',
+        imageModelNum: '',
+        imageModelPath: ''
       }
     },
     resetListQuery() {
@@ -352,7 +362,7 @@ export default {
 
         if (valid) {
           // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          createOperation(this.temp).then(() => {
+          createMachine(this.temp).then(() => {
             this.refreshList()
             // this.list.unshift(this.temp)
             this.dialogFormVisible = false
@@ -379,7 +389,7 @@ export default {
     // 修改操作
     updateData() {
       // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-      updateOperation(this.temp).then(() => {
+      updateMachine(this.temp).then(() => {
         this.refreshList()
         // this.list.unshift(this.temp)
         this.dialogFormVisible = false
@@ -398,7 +408,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteOperation(row.operationId).then(() => {
+        deleteMachine(row.machineId).then(() => {
           this.refreshList()
           this.$message({
             type: 'success',
@@ -455,6 +465,6 @@ export default {
 
 <style scoped>
   .el-dialog .el-form .el-form-item .el-input{
-    width: 220px;
+    width: 300px;
   }
 </style>

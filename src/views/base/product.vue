@@ -463,13 +463,22 @@ export default {
     },
     // 监听删除dialog事件
     handleDelete(row) {
-      deleteProduct(row.productId).then(() => {
-        this.refreshList()
-        this.$notify({
-          title: 'Success',
-          message: '删除成功',
-          type: 'success',
-          duration: 2000
+      this.$confirm('您确定要删除该数据吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteProduct(row.productId).then(() => {
+          this.refreshList()
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
         })
       })
     },

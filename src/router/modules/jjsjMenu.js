@@ -9,7 +9,7 @@ const tableRouter = {
   name: 'machineData',
   meta: {
     title: '机检数据管理',
-    icon: 'table'
+    icon: 'component'
   },
   children: [
 
