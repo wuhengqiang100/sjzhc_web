@@ -59,3 +59,11 @@ export function updateOperation(data) {
     baseURL: 'http://127.0.0.1:8088'
   })
 }
+export function deleteOperation(id) {
+  return request({
+    url: '/operation/delete',
+    method: 'post',
+    params: { id },
+    baseURL: 'http://127.0.0.1:8088'
+  })
+}

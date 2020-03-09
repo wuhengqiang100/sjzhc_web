@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="请输入节点名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.title" placeholder="请输入工序名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
 
       <el-select v-model="listQuery.useFlag" placeholder="状态" clearable class="filter-item" style="width: 130px">
         <el-option v-for="item in useFlagOptions" :key="item.key" :label="item.display_name" :value="item.key" />
@@ -15,6 +15,9 @@
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
         添加
       </el-button>
+      <!--     <el-button class="filter-item" style="margin-left: 10px;" type="warning" icon="el-icon-download" @click="handleCreate">
+        导入
+      </el-button> -->
     </div>
 
     <el-table
@@ -27,28 +30,27 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="节点id" prop="id" sortable="custom" align="center" width="100" :class-name="getSortClass('id')">
+      <el-table-column label="工序id" prop="id" sortable="custom" align="center" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.operationId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="节点code" width="110" align="center">
+      <el-table-column label="工序code" align="center">
         <template slot-scope="{row}">
           <span>{{ row.operationCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="节点名称" width="110" align="center">
+      <el-table-column label="工序名称" align="center">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.operationName }}</span>
-          <!-- <span>{{ row.operationName }}</span> -->
         </template>
       </el-table-column>
-      <el-table-column label="节点类别名称" width="110" align="center">
+      <el-table-column label="工序类别" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.operationType.operationTypeName }}</span>
+          <span>{{ row.operationType }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="启用状态" width="110" align="center">
+      <el-table-column label="启用状态" align="center">
         <template slot-scope="{row}">
           <el-tag v-if="row.useFlag" type="success">
             启用
@@ -58,47 +60,47 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="启用时间" width="150" align="center">
+      <el-table-column label="启用时间" width="112" align="center">
         <template slot-scope="{row}">
           <span>{{ row.startDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="结束时间" width="150" align="center">
+      <el-table-column label="停用时间" width="112" align="center">
         <template v-if="row.endDate !==null" slot-scope="{row}">
           <span>{{ row.endDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="备注" min-width="110px" align="center">
+      <el-table-column label="说明" min-width="200px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.note }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="180" class-name="small-padding fixed-width">
+      <el-table-column label="操作" fixed="right" align="center" min-width="218px" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             修改
           </el-button>
-          <el-button v-if="row.useFlag" size="mini" type="danger" @click="handleModifyUseFlag(row,false)">禁用</el-button>
+          <el-button v-if="row.useFlag" size="mini" type="warning" @click="handleModifyUseFlag(row,false)">禁用</el-button>
           <el-button v-else size="mini" type="success" @click="handleModifyUseFlag(row,true)">启用</el-button>
+          <el-button size="mini" type="danger" @click="handleDelete(row)">删除</el-button>
+
         </template>
       </el-table-column>
     </el-table>
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="120px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="节点code" prop="operationCode">
-          <el-input v-model="temp.operationCode" type="text" placeholder="请输入节点code" />
-        </el-form-item>
-        <el-form-item label="节点name" prop="operationName">
-          <el-input v-model="temp.operationName" type="text" placeholder="请输入节点name" />
-        </el-form-item>
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="50%">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="125px" style="width: 600px; margin-left:50px;">
 
-        <el-form-item label="节点类别" prop="operationTypeId">
-          <el-select v-model="temp.operationTypeId" class="filter-item" placeholder="请选择类别">
-            <el-option v-for="item in operationTypeOptions" :key="item.operationTypeId" :label="item.operationTypeName" :value="item.operationTypeId" />
-          </el-select>
+        <el-form-item label="工序code" prop="operationCode">
+          <el-input v-model="temp.operationCode" type="text" placeholder="请输入工序code" />
+        </el-form-item>
+        <el-form-item label="工序name" prop="operationName">
+          <el-input v-model="temp.operationName" type="text" placeholder="请输入工序name" />
+        </el-form-item>
+        <el-form-item label="工序类别" prop="operationType">
+          <el-input v-model="temp.operationType" type="text" placeholder="请输入工序类别" />
         </el-form-item>
         <el-form-item label="启用状态" prop="useFlag">
           <el-switch v-model="temp.useFlag" active-color="#13ce66" inactive-color="#ff4949" />
@@ -106,13 +108,15 @@
         <el-form-item label="启用时间" prop="startDate">
           <el-date-picker v-model="temp.startDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择一个开始时间" />
         </el-form-item>
-        <el-form-item label="结束时间" prop="endDate">
+        <el-form-item label="停用时间" prop="endDate">
           <el-date-picker v-model="temp.endDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择一个结束时间" />
 
         </el-form-item>
+
         <el-form-item label="备注">
-          <el-input v-model="temp.note" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入备注" />
+          <el-input v-model="temp.note" style="width:220px;" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入备注" />
         </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
@@ -138,7 +142,7 @@
 
 <script>
 
-import { fetchList, fetchPv, createOperation, updateOperation, updateUseFlag, fetchOperationTypeList } from '@/api/operation'
+import { fetchList, fetchPv, createOperation, updateOperation, updateUseFlag, deleteOperation } from '@/api/operation'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -157,7 +161,7 @@ const calendarTypeKeyValue = operationTypeOptions.reduce((acc, cur) => {
 }, {})
 
 export default {
-  name: 'OperationTables',
+  name: 'OperationTable',
   components: { Pagination },
   directives: { waves },
   filters: {
@@ -188,7 +192,6 @@ export default {
         sort: '+id'
       },
       importanceOptions: [1, 2, 3],
-      operationTypeOptions,
       useFlagOptions, // 启用状态
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       statusOptions: ['published', 'draft', 'deleted'],
@@ -197,7 +200,7 @@ export default {
         operationId: undefined,
         operationCode: '',
         operationName: '',
-        operationTypeId: undefined,
+        operationType: '',
         useFlag: true,
         startDate: new Date(),
         endDate: '',
@@ -206,16 +209,17 @@ export default {
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: '修改节点',
-        create: '添加节点'
+        update: '修改工序',
+        create: '添加工序'
       },
       dialogPvVisible: false,
       pvData: [],
       rules: {
         // type: [{ required: true, message: 'type is required', trigger: 'change' }],
         // timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        operationCode: [{ required: true, message: '请填写节点code', trigger: 'blur' }],
-        operationName: [{ required: true, message: '请填写节点name', trigger: 'blur' }],
+        operationCode: [{ required: true, message: '请填写工序code', trigger: 'blur' }],
+        operationName: [{ required: true, message: '请填写工序name', trigger: 'blur' }],
+        operationType: [{ required: true, message: '请填写工序类别', trigger: 'blur' }],
         startDate: [{ type: 'date', required: true, message: '请填写开始时间', trigger: 'change' }]
         // endDate: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }]
 
@@ -226,7 +230,6 @@ export default {
   // 初始化获取数据列表
   created() {
     this.getList()
-    this.getOperationTypes()
   },
   methods: {
     // 有加载圈的加载数据列表
@@ -242,13 +245,13 @@ export default {
         }, 1 * 1000)
       })
     },
-    getOperationTypes() {
-      fetchOperationTypeList().then(response => {
+    /*     getMachineTypes() {
+      fetchMachineTypeList().then(response => {
         console.log('tag', response.data)
         this.operationTypeOptions = response.data
         console.log('tag', this.operationTypeOptions)
       })
-    },
+    }, */
     // 立即刷新数据列表
     refreshList() {
       fetchList(this.listQuery).then(response => {
@@ -268,7 +271,7 @@ export default {
         }, 1 * 1000)
       })
     },
-    // 节点禁用启用操作
+    // 工序禁用启用操作
     handleModifyUseFlag(row, useFlag) {
       updateUseFlag(row.operationId).then(response => {
         this.$message({
@@ -308,7 +311,7 @@ export default {
         operationId: undefined,
         operationCode: '',
         operationName: '',
-        operationTypeId: undefined,
+        operationType: '',
         useFlag: true,
         startDate: new Date(),
         endDate: '',
@@ -390,14 +393,15 @@ export default {
     },
     // 监听删除dialog事件
     handleDelete(row) {
-      this.$notify({
-        title: 'Success',
-        message: 'Delete Successfully',
-        type: 'success',
-        duration: 2000
+      deleteOperation(row.operationId).then(() => {
+        this.refreshList()
+        this.$notify({
+          title: 'Success',
+          message: '删除成功',
+          type: 'success',
+          duration: 2000
+        })
       })
-      const index = this.list.indexOf(row)
-      this.list.splice(index, 1)
     },
     handleFetchPv(pv) {
       fetchPv(pv).then(response => {
@@ -439,3 +443,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .el-dialog .el-form .el-form-item .el-input{
+    width: 220px;
+  }
+</style>

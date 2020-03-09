@@ -19,6 +19,12 @@ const tableRouter = {
       meta: { title: '产品信息管理' }
     },
     {
+      path: 'operation',
+      component: () => import('@/views/base/operation'),
+      name: 'operation',
+      meta: { title: '工序信息管理' }
+    },
+    {
       path: 'renyuan',
       component: () => import('@/views/base/renyuan'),
       name: 'renyuan',
