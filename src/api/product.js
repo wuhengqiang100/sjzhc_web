@@ -59,3 +59,11 @@ export function updateProduct(data) {
     baseURL: 'http://127.0.0.1:8088'
   })
 }
+export function deleteProduct(id) {
+  return request({
+    url: '/product/delete',
+    method: 'post',
+    params: { id },
+    baseURL: 'http://127.0.0.1:8088'
+  })
+}

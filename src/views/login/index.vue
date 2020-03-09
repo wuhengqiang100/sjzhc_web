@@ -3,10 +3,10 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">北京开窗安全线机检信息系统</h3>
+        <h3 class="title">石家庄核查信息综合管理系统</h3>
       </div>
-      <el-tabs  v-model="activeName" @tab-click="handleClick" stretch="true">
-        <el-tab-pane  label="账户登陆" name="first">
+      <el-tabs v-model="activeName" stretch="true" @tab-click="handleClick">
+        <el-tab-pane label="账户登陆" name="first">
           <el-form-item prop="username">
             <span class="svg-container">
               <svg-icon icon-class="user" />
@@ -49,48 +49,25 @@
           <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登陆</el-button>
 
         </el-tab-pane>
-        <el-tab-pane  label="刷卡登陆" name="second">
-           <el-form-item prop="userId">
-          <span class="svg-container">
-            <svg-icon icon-class="user" />
-          </span>
-          <el-input
-            ref="userId"
-            v-model="userId"
-            placeholder="userId"
-            name="userId"
-            type="text"
-            autocomplete="on"/>
+        <!--       <el-tab-pane label="刷卡登陆" name="second">
+          <el-form-item prop="userId">
+            <span class="svg-container">
+              <svg-icon icon-class="user" />
+            </span>
+            <el-input
+              ref="userId"
+              v-model="userId"
+              placeholder="userId"
+              name="userId"
+              type="text"
+              autocomplete="on"
+            />
           </el-form-item>
-            <!-- <el-input ref="userId" v-model="userId" placeholder="请输入内容"></el-input> -->
-        </el-tab-pane>
+        </el-tab-pane> -->
 
       </el-tabs>
-
- <!--     <div style="position:relative">
-        <div class="tips">
-          <span>Username : admin</span>
-          <span>Password : any</span>
-        </div>
-        <div class="tips">
-          <span style="margin-right:18px;">Username : editor</span>
-          <span>Password : any</span>
-        </div>
-
-        <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
-          Or connect with
-        </el-button>
-      </div> -->
     </el-form>
-<!--
-    <el-dialog title="Or connect with" :visible.sync="showDialog">
-      Can not be simulated on local, so please combine you own business simulation! ! !
-      <br>
-      <br>
-      <br>
-      <social-sign />
-      <check-login/>
-    </el-dialog> -->
+
   </div>
 </template>
 
@@ -103,7 +80,9 @@ import SocialSign from './components/SocialSignin'
 export default {
   name: 'Login',
   components: {
+    // eslint-disable-next-line vue/no-unused-components
     SocialSign
+
   },
   data() {
     const validateUsername = (rule, value, callback) => {
@@ -123,7 +102,7 @@ export default {
     return {
       loginForm: {
         username: 'admin',
-        password: '111111'  ,
+        password: '111111'
         // username: '',
         // password: ''
       },
@@ -146,7 +125,7 @@ export default {
       redirect: undefined,
       otherQuery: {},
       activeName: 'first',
-      userId:null
+      userId: null
     }
   },
   watch: {
@@ -190,14 +169,14 @@ export default {
         this.capsTooltip = false
       }
     },
-    //切换登陆方式
+    // 切换登陆方式
     handleClick(tab, event) {
-          console.log(this.activeName);
-          //快捷登陆
-          if(this.activeName === 'second'){
-             this.$refs.userId.focus()
-          }
-      },
+      console.log(this.activeName)
+      // 快捷登陆
+      if (this.activeName === 'second') {
+        this.$refs.userId.focus()
+      }
+    },
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -326,7 +305,6 @@ export default {
 
           text-align: center;
           font-size: 50px;
-
 
       }
     }

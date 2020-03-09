@@ -12,14 +12,19 @@ const tableRouter = {
     icon: 'table'
   },
   children: [
-
+    {
+      path: 'product',
+      component: () => import('@/views/base/product'),
+      name: 'product',
+      meta: { title: '产品信息管理' }
+    },
     {
       path: 'renyuan',
       component: () => import('@/views/base/renyuan'),
       name: 'renyuan',
       meta: { title: '人员管理' }
     },
-      {
+    {
       path: 'jiedianleibie',
       component: () => import('@/views/base/jiedianleibie'),
       name: 'jiedianleibie',
