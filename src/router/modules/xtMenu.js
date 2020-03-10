@@ -3,25 +3,30 @@
 import Layout from '@/layout'
 
 const tableRouter = {
-  path: '/systemManage',
+  path: '/system',
   component: Layout,
   redirect: 'noRedirect',
-  name: 'systemManage',
+  name: 'system',
   meta: {
     title: '系统管理',
-    icon: 'table'
+    icon: 'documentation'
   },
   children: [
-
+    {
+      path: 'menu',
+      component: () => import('@/views/system/menu'),
+      name: 'menu',
+      meta: { title: '菜单管理' }
+    },
     {
       path: 'role',
-      component: () => import('@/views/systemManage/role'),
+      component: () => import('@/views/system/role'),
       name: 'role',
       meta: { title: '角色管理' }
     },
     {
       path: 'user',
-      component: () => import('@/views/systemManage/user'),
+      component: () => import('@/views/system/user'),
       name: 'user',
       meta: { title: '用户管理' }
     }
