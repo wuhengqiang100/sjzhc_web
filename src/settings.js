@@ -1,5 +1,5 @@
 module.exports = {
-  title: '北京开窗安全线信息系统',
+  title: '石家庄核查综合信息管理系统',
 
   /**
    * @type {boolean} true | false

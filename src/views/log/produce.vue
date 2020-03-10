@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="请输入上传日志名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.title" placeholder="请输入生产日志名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
 
       <el-select v-model="listQuery.useFlag" placeholder="状态" clearable class="filter-item" style="width: 130px">
         <el-option v-for="item in useFlagOptions" :key="item.key" :label="item.display_name" :value="item.key" />
@@ -30,17 +30,27 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="上传日志id" prop="id" sortable="custom" align="center" :class-name="getSortClass('id')">
+      <el-table-column label="生产日志id" prop="id" sortable="custom" align="center" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.dataupSetId }}</span>
+          <span>{{ row.logProdId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="上传人员名称" align="center">
+      <el-table-column label="产品id" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.operatorName }}</span>
+          <span>{{ row.productId }}</span>
         </template>
       </el-table-column>
-      <!--     <el-table-column label="上传日志名称" align="center" min-width="120px">
+      <el-table-column label="产品名称" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.productName }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="车号" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.cartNumber }}</span>
+        </template>
+      </el-table-column>
+      <!--     <el-table-column label="生产日志名称" align="center" min-width="120px">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.machineName }}</span>
         </template>
@@ -65,7 +75,7 @@
           </el-tag>
         </template>
       </el-table-column> -->
-      <el-table-column label="上传时间" width="200px" align="center">
+      <el-table-column label="生产时间" width="200px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.dateupSetDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
@@ -98,11 +108,11 @@
     <!--     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="50%">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="125px" style="width: 600px; margin-left:50px;">
 
-        <el-form-item label="上传日志code" prop="machineCode">
-          <el-input v-model="temp.machineCode" type="text" placeholder="请输入上传日志code" />
+        <el-form-item label="生产日志code" prop="machineCode">
+          <el-input v-model="temp.machineCode" type="text" placeholder="请输入生产日志code" />
         </el-form-item>
-        <el-form-item label="上传日志name" prop="machineName">
-          <el-input v-model="temp.machineName" type="text" placeholder="请输入上传日志name" />
+        <el-form-item label="生产日志name" prop="machineName">
+          <el-input v-model="temp.machineName" type="text" placeholder="请输入生产日志name" />
         </el-form-item>
         <el-form-item label="模板image目录" prop="imageModelPath">
           <el-input v-model="temp.imageModelPath" :autosize="{ minRows: 2, maxRows: 5}" type="textarea" placeholder="请输入模板image目录" />
@@ -152,7 +162,7 @@
 <script>
 
 // import { fetchList, fetchPv, createMachine, updateMachine, updateUseFlag, deleteMachine } from '@/api/machine'
-import { fetchDataUpList } from '@/api/verifyLog'
+import { fetchProduceList } from '@/api/verifyLog'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -171,7 +181,7 @@ const calendarTypeKeyValue = machineTypeOptions.reduce((acc, cur) => {
 }, {})
 
 export default {
-  name: 'MachineTable',
+  name: 'ProduceLogTable',
   components: { Pagination },
   directives: { waves },
   filters: {
@@ -220,16 +230,16 @@ export default {
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: '修改上传日志',
-        create: '添加上传日志'
+        update: '修改生产日志',
+        create: '添加生产日志'
       },
       dialogPvVisible: false,
       pvData: [],
       rules: {
         // type: [{ required: true, message: 'type is required', trigger: 'change' }],
         // timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        machineCode: [{ required: true, message: '请填写上传日志code', trigger: 'blur' }],
-        machineName: [{ required: true, message: '请填写上传日志name', trigger: 'blur' }],
+        machineCode: [{ required: true, message: '请填写生产日志code', trigger: 'blur' }],
+        machineName: [{ required: true, message: '请填写生产日志name', trigger: 'blur' }],
         startDate: [{ type: 'date', required: true, message: '请填写开始时间', trigger: 'change' }]
         // endDate: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }]
 
@@ -245,7 +255,7 @@ export default {
     // 有加载圈的加载数据列表
     getList() {
       this.listLoading = true
-      fetchDataUpList(this.listQuery).then(response => {
+      fetchProduceList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
 
@@ -264,7 +274,7 @@ export default {
     }, */
     // 立即刷新数据列表
     refreshList() {
-      fetchDataUpList(this.listQuery).then(response => {
+      fetchProduceList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
       })
@@ -310,7 +320,7 @@ export default {
     },
     handleFilter() {
       this.listLoading = true
-      fetchDataUpList(this.listQuery).then(response => {
+      fetchProduceList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
 
@@ -320,7 +330,7 @@ export default {
         }, 1 * 1000)
       })
     },
-    // 上传日志禁用启用操作
+    // 生产日志禁用启用操作
     /*    handleModifyUseFlag(row, useFlag) {
       updateUseFlag(row.machineId).then(response => {
         this.$message({

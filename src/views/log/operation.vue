@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="请输入上传日志名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.title" placeholder="请输入操作日志名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
 
       <el-select v-model="listQuery.useFlag" placeholder="状态" clearable class="filter-item" style="width: 130px">
         <el-option v-for="item in useFlagOptions" :key="item.key" :label="item.display_name" :value="item.key" />
@@ -30,17 +30,27 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="上传日志id" prop="id" sortable="custom" align="center" :class-name="getSortClass('id')">
+      <el-table-column label="操作日志id" prop="id" sortable="custom" align="center" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.dataupSetId }}</span>
+          <span>{{ row.logOperationNoteId }}</span>
         </template>
       </el-table-column>
       <el-table-column label="上传人员名称" align="center">
         <template slot-scope="{row}">
+          <span>{{ row.jobId }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作人员Id" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.operatorId }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作人员名称" align="center">
+        <template slot-scope="{row}">
           <span>{{ row.operatorName }}</span>
         </template>
       </el-table-column>
-      <!--     <el-table-column label="上传日志名称" align="center" min-width="120px">
+      <!--     <el-table-column label="操作日志名称" align="center" min-width="120px">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.machineName }}</span>
         </template>
@@ -65,17 +75,27 @@
           </el-tag>
         </template>
       </el-table-column> -->
-      <el-table-column label="上传时间" width="200px" align="center">
+      <el-table-column label="开始时间" width="200px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.dateupSetDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ row.startDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <!--       <el-table-column label="停用时间" width="112" align="center">
+      <el-table-column label="结束时间" width="112" align="center">
         <template v-if="row.endDate !==null" slot-scope="{row}">
           <span>{{ row.endDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
-      </el-table-column> -->
-      <el-table-column label="说明" min-width="250px" align="center">
+      </el-table-column>
+      <el-table-column label="进度标志" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.itemFlag }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="判费类型" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.operationNoteType }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="说明" min-width="120px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.note }}</span>
         </template>
@@ -98,11 +118,11 @@
     <!--     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="50%">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="125px" style="width: 600px; margin-left:50px;">
 
-        <el-form-item label="上传日志code" prop="machineCode">
-          <el-input v-model="temp.machineCode" type="text" placeholder="请输入上传日志code" />
+        <el-form-item label="操作日志code" prop="machineCode">
+          <el-input v-model="temp.machineCode" type="text" placeholder="请输入操作日志code" />
         </el-form-item>
-        <el-form-item label="上传日志name" prop="machineName">
-          <el-input v-model="temp.machineName" type="text" placeholder="请输入上传日志name" />
+        <el-form-item label="操作日志name" prop="machineName">
+          <el-input v-model="temp.machineName" type="text" placeholder="请输入操作日志name" />
         </el-form-item>
         <el-form-item label="模板image目录" prop="imageModelPath">
           <el-input v-model="temp.imageModelPath" :autosize="{ minRows: 2, maxRows: 5}" type="textarea" placeholder="请输入模板image目录" />
@@ -152,7 +172,7 @@
 <script>
 
 // import { fetchList, fetchPv, createMachine, updateMachine, updateUseFlag, deleteMachine } from '@/api/machine'
-import { fetchDataUpList } from '@/api/verifyLog'
+import { fetchOperationList } from '@/api/verifyLog'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -171,7 +191,7 @@ const calendarTypeKeyValue = machineTypeOptions.reduce((acc, cur) => {
 }, {})
 
 export default {
-  name: 'MachineTable',
+  name: 'OperationLogTable',
   components: { Pagination },
   directives: { waves },
   filters: {
@@ -220,16 +240,16 @@ export default {
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: '修改上传日志',
-        create: '添加上传日志'
+        update: '修改操作日志',
+        create: '添加操作日志'
       },
       dialogPvVisible: false,
       pvData: [],
       rules: {
         // type: [{ required: true, message: 'type is required', trigger: 'change' }],
         // timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        machineCode: [{ required: true, message: '请填写上传日志code', trigger: 'blur' }],
-        machineName: [{ required: true, message: '请填写上传日志name', trigger: 'blur' }],
+        machineCode: [{ required: true, message: '请填写操作日志code', trigger: 'blur' }],
+        machineName: [{ required: true, message: '请填写操作日志name', trigger: 'blur' }],
         startDate: [{ type: 'date', required: true, message: '请填写开始时间', trigger: 'change' }]
         // endDate: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }]
 
@@ -245,7 +265,7 @@ export default {
     // 有加载圈的加载数据列表
     getList() {
       this.listLoading = true
-      fetchDataUpList(this.listQuery).then(response => {
+      fetchOperationList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
 
@@ -264,7 +284,7 @@ export default {
     }, */
     // 立即刷新数据列表
     refreshList() {
-      fetchDataUpList(this.listQuery).then(response => {
+      fetchOperationList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
       })
@@ -310,7 +330,7 @@ export default {
     },
     handleFilter() {
       this.listLoading = true
-      fetchDataUpList(this.listQuery).then(response => {
+      fetchOperationList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
 
@@ -320,7 +340,7 @@ export default {
         }, 1 * 1000)
       })
     },
-    // 上传日志禁用启用操作
+    // 操作日志禁用启用操作
     /*    handleModifyUseFlag(row, useFlag) {
       updateUseFlag(row.machineId).then(response => {
         this.$message({
