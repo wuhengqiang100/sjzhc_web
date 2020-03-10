@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="请输入设备名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.title" placeholder="请输入上传日志名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
 
       <el-select v-model="listQuery.useFlag" placeholder="状态" clearable class="filter-item" style="width: 130px">
         <el-option v-for="item in useFlagOptions" :key="item.key" :label="item.display_name" :value="item.key" />
@@ -12,9 +12,12 @@
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-refresh" @click="handleReset">
         重置
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
+      <!--  <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
         添加
-      </el-button>
+      </el-button> -->
+      <!--     <el-button class="filter-item" style="margin-left: 10px;" type="warning" icon="el-icon-download" @click="handleCreate">
+        导入
+      </el-button> -->
     </div>
 
     <el-table
@@ -27,33 +30,32 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="设备id" prop="id" sortable="custom" align="center" width="100" :class-name="getSortClass('id')">
+      <el-table-column label="上传日志id" prop="id" sortable="custom" align="center" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.machineId }}</span>
+          <span>{{ row.dataupSetId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="设备code" width="110" align="center">
+      <el-table-column label="上传人员名称" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.machineCode }}</span>
+          <span>{{ row.operatorName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="设备名称" width="110" align="center">
+      <!--     <el-table-column label="上传日志名称" align="center" min-width="120px">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.machineName }}</span>
-          <!-- <span>{{ row.machineName }}</span> -->
         </template>
       </el-table-column>
-      <el-table-column label="设备名称" width="110" align="center">
+      <el-table-column label="模板image目录" min-width="200px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.deviceType.machineTypeName }}</span>
+          <span>{{ row.imageModelPath }}</span>
         </template>
-      </el-table-column>
-      <el-table-column label="设备ip" width="110" align="center">
+      </el-table-column> -->
+      <!--    <el-table-column label="模板image数量" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.machineIp }}</span>
+          <span>{{ row.imageModelNum }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="启用状态" width="110" align="center">
+      <el-table-column label="启用状态" align="center">
         <template slot-scope="{row}">
           <el-tag v-if="row.useFlag" type="success">
             启用
@@ -62,65 +64,68 @@
             禁用
           </el-tag>
         </template>
-      </el-table-column>
-      <el-table-column label="启用时间" width="150" align="center">
+      </el-table-column> -->
+      <el-table-column label="上传时间" width="200px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.startDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ row.dateupSetDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="结束时间" width="150" align="center">
+      <!--       <el-table-column label="停用时间" width="112" align="center">
         <template v-if="row.endDate !==null" slot-scope="{row}">
           <span>{{ row.endDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
-      </el-table-column>
-      <el-table-column label="备注" min-width="110px" align="center">
+      </el-table-column> -->
+      <el-table-column label="说明" min-width="250px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.note }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="180" class-name="small-padding fixed-width">
+      <!--       <el-table-column label="操作" fixed="right" align="center" min-width="218px" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             修改
           </el-button>
-          <el-button v-if="row.useFlag" size="mini" type="danger" @click="handleModifyUseFlag(row,false)">禁用</el-button>
+          <el-button v-if="row.useFlag" size="mini" type="warning" @click="handleModifyUseFlag(row,false)">禁用</el-button>
           <el-button v-else size="mini" type="success" @click="handleModifyUseFlag(row,true)">启用</el-button>
+          <el-button size="mini" type="danger" @click="handleDelete(row)">删除</el-button>
+
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="120px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="设备code" prop="machineCode">
-          <el-input v-model="temp.machineCode" type="text" placeholder="请输入设备code" />
+    <!--     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="50%">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="125px" style="width: 600px; margin-left:50px;">
+
+        <el-form-item label="上传日志code" prop="machineCode">
+          <el-input v-model="temp.machineCode" type="text" placeholder="请输入上传日志code" />
         </el-form-item>
-        <el-form-item label="设备name" prop="machineName">
-          <el-input v-model="temp.machineName" type="text" placeholder="请输入设备name" />
+        <el-form-item label="上传日志name" prop="machineName">
+          <el-input v-model="temp.machineName" type="text" placeholder="请输入上传日志name" />
+        </el-form-item>
+        <el-form-item label="模板image目录" prop="imageModelPath">
+          <el-input v-model="temp.imageModelPath" :autosize="{ minRows: 2, maxRows: 5}" type="textarea" placeholder="请输入模板image目录" />
+        </el-form-item>
+        <el-form-item label="模板image数量" prop="imageModelNum">
+          <el-input-number v-model="temp.imageModelNum" :min="0" label="描述文字" />
         </el-form-item>
 
-        <el-form-item label="设备类别" prop="machineTypeId">
-          <el-select v-model="temp.machineTypeId" class="filter-item" placeholder="请选择类别">
-            <el-option v-for="item in machineTypeOptions" :key="item.machineTypeId" :label="item.machineTypeName" :value="item.machineTypeId" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="设备ip" prop="machineIp">
-          <el-input v-model="temp.machineIp" type="text" placeholder="请输入设备ip" />
-        </el-form-item>
         <el-form-item label="启用状态" prop="useFlag">
           <el-switch v-model="temp.useFlag" active-color="#13ce66" inactive-color="#ff4949" />
         </el-form-item>
         <el-form-item label="启用时间" prop="startDate">
           <el-date-picker v-model="temp.startDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择一个开始时间" />
         </el-form-item>
-        <el-form-item label="结束时间" prop="endDate">
+        <el-form-item label="停用时间" prop="endDate">
           <el-date-picker v-model="temp.endDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择一个结束时间" />
 
         </el-form-item>
+
         <el-form-item label="备注">
-          <el-input v-model="temp.note" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入备注" />
+          <el-input v-model="temp.note" style="width:220px;" :autosize="{ minRows: 2, maxRows: 5}" type="textarea" placeholder="请输入备注" />
         </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
@@ -140,13 +145,14 @@
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialogPvVisible = false">Confirm</el-button>
       </span>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
 <script>
 
-import { fetchList, fetchPv, createDevice, updateDevice, updateUseFlag, fetchMachineTypeList } from '@/api/device'
+// import { fetchList, fetchPv, createMachine, updateMachine, updateUseFlag, deleteMachine } from '@/api/machine'
+import { fetchDataUpList } from '@/api/verifyLog'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -165,7 +171,7 @@ const calendarTypeKeyValue = machineTypeOptions.reduce((acc, cur) => {
 }, {})
 
 export default {
-  name: 'DeviceTable',
+  name: 'MachineTable',
   components: { Pagination },
   directives: { waves },
   filters: {
@@ -190,13 +196,12 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        useFlag: undefined,
+        // useFlag: undefined,
         // importance: undefined,
         title: undefined,
         sort: '+id'
       },
       importanceOptions: [1, 2, 3],
-      machineTypeOptions,
       useFlagOptions, // 启用状态
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       statusOptions: ['published', 'draft', 'deleted'],
@@ -205,27 +210,26 @@ export default {
         machineId: undefined,
         machineCode: '',
         machineName: '',
-        machineTypeId: undefined,
-        machineIp: '',
         useFlag: true,
         startDate: new Date(),
         endDate: '',
-        note: ''
+        note: '',
+        imageModelNum: '',
+        imageModelPath: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: '修改设备',
-        create: '添加设备'
+        update: '修改上传日志',
+        create: '添加上传日志'
       },
       dialogPvVisible: false,
       pvData: [],
       rules: {
         // type: [{ required: true, message: 'type is required', trigger: 'change' }],
         // timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        machineCode: [{ required: true, message: '请填写设备code', trigger: 'blur' }],
-        machineName: [{ required: true, message: '请填写设备name', trigger: 'blur' }],
-        machineIp: [{ required: true, message: '请填写设备ip', trigger: 'blur' }],
+        machineCode: [{ required: true, message: '请填写上传日志code', trigger: 'blur' }],
+        machineName: [{ required: true, message: '请填写上传日志name', trigger: 'blur' }],
         startDate: [{ type: 'date', required: true, message: '请填写开始时间', trigger: 'change' }]
         // endDate: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }]
 
@@ -236,13 +240,12 @@ export default {
   // 初始化获取数据列表
   created() {
     this.getList()
-    this.getMachineTypes()
   },
   methods: {
     // 有加载圈的加载数据列表
     getList() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
+      fetchDataUpList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
 
@@ -252,50 +255,19 @@ export default {
         }, 1 * 1000)
       })
     },
-    getMachineTypes() {
+    /*     getMachineTypes() {
       fetchMachineTypeList().then(response => {
         console.log('tag', response.data)
         this.machineTypeOptions = response.data
         console.log('tag', this.machineTypeOptions)
       })
-    },
+    }, */
     // 立即刷新数据列表
     refreshList() {
-      fetchList(this.listQuery).then(response => {
+      fetchDataUpList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
       })
-    },
-    handleFilter() {
-      this.listLoading = true
-      fetchList(this.listQuery).then(response => {
-        this.list = response.data.items
-        this.total = response.data.total
-
-        // Just to simulate the time of the request
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1 * 1000)
-      })
-    },
-    // 设备禁用启用操作
-    handleModifyUseFlag(row, useFlag) {
-      updateUseFlag(row.machineId).then(response => {
-        this.$message({
-          message: response.message,
-          type: 'success'
-        })
-        this.refreshList()
-      })
-
-      row.status = status
-    },
-    handleModifyStatus(row, status) {
-      this.$message({
-        message: '操作Success',
-        type: 'success'
-      })
-      row.status = status
     },
     sortChange(data) {
       const { prop, order } = data
@@ -318,24 +290,56 @@ export default {
         machineId: undefined,
         machineCode: '',
         machineName: '',
-        machineTypeId: undefined,
-        machineIp: '',
         useFlag: true,
         startDate: new Date(),
         endDate: '',
-        note: ''
+        note: '',
+        imageModelNum: '',
+        imageModelPath: ''
       }
     },
     resetListQuery() {
       this.listQuery = {
         page: 1,
         limit: 10,
-        useFlag: undefined,
+        // useFlag: undefined,
         // importance: undefined,
         title: undefined,
         sort: '+id'
       }
     },
+    handleFilter() {
+      this.listLoading = true
+      fetchDataUpList(this.listQuery).then(response => {
+        this.list = response.data.items
+        this.total = response.data.total
+
+        // Just to simulate the time of the request
+        setTimeout(() => {
+          this.listLoading = false
+        }, 1 * 1000)
+      })
+    },
+    // 上传日志禁用启用操作
+    /*    handleModifyUseFlag(row, useFlag) {
+      updateUseFlag(row.machineId).then(response => {
+        this.$message({
+          message: response.message,
+          type: 'success'
+        })
+        this.refreshList()
+      })
+
+      row.status = status
+    },
+    handleModifyStatus(row, status) {
+      this.$message({
+        message: '操作Success',
+        type: 'success'
+      })
+      row.status = status
+    },
+
     handleReset() {
       this.resetListQuery()
       this.getList()
@@ -360,7 +364,7 @@ export default {
 
         if (valid) {
           // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          createDevice(this.temp).then(() => {
+          createMachine(this.temp).then(() => {
             this.refreshList()
             // this.list.unshift(this.temp)
             this.dialogFormVisible = false
@@ -387,7 +391,7 @@ export default {
     // 修改操作
     updateData() {
       // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-      updateDevice(this.temp).then(() => {
+      updateMachine(this.temp).then(() => {
         this.refreshList()
         // this.list.unshift(this.temp)
         this.dialogFormVisible = false
@@ -401,14 +405,24 @@ export default {
     },
     // 监听删除dialog事件
     handleDelete(row) {
-      this.$notify({
-        title: 'Success',
-        message: 'Delete Successfully',
-        type: 'success',
-        duration: 2000
+      this.$confirm('您确定要删除该数据吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteMachine(row.machineId).then(() => {
+          this.refreshList()
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
       })
-      const index = this.list.indexOf(row)
-      this.list.splice(index, 1)
     },
     handleFetchPv(pv) {
       fetchPv(pv).then(response => {
@@ -429,7 +443,7 @@ export default {
         })
         this.downloadLoading = false
       })
-    },
+    }, */
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
         if (j === 'timestamp') {
@@ -450,3 +464,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .el-dialog .el-form .el-form-item .el-input{
+    width: 300px;
+  }
+</style>

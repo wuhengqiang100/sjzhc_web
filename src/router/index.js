@@ -14,11 +14,12 @@ import nestedRouter from './modules/nested' */
 
 // 自定义管理菜单
 import jcxxMenuRouter from './modules/jcxxMenu'
-import jjsjMenuRouter from './modules/jjsjMenu'
-import zlsjMenuRouter from './modules/zlsjMenu'
-import xtrzMenuRouter from './modules/xtrzMenu'
+// import jjsjMenuRouter from './modules/jjsjMenu'
+import verifyLogMenuRouter from './modules/verifyLog'
+// import zlsjMenuRouter from './modules/zlsjMenu'
+// import xtrzMenuRouter from './modules/xtrzMenu'
 import xtMenuRouter from './modules/xtMenu'
-import jkbjMenuRouter from './modules/jkbjMenu'
+// import jkbjMenuRouter from './modules/jkbjMenu'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -196,11 +197,12 @@ export const asyncRoutes = [
     ]
   }, */
   jcxxMenuRouter, // 基础信息配置菜单
-  jjsjMenuRouter, // 机检数据管理菜单
-  zlsjMenuRouter, // 质量数据菜单
-  xtrzMenuRouter, // 系统日志菜单
+  // jjsjMenuRouter, // 机检数据管理菜单
+  verifyLogMenuRouter, // 核查信息管理菜单
+  // zlsjMenuRouter, // 质量数据菜单
+  // xtrzMenuRouter, // 系统日志菜单
   xtMenuRouter, // 系统管理菜单
-  jkbjMenuRouter, // 监控报警菜单
+  // jkbjMenuRouter, // 监控报警菜单
 
   /** when your routing map is too long, you can split it into small modules **/
   /* componentsRouter,
