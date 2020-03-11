@@ -1,4 +1,166 @@
-import { asyncRoutes, constantRoutes } from '@/router'
+import { constantRoutes } from '@/router'
+import Layout from '@/layout'
+import request from '@/utils/request'
+/* export const asyncRoutes = [
+  {
+    path: '/base',
+    component: Layout,
+    redirect: 'noRedirect',
+    name: 'Base',
+    meta: {
+      title: '基础信息配置',
+      icon: 'table'
+    },
+    children: [
+      {
+        path: 'product',
+        component: () => import('@/views/base/product'),
+        name: 'product',
+        meta: { title: '产品信息管理' }
+      },
+      {
+        path: 'operation',
+        component: () => import('@/views/base/operation'),
+        name: 'operation',
+        meta: { title: '工序信息管理' }
+      },
+      {
+        path: 'machine',
+        component: () => import('@/views/base/machine'),
+        name: 'machine',
+        meta: { title: '设备信息管理' }
+      }
+    ]
+  },
+  {
+    path: '/log',
+    component: Layout,
+    redirect: 'noRedirect',
+    name: 'log',
+    meta: {
+      title: '核查信息管理',
+      icon: 'component'
+    },
+    children: [
+
+      {
+        path: 'dataup',
+        component: () => import('@/views/log/dataup'),
+        name: 'dataup',
+        meta: { title: '上传日志查询' }
+      },
+      {
+        path: 'operation',
+        component: () => import('@/views/log/operation'),
+        name: 'operation',
+        meta: { title: '操作日志查询' }
+      },
+      {
+        path: 'machine',
+        component: () => import('@/views/log/machine'),
+        name: 'machine',
+        meta: { title: '设备日志查询' }
+      },
+      {
+        path: 'produce',
+        component: () => import('@/views/log/produce'),
+        name: 'produce',
+        meta: { title: '生产日志查询' }
+      }
+
+    ]
+  },
+  {
+    path: '/machine',
+    component: Layout,
+    redirect: 'noRedirect',
+    name: 'machine',
+    meta: {
+      title: '机检信息管理',
+      icon: 'guide'
+    },
+    children: [
+      {
+        path: 'check',
+        component: () => import('@/views/machine/check'),
+        name: 'check',
+        meta: { title: '机检信息审核' }
+      },
+      {
+        path: 'template',
+        component: () => import('@/views/machine/template'),
+        name: 'template',
+        meta: { title: '机检模板管理' }
+      }
+    ]
+  },
+  {
+    path: '/system',
+    component: Layout,
+    redirect: 'noRedirect',
+    name: 'system',
+    meta: {
+      title: '系统管理',
+      icon: 'documentation'
+    },
+    children: [
+      {
+        path: 'menu',
+        component: () => import('@/views/system/menu'),
+        name: 'menu',
+        meta: { title: '菜单管理' }
+      },
+      {
+        path: 'role',
+        component: () => import('@/views/system/role'),
+        name: 'role',
+        meta: { title: '角色管理' }
+      },
+      {
+        path: 'user',
+        component: () => import('@/views/system/user'),
+        name: 'user',
+        meta: { title: '用户管理' }
+      }
+
+    ]
+  },
+  { path: '*', redirect: '/404', hidden: true }
+] */
+export const asyncRoutes = [
+  {
+    path: '/base',
+    component: Layout,
+    redirect: 'noRedirect',
+    name: 'Base',
+    meta: {
+      title: '基础信息配置',
+      icon: 'table'
+    },
+    children: [
+      {
+        path: 'product',
+        component: () => import('@/views/base/product'),
+        name: 'product',
+        meta: { title: '产品信息管理' }
+      },
+      {
+        path: 'operation',
+        component: () => import('@/views/base/operation'),
+        name: 'operation',
+        meta: { title: '工序信息管理' }
+      },
+      {
+        path: 'machine',
+        component: () => import('@/views/base/machine'),
+        name: 'machine',
+        meta: { title: '设备信息管理' }
+      }
+    ]
+  }
+  // { path: '*', redirect: '/404', hidden: true }
+]
+
 /**
  * Use meta.role to determine if the current user has permission
  * @param roles
@@ -32,7 +194,6 @@ export function filterAsyncRoutes(routes, roles) {
 
   return res
 }
-
 const state = {
   routes: [],
   addRoutes: []
@@ -45,17 +206,33 @@ const mutations = {
   }
 }
 
+export function getAsyncRoutes() {
+  return request({
+    url: '/common/menu',
+    method: 'post',
+    baseURL: 'http://127.0.0.1:8088'
+  })
+}
+
 const actions = {
   generateRoutes({ commit }, roles) {
     return new Promise(resolve => {
       let accessedRoutes
       if (roles.includes('admin')) {
-        accessedRoutes = asyncRoutes || []
+        getAsyncRoutes().then((res) => {
+          // accessedRoutes = asyncRoutes || []
+          accessedRoutes = res.asyncRoutes
+          console.log('原菜单', accessedRoutes)
+          console.log('新菜单', res.asyncRoutes)
+          commit('SET_ROUTES', accessedRoutes)
+          resolve(accessedRoutes)
+        })
       } else {
         accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
+        console.log('筛选路由', '根据角色筛选路由')
+        commit('SET_ROUTES', accessedRoutes)
+        resolve(accessedRoutes)
       }
-      commit('SET_ROUTES', accessedRoutes)
-      resolve(accessedRoutes)
     })
   }
 }

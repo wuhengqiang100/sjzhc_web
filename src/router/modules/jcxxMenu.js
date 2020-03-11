@@ -30,43 +30,6 @@ const tableRouter = {
       name: 'machine',
       meta: { title: '设备信息管理' }
     }
-    /*  {
-      path: 'renyuan',
-      component: () => import('@/views/base/renyuan'),
-      name: 'renyuan',
-      meta: { title: '人员管理' }
-    },
-    {
-      path: 'jiedianleibie',
-      component: () => import('@/views/base/jiedianleibie'),
-      name: 'jiedianleibie',
-      meta: { title: '节点类别管理' }
-    },
-    {
-      path: 'jiedian',
-      component: () => import('@/views/base/jiedian'),
-      name: 'renyuan',
-      meta: { title: '节点管理' }
-    },
-    {
-      path: 'pinzhong',
-      component: () => import('@/views/base/pinzhong'),
-      name: 'pinzhong',
-      meta: { title: '品种管理' }
-    },
-    {
-      path: 'shebeileibie',
-      component: () => import('@/views/base/shebeileibie'),
-      name: 'shebeileibie',
-      meta: { title: '设备类别管理' }
-    },
-    {
-      path: 'shebei',
-      component: () => import('@/views/base/shebei'),
-      name: 'shebei',
-      meta: { title: '设备管理' }
-    } */
-
   ]
 }
 export default tableRouter
