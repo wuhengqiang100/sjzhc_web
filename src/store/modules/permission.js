@@ -1,12 +1,37 @@
 import { constantRoutes } from '@/router'
 import Layout from '@/layout'
 import request from '@/utils/request'
+// eslint-disable-next-line no-unused-vars
+import product from '@/views/base/product'
+// eslint-disable-next-line no-unused-vars
+import operation from '@/views/base/operation'
+// eslint-disable-next-line no-unused-vars
+import machine from '@/views/base/machine'
+// eslint-disable-next-line no-unused-vars
+import dataupLog from '@/views/log/dataupLog'
+// eslint-disable-next-line no-unused-vars
+import operationLog from '@/views/log/operationLog'
+// eslint-disable-next-line no-unused-vars
+import machineLog from '@/views/log/machineLog'
+// eslint-disable-next-line no-unused-vars
+import produceLog from '@/views/log/produceLog'
+// eslint-disable-next-line no-unused-vars
+import check from '@/views/machine/check'
+// eslint-disable-next-line no-unused-vars
+import template from '@/views/machine/template'
+// eslint-disable-next-line no-unused-vars
+import menu from '@/views/system/menu'
+// eslint-disable-next-line no-unused-vars
+import role from '@/views/system/role'
+// eslint-disable-next-line no-unused-vars
+import user from '@/views/system/user'
+
 /* export const asyncRoutes = [
   {
     path: '/base',
     component: Layout,
     redirect: 'noRedirect',
-    name: 'Base',
+    name: 'base',
     meta: {
       title: '基础信息配置',
       icon: 'table'
@@ -128,6 +153,36 @@ import request from '@/utils/request'
   { path: '*', redirect: '/404', hidden: true }
 ] */
 export const asyncRoutes = [
+  /*  {
+    'path': '/base',
+    'component': Layout,
+    'redirect': 'noRedirect',
+    'name': 'Base',
+    'meta': {
+      'title': '基础信息配置',
+      'icon': 'table'
+    },
+    'children': [
+      {
+        'path': 'product',
+        'component': () => import('@/views/base/product'),
+        'name': 'product',
+        'meta': { 'title': '产品信息管理' }
+      },
+      {
+        'path': 'operation',
+        'component': () => import('@/views/base/operation'),
+        'name': 'operation',
+        'meta': { 'title': '工序信息管理' }
+      },
+      {
+        'path': 'machine',
+        'component': () => import('@/views/base/machine'),
+        'name': 'machine',
+        'meta': { 'title': '设备信息管理' }
+      }
+    ]
+  },
   {
     path: '/base',
     component: Layout,
@@ -137,28 +192,29 @@ export const asyncRoutes = [
       title: '基础信息配置',
       icon: 'table'
     },
-    children: [
-      {
-        path: 'product',
-        component: () => import('@/views/base/product'),
-        name: 'product',
-        meta: { title: '产品信息管理' }
-      },
-      {
-        path: 'operation',
-        component: () => import('@/views/base/operation'),
-        name: 'operation',
-        meta: { title: '工序信息管理' }
-      },
-      {
-        path: 'machine',
-        component: () => import('@/views/base/machine'),
-        name: 'machine',
-        meta: { title: '设备信息管理' }
+    children: [{
+      path: 'product',
+      component: () => import('@/views/base/product'),
+      name: 'product',
+      meta: {
+        title: '产品信息管理'
       }
-    ]
-  }
-  // { path: '*', redirect: '/404', hidden: true }
+    }, {
+      path: 'operation',
+      component: () => import('@/views/base/operation'),
+      name: 'operation',
+      meta: {
+        title: '工序信息管理'
+      }
+    }, {
+      path: 'machine',
+      component: () => import('@/views/base/machine'),
+      name: 'machine',
+      meta: {
+        title: '设备信息管理'
+      }
+    }]
+  } */
 ]
 
 /**
@@ -221,9 +277,54 @@ const actions = {
       if (roles.includes('admin')) {
         getAsyncRoutes().then((res) => {
           // accessedRoutes = asyncRoutes || []
-          accessedRoutes = res.asyncRoutes
-          console.log('原菜单', accessedRoutes)
-          console.log('新菜单', res.asyncRoutes)
+          accessedRoutes = res.asyncRoutes || []
+          accessedRoutes.forEach((route) => {
+            if (route.component === 'Layout') {
+              route.component = Layout
+            }
+            route.children.forEach((child) => {
+              // const componentStr = child.component
+              // 基础信息菜单
+              if (child.component === 'product') {
+                child.component = product
+              }
+              if (child.component === 'operation') {
+                child.component = operation
+              }
+              if (child.component === 'machine') {
+                child.component = machine
+              }
+              if (child.component === 'dataupLog') {
+                child.component = dataupLog
+              }
+              if (child.component === 'operationLog') {
+                child.component = operationLog
+              }
+              if (child.component === 'machineLog') {
+                child.component = machineLog
+              }
+              if (child.component === 'produceLog') {
+                child.component = produceLog
+              }
+              if (child.component === 'check') {
+                child.component = check
+              }
+              if (child.component === 'template') {
+                child.component = template
+              }
+              if (child.component === 'menu') {
+                child.component = menu
+              }
+              if (child.component === 'role') {
+                child.component = role
+              }
+              if (child.component === 'user') {
+                child.component = user
+              }
+            })
+          })
+          console.log('新菜单', accessedRoutes)
+          console.log('输出的json', res.asyncRoutes)
           commit('SET_ROUTES', accessedRoutes)
           resolve(accessedRoutes)
         })
