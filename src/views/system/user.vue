@@ -104,7 +104,11 @@
         <el-form-item label="启用状态" prop="useFlag">
           <el-switch v-model="temp.useFlag" active-color="#13ce66" inactive-color="#ff4949" />
         </el-form-item>
-
+        <el-form-item label="设备类别" prop="machineTypeId">
+          <el-select v-model="temp.machineTypeId" class="filter-item" placeholder="请选择类别">
+            <el-option v-for="item in roleOptions" :key="item.machineTypeId" :label="item.machineTypeName" :value="item.machineTypeId" />
+          </el-select>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
@@ -130,12 +134,12 @@
 
 <script>
 
-import { fetchList, fetchPv, createLoginUser, updateLoginUser, updateUseFlag, deleteLoginUser } from '@/api/loginUser'
+import { fetchList, fetchPv, createLoginUser, updateLoginUser, updateUseFlag, deleteLoginUser, fetchRoleList } from '@/api/loginUser'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
-const loginUserTypeOptions = []
+const roleOptions = []
 
 const useFlagOptions = [
   { key: '0', display_name: '禁用' },
@@ -143,7 +147,7 @@ const useFlagOptions = [
 ]
 
 // arr to obj, such as { CN : "China", US : "USA" }
-const calendarTypeKeyValue = loginUserTypeOptions.reduce((acc, cur) => {
+const calendarTypeKeyValue = roleOptions.reduce((acc, cur) => {
   acc[cur.key] = cur.display_name
   return acc
 }, {})
@@ -180,6 +184,7 @@ export default {
         sort: '+id'
       },
       importanceOptions: [1, 2, 3],
+      roleOptions,
       useFlagOptions, // 启用状态
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       statusOptions: ['published', 'draft', 'deleted'],
@@ -215,6 +220,7 @@ export default {
   // 初始化获取数据列表
   created() {
     this.getList()
+    this.getRoles()
   },
   methods: {
     // 有加载圈的加载数据列表
@@ -230,13 +236,13 @@ export default {
         }, 1 * 1000)
       })
     },
-    /*     getLoginUserTypes() {
-      fetchLoginUserTypeList().then(response => {
+    getRoles() {
+      fetchRoleList().then(response => {
         console.log('tag', response.data)
-        this.loginUserTypeOptions = response.data
-        console.log('tag', this.loginUserTypeOptions)
+        this.roleOptions = response.data
+        console.log('tag', this.roleOptions)
       })
-    }, */
+    },
     // 立即刷新数据列表
     refreshList() {
       fetchList(this.listQuery).then(response => {

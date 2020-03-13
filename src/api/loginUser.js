@@ -44,9 +44,9 @@ export function deleteLoginUser(id) {
   })
 }
 
-export function fetchLoginUserTypeList() {
+export function fetchLoginRoleList() {
   return request({
-    url: '/loginUserType/listOption',
+    url: '/role/listOption',
     method: 'get',
     baseURL: 'http://127.0.0.1:8088'
   })
