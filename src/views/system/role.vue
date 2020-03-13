@@ -73,21 +73,37 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="50%">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="125px" style="width: 600px; margin-left:50px;">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="60%">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="125px" style="width: 750px; margin-left:20px;">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="角色name" prop="roleName">
+              <el-input v-model="temp.roleName" type="text" placeholder="请输入角色name" />
+            </el-form-item>
 
-        <el-form-item label="角色name" prop="roleName">
-          <el-input v-model="temp.roleName" type="text" placeholder="请输入角色name" />
-        </el-form-item>
+            <el-form-item label="启用状态" prop="useFlag">
+              <el-switch v-model="temp.useFlag" active-color="#13ce66" inactive-color="#ff4949" />
+            </el-form-item>
 
-        <el-form-item label="启用状态" prop="useFlag">
-          <el-switch v-model="temp.useFlag" active-color="#13ce66" inactive-color="#ff4949" />
-        </el-form-item>
+            <el-form-item label="备注">
+              <el-input v-model="temp.note" style="width:220px;" :autosize="{ minRows: 2, maxRows: 5}" type="textarea" placeholder="请输入备注" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="菜单权限">
+              <el-tree
+                ref="tree"
+                :data="menuTree"
+                show-checkbox
+                default-expand-all
+                node-key="id"
+                highlight-current
+                :props="defaultProps"
+              />
+            </el-form-item>
 
-        <el-form-item label="备注">
-          <el-input v-model="temp.note" style="width:220px;" :autosize="{ minRows: 2, maxRows: 5}" type="textarea" placeholder="请输入备注" />
-        </el-form-item>
-
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
@@ -113,7 +129,7 @@
 
 <script>
 
-import { fetchList, fetchPv, createRole, updateRole, updateUseFlag, deleteRole } from '@/api/sysRole'
+import { fetchList, fetchPv, createRole, updateRole, updateUseFlag, deleteRole, fetchRoleMenus } from '@/api/sysRole'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -150,6 +166,11 @@ export default {
   },
   data() {
     return {
+      menuTree: [],
+      defaultProps: {
+        children: 'children',
+        label: 'label'
+      },
       tableKey: 0,
       list: null,
       total: 0,
@@ -171,7 +192,8 @@ export default {
         roleId: undefined,
         roleName: '',
         useFlag: true,
-        note: ''
+        note: '',
+        menuIds: []
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -211,13 +233,12 @@ export default {
         }, 1 * 1000)
       })
     },
-    /*     getRoleTypes() {
-      fetchRoleTypeList().then(response => {
-        console.log('tag', response.data)
-        this.roleTypeOptions = response.data
-        console.log('tag', this.roleTypeOptions)
+    getRoleMenus() {
+      fetchRoleMenus().then(response => {
+        console.log('tag', response.menuTree)
+        this.menuTree = response.menuTree
       })
-    }, */
+    },
     // 立即刷新数据列表
     refreshList() {
       fetchList(this.listQuery).then(response => {
@@ -297,6 +318,8 @@ export default {
     // 监听create dialog事件
     handleCreate() {
       this.resetTemp()
+      // 获取权限menuTree
+      this.getRoleMenus()
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -417,6 +440,6 @@ export default {
 
 <style scoped>
   .el-dialog .el-form .el-form-item .el-input{
-    width: 300px;
+    width: 220px;
   }
 </style>

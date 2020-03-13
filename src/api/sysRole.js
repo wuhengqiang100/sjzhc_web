@@ -9,9 +9,9 @@ export function fetchList(query) {
   })
 }
 
-export function fetchRoleTypeList() {
+export function fetchRoleMenus() {
   return request({
-    url: '/roleType/listOption',
+    url: '/menu/listOption',
     method: 'get',
     baseURL: 'http://127.0.0.1:8088'
   })
