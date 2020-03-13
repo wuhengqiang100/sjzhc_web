@@ -1,7 +1,7 @@
 import { constantRoutes } from '@/router'
 import Layout from '@/layout'
 import request from '@/utils/request'
-// eslint-disable-next-line no-unused-vars
+/* // eslint-disable-next-line no-unused-vars
 import product from '@/views/base/product'
 // eslint-disable-next-line no-unused-vars
 import operation from '@/views/base/operation'
@@ -24,7 +24,7 @@ import menu from '@/views/system/menu'
 // eslint-disable-next-line no-unused-vars
 import role from '@/views/system/role'
 // eslint-disable-next-line no-unused-vars
-import user from '@/views/system/user'
+import user from '@/views/system/user' */
 
 /* export const asyncRoutes = [
   {
@@ -270,59 +270,50 @@ export function getAsyncRoutes() {
   })
 }
 
+/**
+ * 后台查询的菜单数据拼装成路由格式的数据
+ * @param routes
+ */
+export function generaMenu(routes, data) {
+  data.forEach(item => {
+    // alert(JSON.stringify(item))
+    const menu = {
+      path: item.path,
+      component: item.component === '#' ? Layout : () => import(`@/views${item.component}`),
+      redirect: item.redirect,
+      // hidden: true,
+      children: [],
+      name: item.name,
+      meta: { title: item.meta.title, icon: item.meta.icon, roles: [item.meta.roles] }
+    }
+    // 如果有children
+    if (item.children) {
+      generaMenu(menu.children, item.children)
+    }
+    routes.push(menu)
+  })
+}
+
 const actions = {
   generateRoutes({ commit }, roles) {
     return new Promise(resolve => {
       let accessedRoutes
+      const loadMenuData = []
       if (roles.includes('admin')) {
         getAsyncRoutes().then((res) => {
+          let data = res
           // accessedRoutes = asyncRoutes || []
-          accessedRoutes = res.asyncRoutes || []
-          accessedRoutes.forEach((route) => {
-            if (route.component === 'Layout') {
-              route.component = Layout
-            }
-            route.children.forEach((child) => {
-              // const componentStr = child.component
-              // 基础信息菜单
-              if (child.component === 'product') {
-                child.component = product
-              }
-              if (child.component === 'operation') {
-                child.component = operation
-              }
-              if (child.component === 'machine') {
-                child.component = machine
-              }
-              if (child.component === 'dataupLog') {
-                child.component = dataupLog
-              }
-              if (child.component === 'operationLog') {
-                child.component = operationLog
-              }
-              if (child.component === 'machineLog') {
-                child.component = machineLog
-              }
-              if (child.component === 'produceLog') {
-                child.component = produceLog
-              }
-              if (child.component === 'check') {
-                child.component = check
-              }
-              if (child.component === 'template') {
-                child.component = template
-              }
-              if (child.component === 'menu') {
-                child.component = menu
-              }
-              if (child.component === 'role') {
-                child.component = role
-              }
-              if (child.component === 'user') {
-                child.component = user
-              }
-            })
-          })
+          data = res.asyncRoutes || []
+          Object.assign(loadMenuData, data)
+          generaMenu(asyncRoutes, loadMenuData)
+          let accessedRoutes
+          if (roles.includes('admin')) {
+            // alert(JSON.stringify(asyncRoutes))
+            accessedRoutes = asyncRoutes || []
+          } else {
+            accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
+          }
+
           console.log('新菜单', accessedRoutes)
           console.log('输出的json', res.asyncRoutes)
           commit('SET_ROUTES', accessedRoutes)
