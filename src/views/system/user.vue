@@ -85,30 +85,42 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="50%">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="125px" style="width: 600px; margin-left:50px;">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="55%">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="100px" style="width: 650px; margin-left:45px;">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="用户id" prop="operatorId">
+              <el-input v-model="temp.operatorId" type="text" placeholder="请输入用户id" />
+            </el-form-item>
+            <el-form-item label="登陆名" prop="loginName">
+              <el-input v-model="temp.loginName" type="text" placeholder="请输入登陆名" />
+            </el-form-item>
+            <el-form-item label="登陆密码" prop="loginPass">
+              <el-input v-model="temp.loginPass" type="password" placeholder="请输入登陆密码" />
+            </el-form-item>
 
-        <el-form-item label="用户id" prop="operatorId">
-          <el-input v-model="temp.operatorId" type="text" placeholder="请输入用户id" />
-        </el-form-item>
-        <el-form-item label="登陆名" prop="loginName">
-          <el-input v-model="temp.loginName" type="text" placeholder="请输入登陆名" />
-        </el-form-item>
-        <el-form-item label="登陆密码" prop="loginPass">
-          <el-input v-model="temp.loginPass" type="password" placeholder="请输入登陆密码" />
-        </el-form-item>
+            <el-form-item label="工作状态" prop="userInWork">
+              <el-switch v-model="temp.userInWork" active-color="#13ce66" inactive-color="#ff4949" />
+            </el-form-item>
+            <el-form-item label="启用状态" prop="useFlag">
+              <el-switch v-model="temp.useFlag" active-color="#13ce66" inactive-color="#ff4949" />
+            </el-form-item>
 
-        <el-form-item label="工作状态" prop="userInWork">
-          <el-switch v-model="temp.userInWork" active-color="#13ce66" inactive-color="#ff4949" />
-        </el-form-item>
-        <el-form-item label="启用状态" prop="useFlag">
-          <el-switch v-model="temp.useFlag" active-color="#13ce66" inactive-color="#ff4949" />
-        </el-form-item>
-        <el-form-item label="设备类别" prop="machineTypeId">
-          <el-select v-model="temp.machineTypeId" class="filter-item" placeholder="请选择类别">
-            <el-option v-for="item in roleOptions" :key="item.machineTypeId" :label="item.machineTypeName" :value="item.machineTypeId" />
-          </el-select>
-        </el-form-item>
+          </el-col>
+          <el-col :span="9" :offset="3">
+            <el-form-item label="用户角色" prop="roleIds">
+              <el-checkbox-group v-model="temp.roleIds" size="small">
+                <ul>
+                  <li>
+                    <el-checkbox v-for="item in roleList" :key="item.roleId" :label="item.roleId">{{ item.roleName }}</el-checkbox>
+                  </li>
+                </ul>
+                <!-- <el-checkbox label="备选项2" border /> -->
+              </el-checkbox-group>
+            </el-form-item>
+
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
@@ -134,7 +146,7 @@
 
 <script>
 
-import { fetchList, fetchPv, createLoginUser, updateLoginUser, updateUseFlag, deleteLoginUser, fetchRoleList } from '@/api/loginUser'
+import { fetchList, fetchPv, createLoginUser, updateLoginUser, updateUseFlag, deleteLoginUser, fetchRoleList, fetchUserOwnRole } from '@/api/loginUser'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -185,6 +197,7 @@ export default {
       },
       importanceOptions: [1, 2, 3],
       roleOptions,
+      roleList: [],
       useFlagOptions, // 启用状态
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       statusOptions: ['published', 'draft', 'deleted'],
@@ -195,7 +208,8 @@ export default {
         loginName: '',
         loginPass: '',
         userInWork: true,
-        useFlag: true
+        useFlag: true,
+        roleIds: []
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -220,7 +234,6 @@ export default {
   // 初始化获取数据列表
   created() {
     this.getList()
-    this.getRoles()
   },
   methods: {
     // 有加载圈的加载数据列表
@@ -239,8 +252,14 @@ export default {
     getRoles() {
       fetchRoleList().then(response => {
         console.log('tag', response.data)
-        this.roleOptions = response.data
+        this.roleList = response.roleList
         console.log('tag', this.roleOptions)
+      })
+    },
+    // 获取所有的menus并设置值
+    getRoleOwnMenus(userId) {
+      fetchUserOwnRole(userId).then(response => {
+        this.temp.roleIds = response.roleIds
       })
     },
     // 立即刷新数据列表
@@ -304,7 +323,9 @@ export default {
         loginName: '',
         loginPass: '',
         userInWork: true,
-        useFlag: true
+        useFlag: true,
+        roleIds: []
+
       }
     },
     resetListQuery() {
@@ -324,6 +345,8 @@ export default {
     // 监听create dialog事件
     handleCreate() {
       this.resetTemp()
+      // 获取所有的角色
+      this.getRoles()
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -359,6 +382,10 @@ export default {
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
       // this.temp.timestamp = new Date(this.temp.timestamp)
+      this.getRoles()// 获取角色
+      // 获取已拥有的角色
+      // console.log('tag', this.temp)
+      this.getRoleOwnMenus(this.temp.operatorId)//
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -444,6 +471,6 @@ export default {
 
 <style scoped>
   .el-dialog .el-form .el-form-item .el-input{
-    width: 300px;
+    width: 220px;
   }
 </style>
