@@ -17,6 +17,15 @@ export function fetchRoleMenus() {
   })
 }
 
+export function fetchRoleOwnMenus(roleId) {
+  return request({
+    url: '/menu/listOwn',
+    method: 'post',
+    params: { roleId },
+    baseURL: 'http://127.0.0.1:8088'
+  })
+}
+
 export function updateUseFlag(id) {
   return request({
     url: '/role/updateUseFlag',

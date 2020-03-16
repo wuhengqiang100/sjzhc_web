@@ -129,7 +129,7 @@
 
 <script>
 
-import { fetchList, fetchPv, createRole, updateRole, updateUseFlag, deleteRole, fetchRoleMenus } from '@/api/sysRole'
+import { fetchList, fetchPv, createRole, updateRole, updateUseFlag, deleteRole, fetchRoleMenus, fetchRoleOwnMenus } from '@/api/sysRole'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -233,10 +233,18 @@ export default {
         }, 1 * 1000)
       })
     },
+    // 获取所有的menus
     getRoleMenus() {
       fetchRoleMenus().then(response => {
-        console.log('tag', response.menuTree)
         this.menuTree = response.menuTree
+      })
+    },
+    // 获取所有的menus并设置值
+    getRoleOwnMenus(roleId) {
+      fetchRoleOwnMenus(roleId).then(response => {
+        this.temp.menuIds = response.menuIds
+        this.$refs.tree.setCheckedKeys(this.temp.menuIds)
+        // this.$refs.tree.setCheckedKeys([3, 7])
       })
     },
     // 立即刷新数据列表
@@ -298,7 +306,8 @@ export default {
         roleId: undefined,
         roleName: '',
         useFlag: true,
-        note: ''
+        note: '',
+        menuIds: []
       }
     },
     resetListQuery() {
@@ -328,13 +337,14 @@ export default {
     },
     // 添加操作
     createData() {
+      console.log(this.$refs.tree.getCheckedKeys())
       this.$refs['dataForm'].validate((valid) => {
         // date格式化
         this.temp.startDate = parseTime(this.temp.startDate)
         if (this.temp.endDate !== '') {
           this.temp.endDate = parseTime(this.temp.endDate)
         }
-
+        this.temp.menuIds = this.$refs.tree.getCheckedKeys()
         if (valid) {
           // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
           createRole(this.temp).then(() => {
@@ -354,6 +364,8 @@ export default {
     // 监听修改 update dialog事件
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
+      this.getRoleMenus()
+      this.getRoleOwnMenus(this.temp.roleId)
       // this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
@@ -364,6 +376,7 @@ export default {
     // 修改操作
     updateData() {
       // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
+      this.temp.menuIds = this.$refs.tree.getCheckedKeys()
       updateRole(this.temp).then(() => {
         this.refreshList()
         // this.list.unshift(this.temp)
