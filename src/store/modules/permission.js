@@ -297,34 +297,27 @@ export function generaMenu(routes, data) {
 const actions = {
   generateRoutes({ commit }, roles) {
     return new Promise(resolve => {
-      let accessedRoutes
+      // let accessedRoutes
       const loadMenuData = []
-      if (roles.includes('admin')) {
-        getAsyncRoutes().then((res) => {
-          let data = res
-          // accessedRoutes = asyncRoutes || []
-          data = res.asyncRoutes || []
-          Object.assign(loadMenuData, data)
-          generaMenu(asyncRoutes, loadMenuData)
-          let accessedRoutes
-          if (roles.includes('admin')) {
-            // alert(JSON.stringify(asyncRoutes))
-            accessedRoutes = asyncRoutes || []
-          } else {
-            accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
-          }
 
-          console.log('新菜单', accessedRoutes)
-          console.log('输出的json', res.asyncRoutes)
+      getAsyncRoutes().then((res) => {
+        let data = res
+        // accessedRoutes = asyncRoutes || []
+        data = res.asyncRoutes || []
+        Object.assign(loadMenuData, data)
+        generaMenu(asyncRoutes, loadMenuData)
+        let accessedRoutes
+        if (roles.includes('最高权限')) {
+          // alert(JSON.stringify(asyncRoutes))
+          accessedRoutes = asyncRoutes || []
+        } else {
+          accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
           commit('SET_ROUTES', accessedRoutes)
           resolve(accessedRoutes)
-        })
-      } else {
-        accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
-        console.log('筛选路由', '根据角色筛选路由')
+        }
         commit('SET_ROUTES', accessedRoutes)
         resolve(accessedRoutes)
-      }
+      })
     })
   }
 }
