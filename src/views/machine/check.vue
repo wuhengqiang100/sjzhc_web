@@ -49,13 +49,12 @@
     </div> -->
     <!-- <p style="text-align: center; margin: 50px 0 20px">使用 scoped-slot 自定义数据项</p> -->
     <div style="text-align: center;min-width:100%;">
+
       <el-transfer
-        v-model="value4"
-        style="text-align: left; display: inline-block;"
+        v-model="value"
+        style="text-align: left; display: inline-block"
         filterable
-        :left-default-checked="[2, 3]"
-        :right-default-checked="[1]"
-        :titles="['Source', 'Target']"
+        :titles="titles"
         :button-texts="['回退', '审核']"
         :format="{
           noChecked: '${total}',
@@ -64,17 +63,17 @@
         :data="data"
         @change="handleChange"
       >
-        <span slot-scope="{ option }">{{ option.key }} - {{ option.label }} </span>
+        <span slot-scope="{ option }">{{ option.key }} - {{ option.label }}</span>
         <el-button slot="left-footer" class="transfer-footer" size="small">操作</el-button>
         <el-button slot="right-footer" class="transfer-footer" size="small">操作</el-button>
-      </el-transfer>
-    </div>
+
+      </el-transfer></div>
 
   </div>
 </template>
 
 <script>
-// import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
+import { fetchList } from '@/api/machineCheck'
 import waves from '@/directive/waves' // waves directive
 // import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -87,9 +86,9 @@ export default {
   filters: {
   },
   data() {
-    const generateData = _ => {
+    /*  const generateData = _ => {
       const data = []
-      for (let i = 1; i <= 18; i++) {
+      for (let i = 1; i <= 15; i++) {
         data.push({
           key: i,
           label: `备选项 ${i}`,
@@ -97,19 +96,90 @@ export default {
         })
       }
       return data
-    }
+    } */
     return {
-      data: generateData(),
-      value: [1],
-      value4: [1]
-    /*   renderFunc(h, option) {
-        return <span>{ option.key } - { option.label }</span>
-      } */
+      data: [],
+      value: [],
+      qaInspectMasterList: [],
+      qaInspectMaster: {
+        inspectmId: undefined,
+        allowJudge: Number, // 产品状态码
+        wipProdLogs: {// 生产日志信息
+          logId: Number// 生产日志id
+        },
+        wipJobs: {// 基础生产信息
+          jobId: Number, // 基础生产信息id
+          cartNumber: Number // 车号
+        },
+        product: {// 产品种类信息
+          productId: Number, // 产品id
+          productCode: '', // 产品code
+          productName: '' // 产品name
+        },
+        operation: {// 产品工序信息
+          operationId: Number, // 工序id
+          operationCode: '', // 工序code
+          operationName: '' // 工序name
+        },
+        operator: {// 操作员信息
+          operatorId: Number, // 人员id
+          operatorCode: '', // 人员code
+          operatorName: '' // 人员name
+        },
+        machine: {// 机器信息
+          machineId: Number, // 机器id
+          machineCode: '', // 机器code
+          machineName: '' // 机器name
+        },
+        dicWorkUnits: {// 操作台信息
+          workUnitId: Number, // 操作台id
+          workUnitCode: '', // 操作台code
+          workUnitName: '' // 操作台name
+        }
+      }
     }
   },
   created() {
+    this.getList()
   },
   methods: {
+    // 有加载圈的加载数据列表
+    getList() {
+      this.listLoading = true
+      fetchList().then(response => {
+        // Just to simulate the time of the request
+        this.titles = response.titles
+        this.value = response.qaInspectDatas.value
+        // this.data = response.qaInspectDatas.qaInspectTransfer
+        console.log('tag', this.value)
+        this.data = response.qaInspectMasterList
+        /*         const data = []
+        qaInspectTransfers.forEach((qa, index) => {
+          data.push({
+            label: qa.label,
+            key: qa.key,
+            disabled: qa.disabled
+          })
+        })
+        this.data = data */
+        console.log('tag', this.data)
+        setTimeout(() => {
+          this.listLoading = false
+          console.log('tag', this.data)
+        }, 1 * 1000)
+      })
+    },
+    /*   generateData(a) {
+      const data = []
+      qaInspectTransfer.forEach((qa, index) => {
+        data.push({
+          label: qa.label,
+          key: qa.key,
+          disabled: qa.disabled
+        })
+      })
+      return data
+    }, */
     handleChange(value, direction, movedKeys) {
       console.log(value, direction, movedKeys)
     }

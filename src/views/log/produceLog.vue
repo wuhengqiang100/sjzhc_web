@@ -76,10 +76,11 @@
         </template>
       </el-table-column> -->
       <el-table-column label="生产时间" width="200px" align="center">
-        <template slot-scope="{row}">
+        <template v-if="row.dateupSetDate !==null" slot-scope="{row}">
           <span>{{ row.dateupSetDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
+
       <!--       <el-table-column label="停用时间" width="112" align="center">
         <template v-if="row.endDate !==null" slot-scope="{row}">
           <span>{{ row.endDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
