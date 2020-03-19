@@ -1,78 +1,53 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <!--      <el-input v-model="listQuery.title" placeholder="Title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-select v-model="listQuery.importance" placeholder="Imp" clearable style="width: 90px" class="filter-item">
-        <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item" />
-      </el-select>
-      <el-select v-model="listQuery.type" placeholder="Type" clearable class="filter-item" style="width: 130px">
-        <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key" />
-      </el-select>
-      <el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="handleFilter">
-        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
-      </el-select> -->
-      <!--    <el-button v-waves class="filter-item" type="primary" icon="el-icon-search">
-        Search
-      </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit">
-        Add
-      </el-button>
-      <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download">
-        Export
-      </el-button>
-      <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;">
-        reviewer
-      </el-checkbox> -->
+      <div style="text-align: justify;width:100%;  justify-content: space-between">
+
+        <el-transfer
+          v-model="value"
+          style="text-align: left; display: inline-block;margin: auto"
+          filterable
+          :filter-method="filterMethod"
+          filter-placeholder="请输入车号"
+          :titles="titles"
+          :button-texts="['回退', '审核']"
+          :format="{
+            noChecked: '${total}',
+            hasChecked: '${checked}/${total}'
+          }"
+          :data="data"
+          @change="handleChange"
+        >
+          <span v-if="option.allowJudge===0" slot-scope="{ option }" class="widController">
+            <el-tag size="small ">{{ option.wipJobs.cartNumber }}</el-tag>&emsp;&emsp;
+            <span class="spanLi"> {{ option.product.productName }}</span>
+            <span class="spanLi">{{ option.operation.operationName }}</span>
+            <span class="spanLi">{{ option.infoNumber }}</span>
+            <span class="spanLi">{{ option.machineWasterNumber }}</span>
+          </span>
+          <span v-else-if="option.allowJudge===1" slot-scope="{ option }" class="widController">
+            <el-tag size="small " type="success">{{ option.wipJobs.cartNumber }}</el-tag> &emsp;&emsp;
+            <span class="spanLi"> {{ option.product.productName }}</span>
+            <span class="spanLi">{{ option.operation.operationName }}</span>
+            <span class="spanLi">{{ option.infoNumber }}</span>
+            <span class="spanLi">{{ option.machineWasterNumber }}</span>
+            <span class="spanLi">未分活</span>
+          </span>
+          <span v-else slot-scope="{ option }" class="widController">
+            <el-tag size="small " type="danger">{{ option.wipJobs.cartNumber }}</el-tag> &emsp;&emsp;
+            <span class="spanLi"> {{ option.product.productName }}</span>
+            <span class="spanLi">{{ option.operation.operationName }}</span>
+            <span class="spanLi">{{ option.infoNumber }}</span>
+            <span class="spanLi">{{ option.machineWasterNumber }}</span>
+            <span class="spanLi">已分活</span>
+
+          </span>
+          <el-button slot="left-footer" class="transfer-footer" size="small">审核</el-button>
+          <el-button slot="right-footer" class="transfer-footer" size="small">回退</el-button>
+        </el-transfer>
+
+      </div>
     </div>
-
-    <!--  <p style="text-align: center; margin: 0 0 20px">使用 render-content 自定义数据项</p>
-    <div style="text-align: center">
-      <el-transfer
-        v-model="value"
-        style="text-align: left; display: inline-block"
-        filterable
-        :left-default-checked="[2, 3]"
-        :right-default-checked="[1]"
-        :render-content="renderFunc"
-        :titles="['Source', 'Target']"
-        :button-texts="['到左边', '到右边']"
-        :format="{
-          noChecked: '${total}',
-          hasChecked: '${checked}/${total}'
-        }"
-        :data="data"
-        @change="handleChange"
-      >
-        <el-button slot="left-footer" class="transfer-footer" size="small">操作</el-button>
-        <el-button slot="right-footer" class="transfer-footer" size="small">操作</el-button>
-      </el-transfer>
-    </div> -->
-    <!-- <p style="text-align: center; margin: 50px 0 20px">使用 scoped-slot 自定义数据项</p> -->
-    <div style="text-align: center;min-width:100%;">
-
-      <el-transfer
-        v-model="value"
-        style="text-align: left; display: inline-block"
-        filterable
-        :filter-method="filterMethod"
-        filter-placeholder="请输入车号"
-        :titles="titles"
-        :button-texts="['回退', '审核']"
-        :format="{
-          noChecked: '${total}',
-          hasChecked: '${checked}/${total}'
-        }"
-        :data="data"
-        @change="handleChange"
-      >
-        <span v-if="option.allowJudge===0" slot-scope="{ option }"><el-tag>{{ option.wipJobs.cartNumber }}</el-tag> &emsp;&emsp;{{ option.wipJobs.cartNumber }}  &emsp;&emsp; {{ option.product.productName }}  &emsp;&emsp; {{ option.operation.operationName }}  &emsp;&emsp; {{ option.infoNumber }}  &emsp;&emsp; {{ option.machineWasterNumber }}  &emsp;&emsp; {{ option.key }}</span>
-        <span v-else-if="option.allowJudge===1" slot-scope="{ option }">{{ option.wipJobs.cartNumber }} &emsp;&emsp; {{ option.product.productName }}  &emsp;&emsp; {{ option.operation.operationName }}  &emsp;&emsp;{{ option.infoNumber }}  &emsp;&emsp; {{ option.machineWasterNumber }}  &emsp;&emsp; <el-tag type="success">未分活</el-tag>  &emsp;&emsp; {{ option.key }}</span>
-        <span v-else slot-scope="{ option }">{{ option.wipJobs.cartNumber }} &emsp;&emsp; {{ option.product.productName }} &emsp;&emsp; {{ option.operation.operationName }}  &emsp;&emsp; {{ option.infoNumber }}  &emsp;&emsp; {{ option.machineWasterNumber }}  &emsp;&emsp; <el-tag type="danger">已分活</el-tag>  &emsp;&emsp; {{ option.key }}</span>
-        <el-button slot="left-footer" class="transfer-footer" size="small">操作左</el-button>
-        <el-button slot="right-footer" class="transfer-footer" size="small">操作右</el-button>
-
-      </el-transfer></div>
-
   </div>
 </template>
 
@@ -90,22 +65,11 @@ export default {
   filters: {
   },
   data() {
-    /*  const generateData = _ => {
-      const data = []
-      for (let i = 1; i <= 15; i++) {
-        data.push({
-          key: i,
-          label: `备选项 ${i}`,
-          disabled: i % 4 === 0
-        })
-      }
-      return data
-    } */
     return {
       data: [],
       value: [],
-      titles: ['车号   品种 --  工艺 --  检测总数 --  缺陷数量 --  未检数量',
-        '车号 --  品种 --  工艺 --  检测总数  -- 缺陷数量  -- 未检数量 --  分活状态'],
+      titles: [' -- 车号 --------  品种 --------  工艺 --------  总数  ----- 缺陷数  -- 未检数',
+        '-- 车号 --------  品种 --------  工艺 --------  总数  ----- 缺陷数  -- 未检数--  状态'],
       filterMethod(query, item) {
         return item.wipJobs.cartNumber.indexOf(query) > -1
       },
@@ -273,19 +237,41 @@ export default {
 }
 </script>
 <style>
+
+  .widController .spanLi{
+    width:80px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    display: inline-block;
+  }
+  .widController .el-tag{
+    width:60px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    display: inline-block;
+  }
+  .el-transfer {
+      width: 98%;
+      justify-content: space-between
+  }
   .transfer-footer {
     margin-left: 20px;
     padding: 6px 5px;
   }
   .el-transfer-panel{
-    min-width: 570px;
-    width: auto;
+    min-width: 45%;
   }
   .el-transfer-panel__body {
-    height: 500px;
+    height: 560px;
   }
   .el-transfer-panel__list.is-filterable {
-    height: 480px;
-    padding-top: 0;
+    height: 560px;
+    padding-top: 5px;
+}
+.el-transfer-panel__filter {
+   min-width: 90%;
+   max-width: 100%;
 }
 </style>
