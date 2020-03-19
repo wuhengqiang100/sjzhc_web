@@ -11,7 +11,7 @@
       <el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="handleFilter">
         <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
       </el-select> -->
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search">
+      <!--    <el-button v-waves class="filter-item" type="primary" icon="el-icon-search">
         Search
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit">
@@ -22,7 +22,7 @@
       </el-button>
       <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;">
         reviewer
-      </el-checkbox>
+      </el-checkbox> -->
     </div>
 
     <!--  <p style="text-align: center; margin: 0 0 20px">使用 render-content 自定义数据项</p>
@@ -54,6 +54,8 @@
         v-model="value"
         style="text-align: left; display: inline-block"
         filterable
+        :filter-method="filterMethod"
+        filter-placeholder="请输入车号"
         :titles="titles"
         :button-texts="['回退', '审核']"
         :format="{
@@ -63,9 +65,11 @@
         :data="data"
         @change="handleChange"
       >
-        <span slot-scope="{ option }">{{ option.key }} - {{ option.label }}</span>
-        <el-button slot="left-footer" class="transfer-footer" size="small">操作</el-button>
-        <el-button slot="right-footer" class="transfer-footer" size="small">操作</el-button>
+        <span v-if="option.allowJudge===0" slot-scope="{ option }"><el-tag>{{ option.wipJobs.cartNumber }}</el-tag> &emsp;&emsp;{{ option.wipJobs.cartNumber }}  &emsp;&emsp; {{ option.product.productName }}  &emsp;&emsp; {{ option.operation.operationName }}  &emsp;&emsp; {{ option.infoNumber }}  &emsp;&emsp; {{ option.machineWasterNumber }}  &emsp;&emsp; {{ option.key }}</span>
+        <span v-else-if="option.allowJudge===1" slot-scope="{ option }">{{ option.wipJobs.cartNumber }} &emsp;&emsp; {{ option.product.productName }}  &emsp;&emsp; {{ option.operation.operationName }}  &emsp;&emsp;{{ option.infoNumber }}  &emsp;&emsp; {{ option.machineWasterNumber }}  &emsp;&emsp; <el-tag type="success">未分活</el-tag>  &emsp;&emsp; {{ option.key }}</span>
+        <span v-else slot-scope="{ option }">{{ option.wipJobs.cartNumber }} &emsp;&emsp; {{ option.product.productName }} &emsp;&emsp; {{ option.operation.operationName }}  &emsp;&emsp; {{ option.infoNumber }}  &emsp;&emsp; {{ option.machineWasterNumber }}  &emsp;&emsp; <el-tag type="danger">已分活</el-tag>  &emsp;&emsp; {{ option.key }}</span>
+        <el-button slot="left-footer" class="transfer-footer" size="small">操作左</el-button>
+        <el-button slot="right-footer" class="transfer-footer" size="small">操作右</el-button>
 
       </el-transfer></div>
 
@@ -73,7 +77,7 @@
 </template>
 
 <script>
-import { fetchList } from '@/api/machineCheck'
+import { fetchList, updateMachineCheck } from '@/api/machineCheck'
 import waves from '@/directive/waves' // waves directive
 // import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -100,12 +104,32 @@ export default {
     return {
       data: [],
       value: [],
-      qaInspectMasterList: [],
+      titles: ['车号   品种 --  工艺 --  检测总数 --  缺陷数量 --  未检数量',
+        '车号 --  品种 --  工艺 --  检测总数  -- 缺陷数量  -- 未检数量 --  分活状态'],
+      filterMethod(query, item) {
+        return item.wipJobs.cartNumber.indexOf(query) > -1
+      },
+      qaInspectMasterList: [], // 总的核查数据list
+      temp: {
+        direction: '',
+        movedKeys: []
+      },
       qaInspectMaster: {
-        inspectmId: undefined,
+        inspectmId: Number, // 质量表头id
+        machineWasterNumber: Number, // 整万错误数量
+        infoNumber: Number, // 整万信息数量
         allowJudge: Number, // 产品状态码
         wipProdLogs: {// 生产日志信息
-          logId: Number// 生产日志id
+          logId: Number, // 生产日志id
+          jobId: Number, // 外键(生产序号)
+          operationId: Number, // 生产工序
+          machineId: Number, // 生产机器
+          workUnitId: Number, // 生产机台
+          operatorId: Number, // 操作人
+          itemFlag: Number, // 操作标志
+          qainfonum: Number, // 信息数量
+          qawasternum: Number, // 报错数量
+          sminfonum: Number// 识码数量
         },
         wipJobs: {// 基础生产信息
           jobId: Number, // 基础生产信息id
@@ -145,43 +169,105 @@ export default {
   methods: {
     // 有加载圈的加载数据列表
     getList() {
-      this.listLoading = true
+      // this.listLoading = true
       fetchList().then(response => {
-        // Just to simulate the time of the request
-        this.titles = response.titles
-        this.value = response.qaInspectDatas.value
-        // this.data = response.qaInspectDatas.qaInspectTransfer
-        console.log('tag', this.value)
-        this.data = response.qaInspectMasterList
-        /*         const data = []
-        qaInspectTransfers.forEach((qa, index) => {
-          data.push({
-            label: qa.label,
-            key: qa.key,
-            disabled: qa.disabled
-          })
+        this.qaInspectMasterList = response.qaInspectMasterList
+        // this.generateData(this.qaInspectMasterList)// 解析返回的核查数据
+        // this.generateData() // 生成data穿梭框数据
+        this.qaInspectMasterList.forEach((qa, index) => {
+        // this.qaInspectMaster = qa
+
+          // 可以审核
+          if (qa.allowJudge === 0) {
+            this.data.push({
+              key: qa.inspectmId,
+              label: qa.product.productName,
+              disabled: false,
+              machineWasterNumber: qa.machineWasterNumber,
+              infoNumber: qa.infoNumber,
+              allowJudge: qa.allowJudge,
+              wipProdLogs: qa.wipProdLogs,
+              wipJobs: qa.wipJobs,
+              product: qa.product,
+              operation: qa.operation,
+              operator: qa.operator,
+              machine: qa.machine,
+              dicWorkUnits: qa.dicWorkUnits
+            })
+          }
+          // 允许分活
+          if (qa.allowJudge === 1) {
+            this.value.push(qa.inspectmId)
+            this.data.push({
+              key: qa.inspectmId,
+              label: qa.product.productName,
+              disabled: false,
+              machineWasterNumber: qa.machineWasterNumber,
+              infoNumber: qa.infoNumber,
+              allowJudge: qa.allowJudge,
+              wipProdLogs: qa.wipProdLogs,
+              wipJobs: qa.wipJobs,
+              product: qa.product,
+              operation: qa.operation,
+              operator: qa.operator,
+              machine: qa.machine,
+              dicWorkUnits: qa.dicWorkUnits
+            })
+          }
+          // 已经分完活,不能回退
+          if (qa.allowJudge === 2) {
+            this.value.push(qa.inspectmId)
+            this.data.push({
+              key: qa.inspectmId,
+              label: qa.product.productName,
+              disabled: true,
+              machineWasterNumber: qa.machineWasterNumber,
+              infoNumber: qa.infoNumber,
+              allowJudge: qa.allowJudge,
+              wipProdLogs: qa.wipProdLogs,
+              wipJobs: qa.wipJobs,
+              product: qa.product,
+              operation: qa.operation,
+              operator: qa.operator,
+              machine: qa.machine,
+              dicWorkUnits: qa.dicWorkUnits
+            })
+          }
         })
-        this.data = data */
-        console.log('tag', this.data)
-        setTimeout(() => {
+        // console.log('data', this.data)
+        /*       setTimeout(() => {
           this.listLoading = false
-          console.log('tag', this.data)
-        }, 1 * 1000)
+          // console.log('tag', this.data)
+        }, 1 * 1000) */
       })
     },
-    /*   generateData(a) {
-      const data = []
-      qaInspectTransfer.forEach((qa, index) => {
-        data.push({
-          label: qa.label,
-          key: qa.key,
-          disabled: qa.disabled
+    /**
+     * direction:right 审核操作
+     * direction:left  回退操作
+     * movedKeys改变状态的id值,质量表头id
+     */
+    handleChange(value, direction, movedKeys) {
+      this.temp.direction = direction
+      this.temp.movedKeys = movedKeys
+      updateMachineCheck(this.temp).then((response) => {
+        this.getList()
+        this.resetTemp()
+        this.$notify({
+          title: 'Success',
+          message: response.message,
+          type: 'success',
+          duration: 2000
         })
       })
-      return data
-    }, */
-    handleChange(value, direction, movedKeys) {
-      console.log(value, direction, movedKeys)
+    },
+    // 重置temp实体类变量属性
+    resetTemp() {
+      this.temp = {
+        direction: '',
+        movedKeys: []
+      }
+      this.data = []
+      this.value = []
     }
   }
 }

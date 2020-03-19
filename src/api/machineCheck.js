@@ -7,7 +7,14 @@ export function fetchList() {
     baseURL: 'http://127.0.0.1:8088'
   })
 }
-
+export function updateMachineCheck(data) {
+  return request({
+    url: '/machine/check/save',
+    method: 'post',
+    data,
+    baseURL: 'http://127.0.0.1:8088'
+  })
+}
 export function fetchMachineTypeList() {
   return request({
     url: '/machine/checkType/listOption',
