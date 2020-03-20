@@ -329,6 +329,7 @@ export default {
       this.resetTemp()
       // 获取权限menuTree
       this.getRoleMenus()
+      this.$refs.tree.setCheckedKeys([])
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -337,7 +338,7 @@ export default {
     },
     // 添加操作
     createData() {
-      console.log(this.$refs.tree.getCheckedKeys())
+      // console.log(this.$refs.tree.getCheckedKeys())
       this.$refs['dataForm'].validate((valid) => {
         // date格式化
         this.temp.startDate = parseTime(this.temp.startDate)
