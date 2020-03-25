@@ -1,3 +1,4 @@
+/* eslint-disable spaced-comment */
 <template>
   <div class="app-container">
     <div class="filter-container">
@@ -42,13 +43,38 @@
             <span class="spanLi">已分活</span>
 
           </span>
-          <el-button slot="left-footer" class="transfer-footer" size="small">审核</el-button>
+          <el-button slot="left-footer" class="transfer-footer" size="small" @click="refreshQa">刷新数据</el-button>
+          <el-button slot="left-footer" class="transfer-footer" size="small"><el-switch
+            v-model="switchWalue"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            @change="changeSwitch"
+          /></el-button>
+          <!-- <el-button slot="left-footer" class="transfer-footer" size="small" @click="refreshQa">定时获取</el-button> -->
+          <el-button slot="left-footer" v-popover:popover class="transfer-footer" size="small">定时获取</el-button>
+
           <el-button slot="right-footer" class="transfer-footer" size="small">回退</el-button>
         </el-transfer>
 
       </div>
     </div>
+    <el-popover
+      ref="popover"
+      v-model="visible"
+      placement="top"
+      title="设置定时刷新"
+      width="200"
+      trigger="click"
+    >
+      <!-- <el-input v-model="input1" placeholder="请输入内容" />
+      <el-input v-model="input2" placeholder="请输入内容" /> -->
+      <div style="text-align: right; margin: 0">
+        <el-button size="mini" type="text" @click="visible = false">取消</el-button>
+        <el-button type="primary" size="mini" @click="visible = false">确定</el-button>
+      </div>
+    </el-popover>
   </div>
+
 </template>
 
 <script>
@@ -66,8 +92,11 @@ export default {
   },
   data() {
     return {
+      visible: false,
       data: [],
       value: [],
+      switchWalue: false,
+      interval: '', // 定时器参数
       titles: [' -- 车号 --------  品种 --------  工艺 --------  总数  ----- 缺陷数  -- 未检数',
         '-- 车号 --------  品种 --------  工艺 --------  总数  ----- 缺陷数  -- 未检数--  状态'],
       filterMethod(query, item) {
@@ -129,6 +158,28 @@ export default {
   },
   created() {
     this.getList()
+  },
+  mounted() {
+    // setInterval(() => {
+    //   this.resetTemp() // 先初始化
+    //   this.getList()// 定时刷新获取数据
+    // }, 2 * 2000)
+  /*   var Interval
+    if (this.switchWalue) { // 开启自动刷新功能
+      Interval = setInterval(() => {
+        this.resetTemp() // 先初始化
+        this.getList()// 定时刷新获取数据
+        console.log(this.switchWalue)
+      }, 2 * 2000)
+    } else {
+      console.log(this.switchWalue)
+      clearInterval(Interval)
+    } */
+    /*     setInterval(() => {
+      this.resetTemp() // 先初始化
+      this.getList()// 定时刷新获取数据
+      console.log('获取数据')
+    }, 2 * 2000) */
   },
   methods: {
     // 有加载圈的加载数据列表
@@ -223,6 +274,26 @@ export default {
           duration: 2000
         })
       })
+    },
+    refreshQa() {
+      this.resetTemp() // 重置数据
+      this.getList() // 获取数据
+      console.log('获取数据成功')
+    },
+    changeSwitch(data) {
+      console.log(data)
+      if (data) { // 开启自动刷新功能
+        this.interval = setInterval(() => {
+          this.resetTemp() // 先初始化
+          this.getList()// 定时刷新获取数据
+          console.log('获取数据成功')
+        }, 2 * 2000)
+        console.log('获取数据成功')
+      } else {
+        console.log('关闭定时器')
+
+        clearInterval(this.interval)
+      }
     },
     // 重置temp实体类变量属性
     resetTemp() {
