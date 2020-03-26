@@ -43,7 +43,9 @@
             <span class="spanLi">已分活</span>
 
           </span>
+          <span slot="left-footer" class="transfer-footer" style="font-size:12px;padding-right:0px;">手动</span>
           <el-button slot="left-footer" class="transfer-footer" size="small" @click="refreshQa">刷新数据</el-button>
+          <span slot="left-footer" class="transfer-footer" style="font-size:12px;padding-right:0px;">定时</span>
           <el-button slot="left-footer" class="transfer-footer" size="small"><el-switch
             v-model="switchWalue"
             active-color="#13ce66"
@@ -51,7 +53,7 @@
             @change="changeSwitch"
           /></el-button>
           <!-- <el-button slot="left-footer" class="transfer-footer" size="small" @click="refreshQa">定时获取</el-button> -->
-          <el-button slot="left-footer" v-popover:popover class="transfer-footer" size="small">定时获取</el-button>
+          <!-- <el-button slot="left-footer" v-popover:popover class="transfer-footer" size="small">定时获取</el-button> -->
 
           <el-button slot="right-footer" class="transfer-footer" size="small">回退</el-button>
         </el-transfer>
