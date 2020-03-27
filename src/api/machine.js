@@ -26,6 +26,18 @@ export function updateUseFlag(id) {
   })
 }
 
+export function upload(forData) {
+  return request({
+    url: '/machine/template/upload',
+    method: 'post',
+    data: forData,
+    baseURL: 'http://127.0.0.1:8088',
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}
+
 export function fetchMachine(id) {
   return request({
     url: '/machine/detail',
