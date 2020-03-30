@@ -2,19 +2,19 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input v-model="listQuery.title" placeholder="请输入设备名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-
+      <!--
       <el-select v-model="listQuery.useFlag" placeholder="状态" clearable class="filter-item" style="width: 130px">
         <el-option v-for="item in useFlagOptions" :key="item.key" :label="item.display_name" :value="item.key" />
-      </el-select>
+      </el-select> -->
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-refresh" @click="handleReset">
         重置
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
+      <!-- <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
         添加
-      </el-button>
+      </el-button> -->
       <!--     <el-button class="filter-item" style="margin-left: 10px;" type="warning" icon="el-icon-download" @click="handleCreate">
         导入
       </el-button> -->
@@ -56,20 +56,20 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="说明" min-width="50px" align="center">
+      <!-- <el-table-column label="说明" min-width="50px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.note }}</span>
         </template>
-      </el-table-column>
-      <el-table-column label="操作" fixed="right" align="center" min-width="218px" class-name="small-padding fixed-width">
+      </el-table-column> -->
+      <el-table-column label="操作" fixed="right" align="left" min-width="90px" class-name="big-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
+          <!-- <el-button type="primary" size="mini" @click="handleUpdate(row)">
             修改
+          </el-button>   -->
+          <el-button type="primary" size="mini" @click="handleUpload(row)">
+            上传
           </el-button>
-          <el-button v-if="row.useFlag" size="mini" type="warning" @click="handleModifyUseFlag(row,false)">禁用</el-button>
-          <el-button v-else size="mini" type="success" @click="handleModifyUseFlag(row,true)">启用</el-button>
-          <el-button size="mini" type="danger" @click="handleUpload(row)">上传</el-button>
-          <!-- <el-button size="mini" type="danger" @click="handleDelete(row)">删除</el-button> -->
+          <el-button v-if="row.imageModelNum > 0" size="mini" type="success" @click="handlDownload(row)">下载</el-button>
 
         </template>
       </el-table-column>
@@ -120,17 +120,22 @@
     </el-dialog>
 
     <el-dialog :title="addName" :visible.sync="dialogAddFile" width="500px" style="padding:0;" @close="resetAdd">
-      附件名称：<el-input v-model="addFileName" autocomplete="off" size="small" style="width: 300px;" />
+      <!-- <el-form-item label="设备名称"> -->
+      设备名称:       <el-input v-model="addFileName" disabled="true" type="text" style="width:200px" />
+      <!-- </el-form-item> -->
+      <!-- 附件名称：<el-input v-model="addFileName" autocomplete="off" size="small" style="width: 250x;" /> -->
       <div class="add-file-right" style="height:70px;margin-left:100px;margin-top:15px;">
         <div class="add-file-right-img" style="margin-left:70px;">上传文件：</div>
-        <input ref="clearFile" type="file" multiple="multiplt" class="add-file-right-input" style="margin-left:70px;" accept=".docx,.doc,.pdf" @change="getFile($event)">
-        <span class="add-file-right-more">支持扩展名：.doc .docx .pdf </span>
+        <input ref="clearFile" type="file" multiple="multiplt" class="add-file-right-input" style="margin-left:70px;" accept=".rar,.zip" @change="getFile($event)">
+
       </div>
+      <div style="text-algin:center"> <span class="add-file-right-more">支持扩展名：.rar .zip  </span></div>
       <div class="add-file-list">
         <ul>
           <li v-for="(item, index) in addArr" :key="index"><a>{{ item.name }}</a></li>
         </ul>
       </div>
+
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" size="small" @click="submitAddFile">开始上传</el-button>
         <el-button size="small" @click="resetAdd">全部删除</el-button>
@@ -151,7 +156,7 @@
 
 <script>
 
-import { fetchList, fetchPv, createMachine, updateMachine, updateUseFlag, deleteMachine, upload } from '@/api/machine'
+import { fetchList, fetchPv, createMachine, updateMachine, updateUseFlag, deleteMachine, upload, download } from '@/api/machine'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -238,7 +243,8 @@ export default {
         // endDate: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }]
 
       },
-      downloadLoading: false
+      downloadLoading: false,
+      ftpUrl: ''
     }
   },
   // 初始化获取数据列表
@@ -257,7 +263,7 @@ export default {
           var ext = imgName.substr(idx + 1).toUpperCase()
           ext = ext.toLowerCase()
           // eslint-disable-next-line no-empty
-          if (ext !== 'pdf' && ext !== 'doc' && ext !== 'docx') {
+          if (ext !== 'rar' && ext !== 'zip') {
           } else {
             this.addArr.push(file[i])
           }
@@ -270,6 +276,7 @@ export default {
       // this.resetTemp()
       // this.dialogStatus = 'create'
       this.addId = row.machineId
+      this.addFileName = row.machineName
       // this.addId = Object.assign({}, row.machineId) // copy obj
       this.dialogAddFile = true
       // this.$nextTick(() => {
@@ -300,10 +307,22 @@ export default {
         }
       } */
       upload(formData).then(response => {
-        this.$message({
-          type: 'success',
-          message: '附件上传成功!'
-        })
+        if (response.code === 20000) {
+          this.resetFile()
+          this.getList()
+          this.$message({
+            type: 'success',
+            message: response.message
+
+          })
+          this.dialogAddFile = false
+        } else {
+          this.addArr = []
+          this.$message({
+            type: 'error',
+            message: response.message
+          })
+        }
       })
       /*     this.axios.post(apidate.uploadEnclosure, formData, config)
         .then((response) => {
@@ -315,7 +334,27 @@ export default {
           }
         }) */
     },
+    handlDownload(row) {
+      // var elemIF = document.createElement('iframe')
+      // //   // a.href = process.env.VUE_APP_BASE_API + '/machine/template/download?id=' + row.machineId
+
+      // elemIF.src = 'http://127.0.0.1:8088/machine/template/download?id=' + row.machineId
+      // elemIF.style.display = 'none'
+      // document.body.appendChild(elemIF)
+      download(row.machineId).then(response => {
+        // this.ftpUrl = response.ftpUrl
+        window.location.href = response.ftpUrl
+        // ftp://ftpuser:ftpuser@192.168.137.200\Model\Images\其他33\其他33.rar
+      })
+    },
+    // 重置上传文件相关参数
+    resetFile() {
+      this.addArr = []
+      this.addId = ''
+      this.addFileName = ''
+    },
     resetAdd() {
+      this.resetFile()
       this.dialogAddFile = false
     },
     getList() {

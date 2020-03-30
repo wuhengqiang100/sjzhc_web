@@ -55,7 +55,7 @@
           <!-- <el-button slot="left-footer" class="transfer-footer" size="small" @click="refreshQa">定时获取</el-button> -->
           <!-- <el-button slot="left-footer" v-popover:popover class="transfer-footer" size="small">定时获取</el-button> -->
 
-          <el-button slot="right-footer" class="transfer-footer" size="small">回退</el-button>
+          <!-- <el-button slot="right-footer" class="transfer-footer" size="small">回退</el-button> -->
         </el-transfer>
 
       </div>

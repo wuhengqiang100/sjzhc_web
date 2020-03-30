@@ -37,6 +37,15 @@ export function upload(forData) {
     }
   })
 }
+export function download(id) {
+  return request({
+    url: '/machine/template/download',
+    method: 'post',
+    baseURL: 'http://127.0.0.1:8088',
+    params: { id }
+    // responseType: 'blob'
+  })
+}
 
 export function fetchMachine(id) {
   return request({
