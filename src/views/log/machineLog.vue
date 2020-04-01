@@ -35,7 +35,7 @@
           <span>{{ row.logMachineId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="上传人员Id" align="center">
+      <el-table-column label="操作人员Id" align="center">
         <template slot-scope="{row}">
           <span>{{ row.operatorId }}</span>
         </template>

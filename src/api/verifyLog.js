@@ -36,4 +36,13 @@ export function fetchProduceList(query) {
     baseURL: 'http://127.0.0.1:8088'
   })
 }
+// 核查综合查询
+export function fetchCheckQueryList(data) {
+  return request({
+    url: '/log/CheckQuery',
+    method: 'post',
+    data,
+    baseURL: 'http://127.0.0.1:8088'
+  })
+}
 

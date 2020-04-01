@@ -30,6 +30,9 @@ export default {
       return this.$store.getters.size
     }
   },
+  mounted: function() {
+    this.handleSetSize('mini')
+  },
   methods: {
     handleSetSize(size) {
       this.$ELEMENT.size = size

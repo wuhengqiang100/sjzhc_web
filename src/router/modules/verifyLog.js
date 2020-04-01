@@ -13,7 +13,7 @@ const tableRouter = {
   },
   children: [
 
-    {
+    /*   {
       path: 'dataup',
       component: () => import('@/views/log/dataup'),
       name: 'dataup',
@@ -36,7 +36,7 @@ const tableRouter = {
       component: () => import('@/views/log/produce'),
       name: 'produce',
       meta: { title: '生产日志查询' }
-    }
+    } */
 
   ]
 }

@@ -1,25 +1,11 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      车号：<el-input v-model="listQuery.cartNumber" placeholder="请输入车号" style="width: 120px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      产品：<el-input v-model="listQuery.productName" placeholder="请输入产品名称" style="width: 120px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      工序：<el-input v-model="listQuery.operationName" placeholder="请输入工序名称" style="width: 120px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      设备：<el-input v-model="listQuery.machineName" placeholder="请输入设备名称" style="width: 120px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      机台：<el-input v-model="listQuery.workUnitName" placeholder="请输入机台名称" style="width: 120px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <div class="filter-item">
-        <el-date-picker
-          v-model="dateValue"
-          type="datetimerange"
-          align="right"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          :default-time="['00:00:00', '23:59:59']"
-          @keyup.enter.native="handleFilter"
-        />
-      </div>
-      <!-- <el-select v-model="listQuery.useFlag" placeholder="状态" clearable class="filter-item" style="width: 130px">
+      <el-input v-model="listQuery.title" placeholder="请输入生产日志名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+
+      <el-select v-model="listQuery.useFlag" placeholder="状态" clearable class="filter-item" style="width: 130px">
         <el-option v-for="item in useFlagOptions" :key="item.key" :label="item.display_name" :value="item.key" />
-      </el-select> -->
+      </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
       </el-button>
@@ -46,166 +32,70 @@
     >
       <el-table-column label="生产日志id" prop="id" sortable="custom" align="center" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.logId }}</span>
+          <span>{{ row.logProdId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="生产车号" align="center">
+      <el-table-column label="产品id" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.productId }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="车号" align="center">
         <template slot-scope="{row}">
           <span>{{ row.cartNumber }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="产品名称" align="center">
+      <el-table-column label="工艺id" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.productName }}</span>
+          <span>{{ row.operationId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="工序名称" align="center">
+      <el-table-column label="人员id" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.operationName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="设备名称" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.machineName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="机台名称" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.workUnitName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="信息数量" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.qainfonum }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="报错数量" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.qawasternum }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="识码数量" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.sminfonum }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="整万错误数量" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.machineWasterNumber }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="整万信息数量" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.infoNumber }}</span>
+          <span>{{ row.operatorId }}</span>
         </template>
       </el-table-column>
       <el-table-column label="人员名称" align="center">
         <template slot-scope="{row}">
           <span>{{ row.operatorName }}</span>
         </template>
-      </el-table-column>
-      <!--     <el-table-column label="生产日志名称" align="center" min-width="120px">
+      </el-table-column><el-table-column label="日志类型" align="center">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleUpdate(row)">{{ row.machineName }}</span>
+          <span>{{ row.logType }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="模板image目录" min-width="200px" align="center">
+
+      <el-table-column label="开始时间" width="200px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.imageModelPath }}</span>
-        </template>
-      </el-table-column> -->
-      <!--    <el-table-column label="模板image数量" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.imageModelNum }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="启用状态" align="center">
-        <template slot-scope="{row}">
-          <el-tag v-if="row.useFlag" type="success">
-            启用
-          </el-tag>
-          <el-tag v-else type="danger">
-            禁用
-          </el-tag>
-        </template>
-      </el-table-column> -->
-      <el-table-column label="开始时间" align="center">
-        <template v-if="row.startDate !==null" slot-scope="{row}">
           <span>{{ row.startDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="结束时间" align="center">
+      <el-table-column label="结束时间" width="112" align="center">
         <template v-if="row.endDate !==null" slot-scope="{row}">
           <span>{{ row.endDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <!--       <el-table-column label="操作" fixed="right" align="center" min-width="218px" class-name="small-padding fixed-width">
+      <el-table-column label="数目" align="center">
         <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            修改
-          </el-button>
-          <el-button v-if="row.useFlag" size="mini" type="warning" @click="handleModifyUseFlag(row,false)">禁用</el-button>
-          <el-button v-else size="mini" type="success" @click="handleModifyUseFlag(row,true)">启用</el-button>
-          <el-button size="mini" type="danger" @click="handleDelete(row)">删除</el-button>
-
+          <span>{{ row.actionCount }}</span>
         </template>
-      </el-table-column> -->
+      </el-table-column>
+
+      <el-table-column label="说明" min-width="120px" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.note }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="进度标志" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.itemFlag }}</span>
+        </template>
+      </el-table-column>
+
     </el-table>
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
-    <!--     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="50%">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="125px" style="width: 600px; margin-left:50px;">
-
-        <el-form-item label="生产日志code" prop="machineCode">
-          <el-input v-model="temp.machineCode" type="text" placeholder="请输入生产日志code" />
-        </el-form-item>
-        <el-form-item label="生产日志name" prop="machineName">
-          <el-input v-model="temp.machineName" type="text" placeholder="请输入生产日志name" />
-        </el-form-item>
-        <el-form-item label="模板image目录" prop="imageModelPath">
-          <el-input v-model="temp.imageModelPath" :autosize="{ minRows: 2, maxRows: 5}" type="textarea" placeholder="请输入模板image目录" />
-        </el-form-item>
-        <el-form-item label="模板image数量" prop="imageModelNum">
-          <el-input-number v-model="temp.imageModelNum" :min="0" label="描述文字" />
-        </el-form-item>
-
-        <el-form-item label="启用状态" prop="useFlag">
-          <el-switch v-model="temp.useFlag" active-color="#13ce66" inactive-color="#ff4949" />
-        </el-form-item>
-        <el-form-item label="启用时间" prop="startDate">
-          <el-date-picker v-model="temp.startDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择一个开始时间" />
-        </el-form-item>
-        <el-form-item label="停用时间" prop="endDate">
-          <el-date-picker v-model="temp.endDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择一个结束时间" />
-
-        </el-form-item>
-
-        <el-form-item label="备注">
-          <el-input v-model="temp.note" style="width:220px;" :autosize="{ minRows: 2, maxRows: 5}" type="textarea" placeholder="请输入备注" />
-        </el-form-item>
-
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">
-          返回
-        </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          确认
-        </el-button>
-      </div>
-    </el-dialog>
-
-    <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
-      <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
-        <el-table-column prop="key" label="Channel" />
-        <el-table-column prop="pv" label="Pv" />
-      </el-table>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">Confirm</el-button>
-      </span>
-    </el-dialog> -->
   </div>
 </template>
 
@@ -231,7 +121,7 @@ const calendarTypeKeyValue = machineTypeOptions.reduce((acc, cur) => {
 }, {})
 
 export default {
-  name: 'ProduceLogTable',
+  name: 'OperationLogTable',
   components: { Pagination },
   directives: { waves },
   filters: {
@@ -253,19 +143,12 @@ export default {
       list: null,
       total: 0,
       listLoading: true,
-      dateValue: '',
       listQuery: {
         page: 1,
         limit: 10,
         // useFlag: undefined,
         // importance: undefined,
-        cartNumber: undefined,
-        productName: undefined,
-        operationName: undefined,
-        machineName: undefined,
-        workUnitName: undefined,
-        startDate: '',
-        endDate: '',
+        title: undefined,
         sort: '+id'
       },
       importanceOptions: [1, 2, 3],
@@ -274,29 +157,15 @@ export default {
       statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
       temp: {
-        logId: Number, // 生产日志id
-        itemFlag: Number, // 操作标志
-        qainfonum: Number, // 信息数量
-        qawasternum: Number, // 报错数量
-        sminfonum: Number, // 识码数量
-        jobId: Number, // 基础生产信息主键id
-        cartNumber: '', // 生产车号（大万编号）
+        machineId: undefined,
+        machineCode: '',
+        machineName: '',
+        useFlag: true,
         startDate: new Date(),
-        endDate: new Date(),
-        productId: Number, // 产品id
-        productName: '', // 产品名称
-        operationId: Number, // 工序id
-        operationName: '', // 工序名称
-        operatorId: Number, // 人员序号
-        operatorName: '', // 人员名称
-        machineId: Number, // 设备主键id
-        machineName: '', // 设备名称
-        workUnitId: Number, // 机台主键
-        workUnitName: '', // 机台名称
-        inspectmId: Number, // 主键
-        machineWasterNumber: Number, // 整万错误数量
-        infoNumber: Number// 整万信息数量
-
+        endDate: '',
+        note: '',
+        imageModelNum: '',
+        imageModelPath: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -330,19 +199,12 @@ export default {
         this.list = response.data.items
         this.total = response.data.total
 
-        // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
         }, 1 * 1000)
       })
     },
-    /*     getMachineTypes() {
-      fetchMachineTypeList().then(response => {
-        console.log('tag', response.data)
-        this.machineTypeOptions = response.data
-        console.log('tag', this.machineTypeOptions)
-      })
-    }, */
+
     // 立即刷新数据列表
     refreshList() {
       fetchProduceList(this.listQuery).then(response => {
@@ -380,38 +242,17 @@ export default {
       }
     },
     resetListQuery() {
-      // this.listQuery = {
-      //   page: 1,
-      //   limit: 10,
-      //   // useFlag: undefined,
-      //   // importance: undefined,
-      //   title: undefined,
-      //   sort: '+id'
-      // }
       this.listQuery = {
         page: 1,
         limit: 10,
         // useFlag: undefined,
         // importance: undefined,
-        cartNumber: undefined,
-        productName: undefined,
-        operationName: undefined,
-        machineName: undefined,
-        workUnitName: undefined,
-        startDate: new Date(),
-        endDate: new Date(),
+        title: undefined,
         sort: '+id'
       }
     },
     handleFilter() {
       this.listLoading = true
-      console.log(this.dateValue)
-      if (this.dateValue.length > 0) {
-        this.listQuery.startDate = this.dateValue[0]
-        this.listQuery.endDate = this.dateValue[1]
-      }
-      console.log(this.listQuery.startDate)
-      console.log(this.listQuery.endDate)
       fetchProduceList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
@@ -422,134 +263,6 @@ export default {
         }, 1 * 1000)
       })
     },
-    handleReset() {
-      this.resetListQuery()
-      this.getList()
-    },
-    // 生产日志禁用启用操作
-    /*    handleModifyUseFlag(row, useFlag) {
-      updateUseFlag(row.machineId).then(response => {
-        this.$message({
-          message: response.message,
-          type: 'success'
-        })
-        this.refreshList()
-      })
-
-      row.status = status
-    },
-    handleModifyStatus(row, status) {
-      this.$message({
-        message: '操作Success',
-        type: 'success'
-      })
-      row.status = status
-    },
-
-    handleReset() {
-      this.resetListQuery()
-      this.getList()
-    },
-    // 监听create dialog事件
-    handleCreate() {
-      this.resetTemp()
-      this.dialogStatus = 'create'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
-    },
-    // 添加操作
-    createData() {
-      this.$refs['dataForm'].validate((valid) => {
-        // date格式化
-        this.temp.startDate = parseTime(this.temp.startDate)
-        if (this.temp.endDate !== '') {
-          this.temp.endDate = parseTime(this.temp.endDate)
-        }
-
-        if (valid) {
-          // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          createMachine(this.temp).then(() => {
-            this.refreshList()
-            // this.list.unshift(this.temp)
-            this.dialogFormVisible = false
-            this.$notify({
-              title: 'Success',
-              message: '添加成功',
-              type: 'success',
-              duration: 2000
-            })
-          })
-        }
-      })
-    },
-    // 监听修改 update dialog事件
-    handleUpdate(row) {
-      this.temp = Object.assign({}, row) // copy obj
-      // this.temp.timestamp = new Date(this.temp.timestamp)
-      this.dialogStatus = 'update'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
-    },
-    // 修改操作
-    updateData() {
-      // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-      updateMachine(this.temp).then(() => {
-        this.refreshList()
-        // this.list.unshift(this.temp)
-        this.dialogFormVisible = false
-        this.$notify({
-          title: 'Success',
-          message: '修改成功',
-          type: 'success',
-          duration: 2000
-        })
-      })
-    },
-    // 监听删除dialog事件
-    handleDelete(row) {
-      this.$confirm('您确定要删除该数据吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        deleteMachine(row.machineId).then(() => {
-          this.refreshList()
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          })
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
-      })
-    },
-    handleFetchPv(pv) {
-      fetchPv(pv).then(response => {
-        this.pvData = response.data.pvData
-        this.dialogPvVisible = true
-      })
-    },
-    handleDownload() {
-      this.downloadLoading = true
-      import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-        const filterVal = ['timestamp', 'title', 'type', 'importance', 'status']
-        const data = this.formatJson(filterVal, this.list)
-        excel.export_json_to_excel({
-          header: tHeader,
-          data,
-          filename: 'table-list'
-        })
-        this.downloadLoading = false
-      })
-    }, */
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
         if (j === 'timestamp') {

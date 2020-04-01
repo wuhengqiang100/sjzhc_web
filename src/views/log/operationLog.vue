@@ -35,16 +35,16 @@
           <span>{{ row.logOperationNoteId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="上传人员名称" align="center">
+      <el-table-column label="生产id" align="center">
         <template slot-scope="{row}">
           <span>{{ row.jobId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作人员Id" align="center">
+      <!--       <el-table-column label="操作人员Id" align="center">
         <template slot-scope="{row}">
           <span>{{ row.operatorId }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="操作人员名称" align="center">
         <template slot-scope="{row}">
           <span>{{ row.operatorName }}</span>
