@@ -113,9 +113,9 @@
         <el-button @click="dialogFormVisible = false">
           返回
         </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
+        <!--        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
           确认
-        </el-button>
+        </el-button> -->
       </div>
     </el-dialog>
 

@@ -3,9 +3,6 @@
     <div class="filter-container">
       <el-input v-model="listQuery.title" placeholder="请输入操作日志名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
 
-      <el-select v-model="listQuery.useFlag" placeholder="状态" clearable class="filter-item" style="width: 130px">
-        <el-option v-for="item in useFlagOptions" :key="item.key" :label="item.display_name" :value="item.key" />
-      </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
       </el-button>
@@ -50,31 +47,7 @@
           <span>{{ row.operatorName }}</span>
         </template>
       </el-table-column>
-      <!--     <el-table-column label="操作日志名称" align="center" min-width="120px">
-        <template slot-scope="{row}">
-          <span class="link-type" @click="handleUpdate(row)">{{ row.machineName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="模板image目录" min-width="200px" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.imageModelPath }}</span>
-        </template>
-      </el-table-column> -->
-      <!--    <el-table-column label="模板image数量" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.imageModelNum }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="启用状态" align="center">
-        <template slot-scope="{row}">
-          <el-tag v-if="row.useFlag" type="success">
-            启用
-          </el-tag>
-          <el-tag v-else type="danger">
-            禁用
-          </el-tag>
-        </template>
-      </el-table-column> -->
+
       <el-table-column label="开始时间" width="200px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.startDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>

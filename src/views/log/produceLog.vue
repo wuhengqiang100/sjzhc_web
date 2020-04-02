@@ -3,9 +3,6 @@
     <div class="filter-container">
       <el-input v-model="listQuery.title" placeholder="请输入生产日志名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
 
-      <el-select v-model="listQuery.useFlag" placeholder="状态" clearable class="filter-item" style="width: 130px">
-        <el-option v-for="item in useFlagOptions" :key="item.key" :label="item.display_name" :value="item.key" />
-      </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
       </el-button>
@@ -35,9 +32,9 @@
           <span>{{ row.logProdId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="产品id" align="center">
+      <el-table-column label="产品名称" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.productId }}</span>
+          <span>{{ row.productName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="车号" align="center">
@@ -45,21 +42,17 @@
           <span>{{ row.cartNumber }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="工艺id" align="center">
+      <el-table-column label="工艺名称" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.operationId }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="人员id" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.operatorId }}</span>
+          <span>{{ row.operationName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="人员名称" align="center">
         <template slot-scope="{row}">
           <span>{{ row.operatorName }}</span>
         </template>
-      </el-table-column><el-table-column label="日志类型" align="center">
+      </el-table-column>
+      <el-table-column label="日志类型" align="center">
         <template slot-scope="{row}">
           <span>{{ row.logType }}</span>
         </template>
