@@ -1,20 +1,25 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="请输入生产日志名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-
+      <el-input v-model="listQuery.title" placeholder="请输入车号" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <div class="filter-item">
+        <el-date-picker
+          v-model="dateValue"
+          type="datetimerange"
+          align="right"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          :default-time="['00:00:01', '23:59:59']"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          @keyup.enter.native="handleFilter"
+        />
+      </div>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-refresh" @click="handleReset">
         重置
       </el-button>
-      <!--  <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-        添加
-      </el-button> -->
-      <!--     <el-button class="filter-item" style="margin-left: 10px;" type="warning" icon="el-icon-download" @click="handleCreate">
-        导入
-      </el-button> -->
     </div>
 
     <el-table
@@ -94,7 +99,6 @@
 
 <script>
 
-// import { fetchList, fetchPv, createMachine, updateMachine, updateUseFlag, deleteMachine } from '@/api/machine'
 import { fetchProduceList } from '@/api/verifyLog'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
@@ -136,13 +140,14 @@ export default {
       list: null,
       total: 0,
       listLoading: true,
+      dateValue: '',
       listQuery: {
         page: 1,
         limit: 10,
-        // useFlag: undefined,
-        // importance: undefined,
         title: undefined,
-        sort: '+id'
+        sort: '+id',
+        startDate: '',
+        endDate: ''
       },
       importanceOptions: [1, 2, 3],
       useFlagOptions, // 启用状态
@@ -200,6 +205,10 @@ export default {
 
     // 立即刷新数据列表
     refreshList() {
+      if (this.dateValue !== '') {
+        this.listQuery.startDate = parseTime(this.dateValue[0])
+        this.listQuery.endDate = parseTime(this.dateValue[1])
+      }
       fetchProduceList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
@@ -238,14 +247,19 @@ export default {
       this.listQuery = {
         page: 1,
         limit: 10,
-        // useFlag: undefined,
-        // importance: undefined,
         title: undefined,
-        sort: '+id'
+        sort: '+id',
+        startDate: '',
+        endDate: ''
       }
+      this.dateValue = ''
     },
     handleFilter() {
       this.listLoading = true
+      if (this.dateValue !== '') {
+        this.listQuery.startDate = parseTime(this.dateValue[0])
+        this.listQuery.endDate = parseTime(this.dateValue[1])
+      }
       fetchProduceList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
@@ -255,6 +269,10 @@ export default {
           this.listLoading = false
         }, 1 * 1000)
       })
+    },
+    handleReset() {
+      this.resetListQuery()
+      this.getList()
     },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {

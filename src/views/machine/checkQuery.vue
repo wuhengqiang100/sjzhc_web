@@ -121,64 +121,11 @@
     </el-table>
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
-
-    <!--     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="50%">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="125px" style="width: 600px; margin-left:50px;">
-
-        <el-form-item label="生产日志code" prop="machineCode">
-          <el-input v-model="temp.machineCode" type="text" placeholder="请输入生产日志code" />
-        </el-form-item>
-        <el-form-item label="生产日志name" prop="machineName">
-          <el-input v-model="temp.machineName" type="text" placeholder="请输入生产日志name" />
-        </el-form-item>
-        <el-form-item label="模板image目录" prop="imageModelPath">
-          <el-input v-model="temp.imageModelPath" :autosize="{ minRows: 2, maxRows: 5}" type="textarea" placeholder="请输入模板image目录" />
-        </el-form-item>
-        <el-form-item label="模板image数量" prop="imageModelNum">
-          <el-input-number v-model="temp.imageModelNum" :min="0" label="描述文字" />
-        </el-form-item>
-
-        <el-form-item label="启用状态" prop="useFlag">
-          <el-switch v-model="temp.useFlag" active-color="#13ce66" inactive-color="#ff4949" />
-        </el-form-item>
-        <el-form-item label="启用时间" prop="startDate">
-          <el-date-picker v-model="temp.startDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择一个开始时间" />
-        </el-form-item>
-        <el-form-item label="停用时间" prop="endDate">
-          <el-date-picker v-model="temp.endDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择一个结束时间" />
-
-        </el-form-item>
-
-        <el-form-item label="备注">
-          <el-input v-model="temp.note" style="width:220px;" :autosize="{ minRows: 2, maxRows: 5}" type="textarea" placeholder="请输入备注" />
-        </el-form-item>
-
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">
-          返回
-        </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          确认
-        </el-button>
-      </div>
-    </el-dialog>
-
-    <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
-      <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
-        <el-table-column prop="key" label="Channel" />
-        <el-table-column prop="pv" label="Pv" />
-      </el-table>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">Confirm</el-button>
-      </span>
-    </el-dialog> -->
   </div>
 </template>
 
 <script>
 
-// import { fetchList, fetchPv, createMachine, updateMachine, updateUseFlag, deleteMachine } from '@/api/machine'
 import { fetchCheckQueryList } from '@/api/verifyLog'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
@@ -224,15 +171,13 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        // useFlag: undefined,
-        // importance: undefined,
         cartNumber: undefined,
         productName: undefined,
         operationName: undefined,
         machineName: undefined,
         workUnitName: undefined,
-        startDate: Date,
-        endDate: Date,
+        startDate: '',
+        endDate: '',
         sort: '+id'
       },
       importanceOptions: [1, 2, 3],
@@ -303,15 +248,11 @@ export default {
         }, 1 * 1000)
       })
     },
-    /*     getMachineTypes() {
-      fetchMachineTypeList().then(response => {
-        console.log('tag', response.data)
-        this.machineTypeOptions = response.data
-        console.log('tag', this.machineTypeOptions)
-      })
-    }, */
-    // 立即刷新数据列表
     refreshList() {
+      if (this.dateValue !== '') {
+        this.listQuery.startDate = parseTime(this.dateValue[0])
+        this.listQuery.endDate = parseTime(this.dateValue[1])
+      }
       fetchCheckQueryList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
@@ -347,14 +288,6 @@ export default {
       }
     },
     resetListQuery() {
-      // this.listQuery = {
-      //   page: 1,
-      //   limit: 10,
-      //   // useFlag: undefined,
-      //   // importance: undefined,
-      //   title: undefined,
-      //   sort: '+id'
-      // }
       this.listQuery = {
         page: 1,
         limit: 10,
@@ -365,14 +298,14 @@ export default {
         operationName: undefined,
         machineName: undefined,
         workUnitName: undefined,
-        startDate: Date,
-        endDate: Date,
+        startDate: '',
+        endDate: '',
         sort: '+id'
       }
     },
     handleFilter() {
       this.listLoading = true
-      if (this.dateValue !== null) {
+      if (this.dateValue !== '') {
         this.listQuery.startDate = parseTime(this.dateValue[0])
         this.listQuery.endDate = parseTime(this.dateValue[1])
       }
@@ -390,130 +323,6 @@ export default {
       this.resetListQuery()
       this.getList()
     },
-    // 生产日志禁用启用操作
-    /*    handleModifyUseFlag(row, useFlag) {
-      updateUseFlag(row.machineId).then(response => {
-        this.$message({
-          message: response.message,
-          type: 'success'
-        })
-        this.refreshList()
-      })
-
-      row.status = status
-    },
-    handleModifyStatus(row, status) {
-      this.$message({
-        message: '操作Success',
-        type: 'success'
-      })
-      row.status = status
-    },
-
-    handleReset() {
-      this.resetListQuery()
-      this.getList()
-    },
-    // 监听create dialog事件
-    handleCreate() {
-      this.resetTemp()
-      this.dialogStatus = 'create'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
-    },
-    // 添加操作
-    createData() {
-      this.$refs['dataForm'].validate((valid) => {
-        // date格式化
-        this.temp.startDate = parseTime(this.temp.startDate)
-        if (this.temp.endDate !== '') {
-          this.temp.endDate = parseTime(this.temp.endDate)
-        }
-
-        if (valid) {
-          // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          createMachine(this.temp).then(() => {
-            this.refreshList()
-            // this.list.unshift(this.temp)
-            this.dialogFormVisible = false
-            this.$notify({
-              title: 'Success',
-              message: '添加成功',
-              type: 'success',
-              duration: 2000
-            })
-          })
-        }
-      })
-    },
-    // 监听修改 update dialog事件
-    handleUpdate(row) {
-      this.temp = Object.assign({}, row) // copy obj
-      // this.temp.timestamp = new Date(this.temp.timestamp)
-      this.dialogStatus = 'update'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
-    },
-    // 修改操作
-    updateData() {
-      // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-      updateMachine(this.temp).then(() => {
-        this.refreshList()
-        // this.list.unshift(this.temp)
-        this.dialogFormVisible = false
-        this.$notify({
-          title: 'Success',
-          message: '修改成功',
-          type: 'success',
-          duration: 2000
-        })
-      })
-    },
-    // 监听删除dialog事件
-    handleDelete(row) {
-      this.$confirm('您确定要删除该数据吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        deleteMachine(row.machineId).then(() => {
-          this.refreshList()
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          })
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
-      })
-    },
-    handleFetchPv(pv) {
-      fetchPv(pv).then(response => {
-        this.pvData = response.data.pvData
-        this.dialogPvVisible = true
-      })
-    },
-    handleDownload() {
-      this.downloadLoading = true
-      import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-        const filterVal = ['timestamp', 'title', 'type', 'importance', 'status']
-        const data = this.formatJson(filterVal, this.list)
-        excel.export_json_to_excel({
-          header: tHeader,
-          data,
-          filename: 'table-list'
-        })
-        this.downloadLoading = false
-      })
-    }, */
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
         if (j === 'timestamp') {

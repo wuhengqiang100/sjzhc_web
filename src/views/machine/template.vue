@@ -12,12 +12,6 @@
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-refresh" @click="handleReset">
         重置
       </el-button>
-      <!-- <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-        添加
-      </el-button> -->
-      <!--     <el-button class="filter-item" style="margin-left: 10px;" type="warning" icon="el-icon-download" @click="handleCreate">
-        导入
-      </el-button> -->
     </div>
 
     <el-table
@@ -55,12 +49,6 @@
           <span>{{ row.imageModelNum }}</span>
         </template>
       </el-table-column>
-
-      <!-- <el-table-column label="说明" min-width="50px" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.note }}</span>
-        </template>
-      </el-table-column> -->
       <el-table-column label="操作" fixed="right" align="left" min-width="90px" class-name="big-padding fixed-width">
         <template slot-scope="{row}">
           <!-- <el-button type="primary" size="mini" @click="handleUpdate(row)">
@@ -279,6 +267,7 @@ export default {
       this.addFileName = row.machineName
       // this.addId = Object.assign({}, row.machineId) // copy obj
       this.dialogAddFile = true
+
       // this.$nextTick(() => {
       //   this.$refs['dataForm'].clearValidate()
       // })
@@ -291,7 +280,14 @@ export default {
         })
         return
       }
-
+      if (this.addArr.length > 1) {
+        this.$message({
+          type: 'error',
+          message: '只能单文件上传'
+        })
+        this.addArr = []
+        return
+      }
       var formData = new FormData()
       // formData.append('num', this.addType)
       formData.append('addId', this.addId)
@@ -308,7 +304,6 @@ export default {
       } */
       upload(formData).then(response => {
         if (response.code === 20000) {
-          this.resetFile()
           this.getList()
           this.$message({
             type: 'success',
@@ -316,12 +311,14 @@ export default {
 
           })
           this.dialogAddFile = false
+          this.resetFile()
         } else {
           this.addArr = []
           this.$message({
             type: 'error',
             message: response.message
           })
+          this.resetFile()
         }
       })
       /*     this.axios.post(apidate.uploadEnclosure, formData, config)
@@ -335,12 +332,6 @@ export default {
         }) */
     },
     handlDownload(row) {
-      // var elemIF = document.createElement('iframe')
-      // //   // a.href = process.env.VUE_APP_BASE_API + '/machine/template/download?id=' + row.machineId
-
-      // elemIF.src = 'http://127.0.0.1:8088/machine/template/download?id=' + row.machineId
-      // elemIF.style.display = 'none'
-      // document.body.appendChild(elemIF)
       download(row.machineId).then(response => {
         // this.ftpUrl = response.ftpUrl
         window.location.href = response.ftpUrl
