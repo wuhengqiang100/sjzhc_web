@@ -329,7 +329,7 @@ export default {
       this.resetTemp()
       // 获取权限menuTree
       this.getRoleMenus()
-      this.$refs.tree.setCheckedKeys([])
+      // this.$refs.tree.setCheckedKeys([])
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {

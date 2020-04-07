@@ -1,51 +1,54 @@
-import request from '@/utils/request'
+import request from "@/utils/request";
 
 // 上传日志查询
-export function fetchDataUpList(data) {
+export function fetchDataUpList (data) {
   return request({
-    url: '/log/dataup',
-    method: 'post',
+    url: "/log/dataup",
+    method: "post",
     data,
-    baseURL: 'http://127.0.0.1:8088'
-  })
+    baseURL: "http://127.0.0.1:8088"
+  });
 }
-
 // 操作日志查询
-export function fetchOperationList(data) {
+export function fetchOperationList (data) {
   return request({
-    url: '/log/operation',
-    method: 'post',
+    url: "/log/operation",
+    method: "post",
     data,
-    baseURL: 'http://127.0.0.1:8088'
-  })
+    baseURL: "http://127.0.0.1:8088"
+  });
 }
-
 // 设备日志查询
-export function fetchMachineList(data) {
+export function fetchMachineList (data) {
   return request({
-    url: '/log/machine',
-    method: 'post',
+    url: "/log/machine",
+    method: "post",
     data,
-    baseURL: 'http://127.0.0.1:8088'
-  })
+    baseURL: "http://127.0.0.1:8088"
+  });
 }
-
 // 生产日志查询
-export function fetchProduceList(data) {
+export function fetchProduceList (data) {
   return request({
-    url: '/log/produce',
-    method: 'post',
+    url: "/log/produce",
+    method: "post",
     data,
-    baseURL: 'http://127.0.0.1:8088'
-  })
+    baseURL: "http://127.0.0.1:8088"
+  });
 }
 // 核查综合查询
-export function fetchCheckQueryList(data) {
+export function fetchCheckQueryList (data) {
   return request({
-    url: '/log/CheckQuery',
-    method: 'post',
+    url: "/log/CheckQuery",
+    method: "post",
     data,
-    baseURL: 'http://127.0.0.1:8088'
-  })
+    baseURL: "http://127.0.0.1:8088"
+  });
 }
-
+export function listOption () {
+  return request({
+    url: "/log/listOption",
+    method: "post",
+    baseURL: "http://127.0.0.1:8088"
+  });
+}

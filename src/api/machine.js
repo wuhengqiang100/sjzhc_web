@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function fetchList(query) {
+export function fetchList (query) {
   return request({
     url: '/machine/list',
     method: 'get',
@@ -9,7 +9,7 @@ export function fetchList(query) {
   })
 }
 
-export function fetchMachineTypeList() {
+export function fetchMachineTypeList () {
   return request({
     url: '/machineType/listOption',
     method: 'get',
@@ -17,7 +17,7 @@ export function fetchMachineTypeList() {
   })
 }
 
-export function updateUseFlag(id) {
+export function updateUseFlag (id) {
   return request({
     url: '/machine/updateUseFlag',
     method: 'post',
@@ -26,7 +26,7 @@ export function updateUseFlag(id) {
   })
 }
 
-export function upload(forData) {
+export function upload (forData) {
   return request({
     url: '/machine/template/upload',
     method: 'post',
@@ -37,17 +37,17 @@ export function upload(forData) {
     }
   })
 }
-export function download(id) {
+export function download (id, tokenId) {
   return request({
     url: '/machine/template/download',
     method: 'post',
     baseURL: 'http://127.0.0.1:8088',
-    params: { id }
+    params: { id, tokenId }
     // responseType: 'blob'
   })
 }
 
-export function fetchMachine(id) {
+export function fetchMachine (id) {
   return request({
     url: '/machine/detail',
     method: 'get',
@@ -55,7 +55,7 @@ export function fetchMachine(id) {
   })
 }
 
-export function fetchPv(pv) {
+export function fetchPv (pv) {
   return request({
     url: '/machine/pv',
     method: 'get',
@@ -63,7 +63,7 @@ export function fetchPv(pv) {
   })
 }
 
-export function createMachine(data) {
+export function createMachine (data) {
   return request({
     url: '/machine/create',
     method: 'post',
@@ -72,7 +72,7 @@ export function createMachine(data) {
   })
 }
 
-export function updateMachine(data) {
+export function updateMachine (data) {
   return request({
     url: '/machine/update',
     method: 'post',
@@ -80,7 +80,7 @@ export function updateMachine(data) {
     baseURL: 'http://127.0.0.1:8088'
   })
 }
-export function deleteMachine(id) {
+export function deleteMachine (id) {
   return request({
     url: '/machine/delete',
     method: 'post',
