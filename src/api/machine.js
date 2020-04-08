@@ -5,7 +5,7 @@ export function fetchList (query) {
     url: '/machine/list',
     method: 'get',
     params: query,
-    baseURL: 'http://127.0.0.1:8088'
+    //baseURL: "http://127.0.0.1:8088"
   })
 }
 
@@ -13,7 +13,7 @@ export function fetchMachineTypeList () {
   return request({
     url: '/machineType/listOption',
     method: 'get',
-    baseURL: 'http://127.0.0.1:8088'
+    //baseURL: "http://127.0.0.1:8088"
   })
 }
 
@@ -22,7 +22,7 @@ export function updateUseFlag (id) {
     url: '/machine/updateUseFlag',
     method: 'post',
     params: { id },
-    baseURL: 'http://127.0.0.1:8088'
+    //baseURL: "http://127.0.0.1:8088"
   })
 }
 
@@ -31,7 +31,7 @@ export function upload (forData) {
     url: '/machine/template/upload',
     method: 'post',
     data: forData,
-    baseURL: 'http://127.0.0.1:8088',
+    //baseURL: "http://127.0.0.1:8088",
     headers: {
       'Content-Type': 'multipart/form-data'
     }
@@ -41,7 +41,7 @@ export function download (id, tokenId) {
   return request({
     url: '/machine/template/download',
     method: 'post',
-    baseURL: 'http://127.0.0.1:8088',
+    //baseURL: "http://127.0.0.1:8088",
     params: { id, tokenId }
     // responseType: 'blob'
   })
@@ -68,7 +68,7 @@ export function createMachine (data) {
     url: '/machine/create',
     method: 'post',
     data,
-    baseURL: 'http://127.0.0.1:8088'
+    //baseURL: "http://127.0.0.1:8088"
   })
 }
 
@@ -77,7 +77,7 @@ export function updateMachine (data) {
     url: '/machine/update',
     method: 'post',
     data,
-    baseURL: 'http://127.0.0.1:8088'
+    //baseURL: "http://127.0.0.1:8088"
   })
 }
 export function deleteMachine (id) {
@@ -85,6 +85,6 @@ export function deleteMachine (id) {
     url: '/machine/delete',
     method: 'post',
     params: { id },
-    baseURL: 'http://127.0.0.1:8088'
+    //baseURL: "http://127.0.0.1:8088"
   })
 }
