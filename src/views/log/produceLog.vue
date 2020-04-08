@@ -1,7 +1,60 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <!-- <el-input v-model="listQuery.title" placeholder="请输入生产日志名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" /> -->
+      车号：
+      <el-input v-model="listQuery.cartNumber"
+                placeholder="请输入车号"
+                style="width: 120px;"
+                class="filter-item"
+                @keyup.enter.native="handleFilter" />
+      产品：
+      <el-select v-model="listQuery.productName"
+                 filterable
+                 placeholder="请搜索或者选择">
+        <el-option v-for="item in productOption"
+                   :key="item.value"
+                   :label="item.label"
+                   :value="item.label"
+                   @keyup.enter.native="handleFilter">
+        </el-option>
+      </el-select>
+
+      工序：
+      <el-select v-model="listQuery.operationName"
+                 filterable
+                 placeholder="请搜索或者选择">
+        <el-option v-for="item in operationOption"
+                   :key="item.value"
+                   :label="item.label"
+                   :value="item.label"
+                   @keyup.enter.native="handleFilter">
+        </el-option>
+      </el-select>
+
+      <!--    设备：
+      <el-select v-model="listQuery.machineName"
+                 filterable
+                 placeholder="请搜索或者选择">
+        <el-option v-for="item in machineOption"
+                   :key="item.value"
+                   :label="item.label"
+                   :value="item.label"
+                   @keyup.enter.native="handleFilter">
+        </el-option>
+      </el-select>
+
+      机台：
+      <el-select v-model="listQuery.workUnitName"
+                 filterable
+                 placeholder="请搜索或者选择">
+        <el-option v-for="item in dicWorkUnitOption"
+                   :key="item.value"
+                   :label="item.label"
+                   :value="item.label"
+                   @keyup.enter.native="handleFilter">
+        </el-option>
+      </el-select> -->
+
       <div class="filter-item">
         <el-date-picker v-model="dateValue"
                         type="datetimerange"
@@ -51,19 +104,20 @@
           <span>{{ row.logProdId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="产品名称"
-                       align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.productName }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="车号"
                        align="center">
         <template slot-scope="{row}">
           <span>{{ row.cartNumber }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="工艺名称"
+      <el-table-column label="产品名称"
+                       align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.productName }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="工序名称"
                        align="center">
         <template slot-scope="{row}">
           <span>{{ row.operationName }}</span>
@@ -139,7 +193,8 @@
 <script>
 
 // import { fetchList, fetchPv, createMachine, updateMachine, updateUseFlag, deleteMachine } from '@/api/machine'
-import { fetchProduceList } from '@/api/verifyLog'
+import { fetchProduceList, listOption } from '@/api/verifyLog'
+
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -181,12 +236,20 @@ export default {
       total: 0,
       listLoading: true,
       dateValue: '',
-
+      productOption: [],
+      operationOption: [],
+      machineOption: [],
+      dicWorkUnitOption: [],
       listQuery: {
         page: 1,
         limit: 10,
         // useFlag: undefined,
         // importance: undefined,
+        cartNumber: undefined,
+        productName: undefined,
+        operationName: undefined,
+        machineName: undefined,
+        workUnitName: undefined,
         title: undefined,
         sort: '+id',
         startDate: Date,
@@ -230,6 +293,8 @@ export default {
   },
   // 初始化获取数据列表
   created () {
+    this.getSelectOption()//获取查询的条件options
+
     this.getList()
   },
   methods: {
@@ -249,7 +314,14 @@ export default {
         }, 1 * 1000)
       })
     },
-
+    getSelectOption () {
+      listOption().then(response => {
+        this.productOption = response.productOption
+        this.machineOption = response.machineOption
+        this.operationOption = response.operationOption
+        this.dicWorkUnitOption = response.dicWorkUnitOption
+      })
+    },
     // 立即刷新数据列表
     refreshList () {
       if (this.dateValue !== '') {
@@ -297,6 +369,11 @@ export default {
         // useFlag: undefined,
         // importance: undefined,
         title: undefined,
+        cartNumber: undefined,
+        productName: undefined,
+        operationName: undefined,
+        machineName: undefined,
+        workUnitName: undefined,
         sort: '+id',
         startDate: Date,
         endDate: Date
@@ -317,6 +394,10 @@ export default {
           this.listLoading = false
         }, 1 * 1000)
       })
+    },
+    handleReset () {
+      this.resetListQuery()
+      this.getList()
     },
     formatJson (filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {

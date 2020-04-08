@@ -52,7 +52,7 @@
           <span>{{ row.operator.operatorName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="设备Id"
+      <el-table-column label="设备ip"
                        align="center">
         <template slot-scope="{row}">
           <span>{{ row.machineIp }}</span>
