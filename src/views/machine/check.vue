@@ -4,54 +4,73 @@
     <div class="filter-container">
       <div style="text-align: justify;width:100%;  justify-content: space-between">
 
-        <el-transfer
-          v-model="value"
-          style="text-align: left; display: inline-block;margin: auto"
-          filterable
-          :filter-method="filterMethod"
-          filter-placeholder="请输入车号"
-          :titles="titles"
-          :button-texts="['回退', '审核']"
-          :format="{
+        <el-transfer v-model="value"
+                     style="text-align: left; display: inline-block;margin: auto"
+                     filterable
+                     :filter-method="filterMethod"
+                     filter-placeholder="请输入车号"
+                     :titles="titles"
+                     :button-texts="['回退', '审核']"
+                     :format="{
             noChecked: '${total}',
             hasChecked: '${checked}/${total}'
           }"
-          :data="data"
-          @change="handleChange"
-        >
-          <span v-if="option.allowJudge===0" slot-scope="{ option }" class="widController">
-            <el-tag size="small ">{{ option.wipJobs.cartNumber }}</el-tag>&emsp;&emsp;
+                     :data="data"
+                     @change="handleChange">
+          <span v-if="option.allowJudge===0"
+                slot-scope="{ option }"
+                class="widController">
+            <el-tag size="small">{{ option.wipJobs.cartNumber }}</el-tag>
+            <span style="margin-left:20px;"></span>
             <span class="spanLi"> {{ option.product.productName }}</span>
             <span class="spanLi">{{ option.operation.operationName }}</span>
             <span class="spanLi">{{ option.infoNumber }}</span>
             <span class="spanLi">{{ option.machineWasterNumber }}</span>
+            <span class="spanLi2">{{ option.noCheckNum }}</span>
           </span>
-          <span v-else-if="option.allowJudge===1" slot-scope="{ option }" class="widController">
-            <el-tag size="small " type="success">{{ option.wipJobs.cartNumber }}</el-tag> &emsp;&emsp;
+          <span v-else-if="option.allowJudge===1"
+                slot-scope="{ option }"
+                class="widController">
+            <el-tag size="small "
+                    type="success">{{ option.wipJobs.cartNumber }}</el-tag> <span style="margin-left:20px;"></span>
             <span class="spanLi"> {{ option.product.productName }}</span>
             <span class="spanLi">{{ option.operation.operationName }}</span>
             <span class="spanLi">{{ option.infoNumber }}</span>
             <span class="spanLi">{{ option.machineWasterNumber }}</span>
+            <span class="spanLi2">{{ option.noCheckNum }}</span>
             <span class="spanLi">未分活</span>
           </span>
-          <span v-else slot-scope="{ option }" class="widController">
-            <el-tag size="small " type="danger">{{ option.wipJobs.cartNumber }}</el-tag> &emsp;&emsp;
+          <span v-else
+                slot-scope="{ option }"
+                class="widController">
+            <el-tag size="small "
+                    type="danger">{{ option.wipJobs.cartNumber }}</el-tag> <span style="margin-left:20px;"></span>
             <span class="spanLi"> {{ option.product.productName }}</span>
             <span class="spanLi">{{ option.operation.operationName }}</span>
             <span class="spanLi">{{ option.infoNumber }}</span>
             <span class="spanLi">{{ option.machineWasterNumber }}</span>
+            <span class="spanLi2">{{ option.noCheckNum }}</span>
             <span class="spanLi">已分活</span>
 
           </span>
-          <span slot="left-footer" class="transfer-footer" style="font-size:12px;padding-right:0px;">手动</span>
-          <el-button slot="left-footer" class="transfer-footer" size="small" @click="refreshQa">刷新数据</el-button>
-          <span slot="left-footer" class="transfer-footer" style="font-size:12px;padding-right:0px;">定时</span>
-          <el-button slot="left-footer" class="transfer-footer" size="small"><el-switch
-            v-model="switchWalue"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-            @change="changeSwitch"
-          /></el-button>
+          <span slot="left-footer"
+                class="transfer-footer"
+                style="font-size:12px;padding-right:0px;">手动</span>
+          <el-button slot="left-footer"
+                     class="transfer-footer"
+                     size="small"
+                     @click="refreshQa">刷新数据</el-button>
+          <span slot="left-footer"
+                class="transfer-footer"
+                style="font-size:12px;padding-right:0px;">定时</span>
+          <el-button slot="left-footer"
+                     class="transfer-footer"
+                     size="small">
+            <el-switch v-model="switchWalue"
+                       active-color="#13ce66"
+                       inactive-color="#ff4949"
+                       @change="changeSwitch" />
+          </el-button>
           <!-- <el-button slot="left-footer" class="transfer-footer" size="small" @click="refreshQa">定时获取</el-button> -->
           <!-- <el-button slot="left-footer" v-popover:popover class="transfer-footer" size="small">定时获取</el-button> -->
 
@@ -60,19 +79,21 @@
 
       </div>
     </div>
-    <el-popover
-      ref="popover"
-      v-model="visible"
-      placement="top"
-      title="设置定时刷新"
-      width="200"
-      trigger="click"
-    >
+    <el-popover ref="popover"
+                v-model="visible"
+                placement="top"
+                title="设置定时刷新"
+                width="200"
+                trigger="click">
       <!-- <el-input v-model="input1" placeholder="请输入内容" />
       <el-input v-model="input2" placeholder="请输入内容" /> -->
       <div style="text-align: right; margin: 0">
-        <el-button size="mini" type="text" @click="visible = false">取消</el-button>
-        <el-button type="primary" size="mini" @click="visible = false">确定</el-button>
+        <el-button size="mini"
+                   type="text"
+                   @click="visible = false">取消</el-button>
+        <el-button type="primary"
+                   size="mini"
+                   @click="visible = false">确定</el-button>
       </div>
     </el-popover>
   </div>
@@ -84,6 +105,7 @@ import { fetchList, updateMachineCheck } from '@/api/machineCheck'
 import waves from '@/directive/waves' // waves directive
 // import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import { getToken } from '@/utils/auth'
 
 export default {
   name: 'MachineCheckTable',
@@ -92,27 +114,29 @@ export default {
   directives: { waves },
   filters: {
   },
-  data() {
+  data () {
     return {
       visible: false,
       data: [],
       value: [],
       switchWalue: false,
       interval: '', // 定时器参数
-      titles: [' -- 车号 --------  品种 --------  工艺 --------  总数  ----- 缺陷数  -- 未检数',
-        '-- 车号 --------  品种 --------  工艺 --------  总数  ----- 缺陷数  -- 未检数--  状态'],
-      filterMethod(query, item) {
+      titles: [' -- 车号 -----  品种 -----  工艺 -----  总数  ----- 缺陷数  -- 未检数',
+        '-- 车号 ------  品种 -----  工艺 -----  总数  ----- 缺陷数  -- 未检数--  状态'],
+      filterMethod (query, item) {
         return item.wipJobs.cartNumber.indexOf(query) > -1
       },
       qaInspectMasterList: [], // 总的核查数据list
       temp: {
         direction: '',
-        movedKeys: []
+        movedKeys: [],
+        tokenId: ''
       },
       qaInspectMaster: {
         inspectmId: Number, // 质量表头id
         machineWasterNumber: Number, // 整万错误数量
         infoNumber: Number, // 整万信息数量
+        noCheckNum: Number, // 未检信息数量
         allowJudge: Number, // 产品状态码
         wipProdLogs: {// 生产日志信息
           logId: Number, // 生产日志id
@@ -158,25 +182,25 @@ export default {
       }
     }
   },
-  created() {
+  created () {
     this.getList()
   },
-  mounted() {
+  mounted () {
     // setInterval(() => {
     //   this.resetTemp() // 先初始化
     //   this.getList()// 定时刷新获取数据
     // }, 2 * 2000)
-  /*   var Interval
-    if (this.switchWalue) { // 开启自动刷新功能
-      Interval = setInterval(() => {
-        this.resetTemp() // 先初始化
-        this.getList()// 定时刷新获取数据
+    /*   var Interval
+      if (this.switchWalue) { // 开启自动刷新功能
+        Interval = setInterval(() => {
+          this.resetTemp() // 先初始化
+          this.getList()// 定时刷新获取数据
+          console.log(this.switchWalue)
+        }, 2 * 2000)
+      } else {
         console.log(this.switchWalue)
-      }, 2 * 2000)
-    } else {
-      console.log(this.switchWalue)
-      clearInterval(Interval)
-    } */
+        clearInterval(Interval)
+      } */
     /*     setInterval(() => {
       this.resetTemp() // 先初始化
       this.getList()// 定时刷新获取数据
@@ -185,14 +209,14 @@ export default {
   },
   methods: {
     // 有加载圈的加载数据列表
-    getList() {
+    getList () {
       // this.listLoading = true
       fetchList().then(response => {
         this.qaInspectMasterList = response.qaInspectMasterList
         // this.generateData(this.qaInspectMasterList)// 解析返回的核查数据
         // this.generateData() // 生成data穿梭框数据
         this.qaInspectMasterList.forEach((qa, index) => {
-        // this.qaInspectMaster = qa
+          // this.qaInspectMaster = qa
 
           // 可以审核
           if (qa.allowJudge === 0) {
@@ -201,6 +225,7 @@ export default {
               label: qa.product.productName,
               disabled: false,
               machineWasterNumber: qa.machineWasterNumber,
+              noCheckNum: qa.noCheckNum,
               infoNumber: qa.infoNumber,
               allowJudge: qa.allowJudge,
               wipProdLogs: qa.wipProdLogs,
@@ -220,6 +245,7 @@ export default {
               label: qa.product.productName,
               disabled: false,
               machineWasterNumber: qa.machineWasterNumber,
+              noCheckNum: qa.noCheckNum,
               infoNumber: qa.infoNumber,
               allowJudge: qa.allowJudge,
               wipProdLogs: qa.wipProdLogs,
@@ -239,6 +265,7 @@ export default {
               label: qa.product.productName,
               disabled: true,
               machineWasterNumber: qa.machineWasterNumber,
+              noCheckNum: qa.noCheckNum,
               infoNumber: qa.infoNumber,
               allowJudge: qa.allowJudge,
               wipProdLogs: qa.wipProdLogs,
@@ -263,9 +290,10 @@ export default {
      * direction:left  回退操作
      * movedKeys改变状态的id值,质量表头id
      */
-    handleChange(value, direction, movedKeys) {
+    handleChange (value, direction, movedKeys) {
       this.temp.direction = direction
       this.temp.movedKeys = movedKeys
+      this.temp.tokenId = getToken()
       updateMachineCheck(this.temp).then((response) => {
         this.getList()
         this.resetTemp()
@@ -277,12 +305,12 @@ export default {
         })
       })
     },
-    refreshQa() {
+    refreshQa () {
       this.resetTemp() // 重置数据
       this.getList() // 获取数据
       console.log('获取数据成功')
     },
-    changeSwitch(data) {
+    changeSwitch (data) {
       console.log(data)
       if (data) { // 开启自动刷新功能
         this.interval = setInterval(() => {
@@ -298,10 +326,11 @@ export default {
       }
     },
     // 重置temp实体类变量属性
-    resetTemp() {
+    resetTemp () {
       this.temp = {
         direction: '',
-        movedKeys: []
+        movedKeys: [],
+        tokenId: ''
       }
       this.data = []
       this.value = []
@@ -310,41 +339,47 @@ export default {
 }
 </script>
 <style>
-
-  .widController .spanLi{
-    width:80px;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-    display: inline-block;
-  }
-  .widController .el-tag{
-    width:60px;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-    display: inline-block;
-  }
-  .el-transfer {
-      width: 98%;
-      justify-content: space-between
-  }
-  .transfer-footer {
-    margin-left: 20px;
-    padding: 6px 5px;
-  }
-  .el-transfer-panel{
-    min-width: 45%;
-  }
-  .el-transfer-panel__body {
-    height: 560px;
-  }
-  .el-transfer-panel__list.is-filterable {
-    height: 560px;
-    padding-top: 5px;
+.widController .spanLi {
+  width: 70px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+}
+.widController .spanLi2 {
+  width: 50px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+}
+.widController .el-tag {
+  width: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+}
+.el-transfer {
+  width: 98%;
+  justify-content: space-between;
+}
+.transfer-footer {
+  margin-left: 20px;
+  padding: 6px 5px;
+}
+.el-transfer-panel {
+  min-width: 45%;
+}
+.el-transfer-panel__body {
+  height: 560px;
+}
+.el-transfer-panel__list.is-filterable {
+  height: 560px;
+  padding-top: 5px;
 }
 .el-transfer-panel__filter {
-   min-width: 90%;
-   max-width: 100%;
+  min-width: 90%;
+  max-width: 100%;
 }
 </style>
