@@ -2,6 +2,7 @@ import { constantRoutes } from "@/router";
 import Layout from "@/layout";
 import request from "@/utils/request";
 import { getAsyncRoutes } from "@/api/user";
+import { getToken } from '@/utils/auth'
 
 /* // eslint-disable-next-line no-unused-vars
 import product from '@/views/base/product'
@@ -316,6 +317,7 @@ const actions = {
           commit("SET_ROUTES", accessedRoutes);
           resolve(accessedRoutes);
         }
+        // accessedRoutes = asyncRoutes || [];
         commit("SET_ROUTES", accessedRoutes);
         resolve(accessedRoutes);
       });

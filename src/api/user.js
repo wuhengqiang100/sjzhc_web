@@ -1,8 +1,9 @@
 import request from "@/utils/request";
-export function getAsyncRoutes () {
+export function getAsyncRoutes (token) {
   return request({
     url: "/common/menu",
-    method: "post",
+    method: "get",
+    params: { token },
     //baseURL: "http://127.0.0.1:8088"
   });
 }
