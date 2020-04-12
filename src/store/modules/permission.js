@@ -2,7 +2,7 @@ import { constantRoutes } from "@/router";
 import Layout from "@/layout";
 import request from "@/utils/request";
 import { getAsyncRoutes } from "@/api/user";
-import { getToken } from '@/utils/auth'
+import { getToken } from '@/utils/auth' // get token from cookie
 
 /* // eslint-disable-next-line no-unused-vars
 import product from '@/views/base/product'
@@ -227,6 +227,16 @@ export const asyncRoutes = [
  */
 function hasPermission (roles, route) {
   if (route.meta && route.meta.roles) {
+
+
+    // roles.some(role => {
+
+    //   console.log(role)
+    //   console.log(route.meta.roles)
+    //   console.log(route.meta.roles.includes(role))
+    // }
+    // )
+    // return roles.includes(route.meta.roles);
     return roles.some(role => route.meta.roles.includes(role));
   } else {
     return true;
@@ -301,23 +311,22 @@ const actions = {
     return new Promise(resolve => {
       // let accessedRoutes
       const loadMenuData = [];
-
-      getAsyncRoutes().then(res => {
+      console.log(getToken())
+      getAsyncRoutes(getToken()).then(res => {
         let data = res;
         // accessedRoutes = asyncRoutes || []
         data = res.asyncRoutes || [];
         Object.assign(loadMenuData, data);
         generaMenu(asyncRoutes, loadMenuData);
         let accessedRoutes;
-        if (roles.includes("最高权限")) {
-          // alert(JSON.stringify(asyncRoutes))
-          accessedRoutes = asyncRoutes || [];
-        } else {
-          accessedRoutes = filterAsyncRoutes(asyncRoutes, roles);
-          commit("SET_ROUTES", accessedRoutes);
-          resolve(accessedRoutes);
-        }
-        // accessedRoutes = asyncRoutes || [];
+        //前台控制菜单
+        /*   if (roles.includes("最高权限")) {
+            accessedRoutes = asyncRoutes || [];
+          } else {
+            accessedRoutes = filterAsyncRoutes(asyncRoutes, roles);
+          } */
+        //后台控制菜单
+        accessedRoutes = asyncRoutes || [];
         commit("SET_ROUTES", accessedRoutes);
         resolve(accessedRoutes);
       });
