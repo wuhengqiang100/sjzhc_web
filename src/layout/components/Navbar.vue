@@ -34,26 +34,45 @@
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
-          <!--        <router-link to="/profile/index">
+          <!--    <router-link to="/profile/index">
             <el-dropdown-item>Profile</el-dropdown-item>
           </router-link>
           <router-link to="/">
             <el-dropdown-item>Dashboard</el-dropdown-item>
           </router-link>
-          <a target="_blank" href="https://github.com/PanJiaChen/vue-element-admin/">
+          <a target="_blank"
+             href="https://github.com/PanJiaChen/vue-element-admin/">
             <el-dropdown-item>Github</el-dropdown-item>
-          </a>
-          <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
-            <el-dropdown-item>Docs</el-dropdown-item>
           </a> -->
-          <el-dropdown-item divided>
-            <span @click="logout">退出</span>
+          <a target="_blank"
+             @click="dialogFormVisible = true">
+            <el-dropdown-item>修改密码</el-dropdown-item>
+            <el-button type="text"
+                       @click="centerDialogVisible = true">点击打开 Dialog</el-button>
+
+          </a>
+          <el-dropdown-item divided
+                            @click="logout">
+            <span>退出</span>
             <!-- <span style="display:block;" @click="logout">退出</span> -->
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+    <el-dialog title="提示"
+               :visible.sync="centerDialogVisible"
+               width="30%"
+               center>
+      <span>需要注意的是内容是默认不居中的</span>
+      <span slot="footer"
+            class="dialog-footer">
+        <el-button @click="centerDialogVisible = false">取 消</el-button>
+        <el-button type="primary"
+                   @click="centerDialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
+
 </template>
 
 <script>
@@ -73,6 +92,11 @@ export default {
     Screenfull,
     SizeSelect
     // Search
+  },
+  data () {
+    return {
+      centerDialogVisible: false
+    };
   },
   computed: {
     ...mapGetters([
