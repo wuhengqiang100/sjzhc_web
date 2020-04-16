@@ -10,9 +10,11 @@
 
     <div class="right-menu">
       <template v-if="device!=='mobile'">
-        <!-- <search id="header-search" class="right-menu-item" /> -->
-
-        <error-log class="errLog-container right-menu-item hover-effect" />
+        <!-- <search id="header-search"
+                class="right-menu-item" /> -->
+        <big-screen id="bigScreen"
+                    class="right-menu-item hover-effect" />
+        <!-- <error-log class="errLog-container right-menu-item hover-effect" /> -->
 
         <screenfull id="screenfull"
                     class="right-menu-item hover-effect" />
@@ -44,13 +46,13 @@
              href="https://github.com/PanJiaChen/vue-element-admin/">
             <el-dropdown-item>Github</el-dropdown-item>
           </a> -->
-          <a target="_blank"
+          <!--          <a target="_blank"
              @click="dialogFormVisible = true">
             <el-dropdown-item>修改密码</el-dropdown-item>
             <el-button type="text"
                        @click="centerDialogVisible = true">点击打开 Dialog</el-button>
 
-          </a>
+          </a> -->
           <el-dropdown-item divided>
             <!-- <span>退出</span> -->
             <span style="display:block;"
@@ -59,7 +61,7 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
-    <el-dialog title="提示"
+    <!--     <el-dialog title="提示"
                :visible.sync="centerDialogVisible"
                width="30%"
                center>
@@ -70,7 +72,7 @@
         <el-button type="primary"
                    @click="centerDialogVisible = false">确 定</el-button>
       </span>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 
 </template>
@@ -82,7 +84,8 @@ import Hamburger from '@/components/Hamburger'
 import ErrorLog from '@/components/ErrorLog'
 import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
-// import Search from '@/components/HeaderSearch'
+import Search from '@/components/HeaderSearch'
+import BigScreen from '@/components/BigScreen'
 
 export default {
   components: {
@@ -90,8 +93,9 @@ export default {
     Hamburger,
     ErrorLog,
     Screenfull,
-    SizeSelect
-    // Search
+    SizeSelect,
+    Search,
+    BigScreen
   },
   data () {
     return {

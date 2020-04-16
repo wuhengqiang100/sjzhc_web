@@ -282,6 +282,7 @@ const mutations = {
 export function generaMenu (routes, data) {
   data.forEach(item => {
     // alert(JSON.stringify(item))
+    // const menu = ''
     const menu = {
       path: item.path,
       component:
@@ -289,7 +290,7 @@ export function generaMenu (routes, data) {
           ? Layout
           : () => import(`@/views${item.component}`),
       redirect: item.redirect,
-      // hidden: true,
+      hidden: false,
       children: [],
       name: item.name,
       meta: {
@@ -298,6 +299,7 @@ export function generaMenu (routes, data) {
         roles: [item.meta.roles]
       }
     };
+
     // 如果有children
     if (item.children) {
       generaMenu(menu.children, item.children);

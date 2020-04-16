@@ -4,8 +4,11 @@ import Cookies from 'js-cookie'
 
 import 'normalize.css/normalize.css' // a modern alternative to CSS resets
 
+
+
 import Element from 'element-ui'
 import './styles/element-variables.scss'
+import './assets//bigScreen/common.less' // 大屏的less
 
 import '@/styles/index.scss' // global css
 
@@ -18,6 +21,9 @@ import './permission' // permission control
 import './utils/error-log' // error log
 
 import * as filters from './filters' // global filters
+
+import dataV from '@jiaminghi/data-view'
+Vue.config.productionTip = false
 
 /**
  * If you don't want to use mock-server
@@ -36,6 +42,7 @@ Vue.use(Element, {
   size: Cookies.get('size') || 'medium' // set element-ui default size
 })
 
+Vue.use(dataV)
 // register global utility filters
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
