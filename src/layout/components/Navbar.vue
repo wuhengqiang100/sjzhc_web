@@ -51,10 +51,10 @@
                        @click="centerDialogVisible = true">点击打开 Dialog</el-button>
 
           </a>
-          <el-dropdown-item divided
-                            @click="logout">
-            <span>退出</span>
-            <!-- <span style="display:block;" @click="logout">退出</span> -->
+          <el-dropdown-item divided>
+            <!-- <span>退出</span> -->
+            <span style="display:block;"
+                  @click="logout">退出</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>

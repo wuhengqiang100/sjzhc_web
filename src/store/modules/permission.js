@@ -303,7 +303,15 @@ export function generaMenu (routes, data) {
       generaMenu(menu.children, item.children);
     }
     routes.push(menu);
+
   });
+  //加一个404页面路由在最后
+  const menu404 = {
+    path: '*',
+    redirect: '/404',
+    hidden: true,
+  };
+  routes.push(menu404);
 }
 
 const actions = {
@@ -317,6 +325,7 @@ const actions = {
         // accessedRoutes = asyncRoutes || []
         data = res.asyncRoutes || [];
         Object.assign(loadMenuData, data);
+        console.log(loadMenuData)
         generaMenu(asyncRoutes, loadMenuData);
         let accessedRoutes;
         //前台控制菜单
@@ -328,6 +337,8 @@ const actions = {
         //后台控制菜单
         accessedRoutes = asyncRoutes || [];
         commit("SET_ROUTES", accessedRoutes);
+        console.log(accessedRoutes)
+
         resolve(accessedRoutes);
       });
     });
