@@ -1,12 +1,17 @@
 <template>
   <div id="cards">
     <div class="card-item"
-         v-for="(card) in cards"
+         v-for="(card,i) in cards"
          :key="card.title">
       <div class="card-header">
 
         <div class="card-header-left">
-          <dv-decoration-11 style="width:160px;height:48px;">{{ card.title }}</dv-decoration-11>
+          <dv-decoration-11 v-if="i==0"
+                            class="card-title">{{ card.title }}</dv-decoration-11>
+          <dv-decoration-11 v-if="i==1"
+                            class="card-title1">{{ card.title }}</dv-decoration-11>
+          <dv-decoration-11 v-if="i==2"
+                            class="card-title2">{{ card.title }}</dv-decoration-11>
         </div>
         <div class="card-header-right">
           <dv-decoration-1 style="width:160px;height:40px;"
@@ -59,12 +64,18 @@
           </el-col>
           <el-col :span="12">
             <el-col>
-              <el-row class="row-class main-value"
+              <el-row class="row-class compare-value"
+                      type="flex"
+                      justify="center">
+                <el-col :span="10">节点</el-col>
+                <el-col :span="10"><span>分切</span></el-col>
+              </el-row>
+              <!--            <el-row class="row-class main-value"
                       type="flex"
                       justify="center">
                 <el-col :span="10">产品名称</el-col>
                 <el-col :span="10"><span>7T</span></el-col>
-              </el-row>
+              </el-row> -->
               <!-- <el-row class="row-class main-value"
                       type="flex"
                       justify="center">
@@ -140,7 +151,7 @@ export default {
               arcLineWidth: 13,
               radius: '80%',
               data: [
-                { name: '好评率', value: randomExtend(80, 100) }
+                { name: '好品率', value: randomExtend(80, 100) }
               ],
               axisLabel: {
                 show: false
@@ -158,10 +169,10 @@ export default {
               },
               details: {
                 show: true,
-                formatter: '好评率{value}%',
+                formatter: '好品率{value}%',
                 style: {
                   fill: '#1ed3e5',
-                  fontSize: 20
+                  fontSize: 18
                 }
               }
             }
@@ -189,6 +200,20 @@ export default {
 </script>
 
 <style lang="less">
+.card-title {
+  width: 160px;
+  height: 48px;
+}
+.card-title1 {
+  width: 160px;
+  height: 48px;
+  background-color: royalblue;
+}
+.card-title2 {
+  width: 160px;
+  height: 48px;
+  background-color: red;
+}
 .question-number {
   color: #91463c;
 }
@@ -259,7 +284,8 @@ export default {
     height: 55%;
   }
   .ring-charts {
-    height: 190px;
+    height: 150px;
+    width: 150px;
   }
   .row-bg {
     padding: 10px 0;
