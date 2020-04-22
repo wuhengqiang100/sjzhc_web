@@ -1,24 +1,36 @@
 <template>
-  <div class="sidebar-logo-container"
-       :class="{'collapse':collapse}">
+  <div
+    class="sidebar-logo-container"
+    :class="{'collapse':collapse}"
+  >
     <transition name="sidebarLogoFade">
-      <router-link v-if="collapse"
-                   key="collapse"
-                   class="sidebar-logo-link"
-                   to="/">
-        <img v-if="logo"
-             :src="logo"
-             class="sidebar-logo">
-        <h1 v-else
-            class="sidebar-title">{{ title }} </h1>
+      <router-link
+        v-if="collapse"
+        key="collapse"
+        class="sidebar-logo-link"
+        to="/"
+      >
+        <img
+          v-if="logo"
+          :src="logo"
+          class="sidebar-logo"
+        >
+        <h1
+          v-else
+          class="sidebar-title"
+        >{{ title }} </h1>
       </router-link>
-      <router-link v-else
-                   key="expand"
-                   class="sidebar-logo-link"
-                   to="/">
-        <img v-if="logo"
-             :src="logo"
-             class="sidebar-logo">
+      <router-link
+        v-else
+        key="expand"
+        class="sidebar-logo-link"
+        to="/"
+      >
+        <img
+          v-if="logo"
+          :src="logo"
+          class="sidebar-logo"
+        >
         <h1 class="sidebar-title">{{ title }} </h1>
       </router-link>
     </transition>
@@ -34,10 +46,12 @@ export default {
       required: true
     }
   },
-  data () {
+  data() {
     return {
       title: '核查综合信息管理系统',
-      logo: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png',
+      // baseURL: process.env.VUE_APP_BASE_API,
+
+      logo: process.env.VUE_APP_BASE_API + '/static/admin/img/logo1.png'
       // logo: 'https://localhost:9527/assets/logo/1.png'
       // logo: 'E:\kexinwork\sjz\sizhc_web\src\icons\logo/3.png'
     }
