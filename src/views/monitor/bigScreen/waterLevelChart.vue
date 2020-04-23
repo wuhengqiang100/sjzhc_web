@@ -15,7 +15,7 @@
 <script>
 export default {
   name: 'WaterLevelChart',
-  data () {
+  data() {
     return {
       config: {
         data: [45],

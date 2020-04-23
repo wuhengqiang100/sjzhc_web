@@ -1,41 +1,53 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title"
-                placeholder="请输入登录名"
-                style="width: 200px;"
-                class="filter-item"
-                @keyup.enter.native="handleFilter" />
+      <el-input
+        v-model="listQuery.title"
+        placeholder="请输入登录名"
+        style="width: 200px;"
+        class="filter-item"
+        @keyup.enter.native="handleFilter"
+      />
 
-      <el-select v-model="listQuery.useFlag"
-                 placeholder="启用状态"
-                 clearable
-                 class="filter-item"
-                 style="width: 130px">
-        <el-option v-for="item in useFlagOptions"
-                   :key="item.key"
-                   :label="item.display_name"
-                   :value="item.key" />
+      <el-select
+        v-model="listQuery.useFlag"
+        placeholder="启用状态"
+        clearable
+        class="filter-item"
+        style="width: 130px"
+      >
+        <el-option
+          v-for="item in useFlagOptions"
+          :key="item.key"
+          :label="item.display_name"
+          :value="item.key"
+        />
       </el-select>
-      <el-button v-waves
-                 class="filter-item"
-                 type="primary"
-                 icon="el-icon-search"
-                 @click="handleFilter">
+      <el-button
+        v-waves
+        class="filter-item"
+        type="primary"
+        icon="el-icon-search"
+        @click="handleFilter"
+      >
         搜索
       </el-button>
-      <el-button class="filter-item"
-                 style="margin-left: 10px;"
-                 type="primary"
-                 icon="el-icon-refresh"
-                 @click="handleReset">
+      <el-button
+        class="filter-item"
+        style="margin-left: 10px;"
+        type="primary"
+        icon="el-icon-refresh"
+        @click="handleReset"
+      >
         重置
       </el-button>
-      <el-button class="filter-item"
-                 style="margin-left: 10px;"
-                 type="primary"
-                 icon="el-icon-edit"
-                 @click="handleCreate">
+      <el-button
+        class="filter-item"
+        style="margin-left: 10px;"
+        type="primary"
+        icon="el-icon-edit"
+        @click="handleCreate"
+      >
         添加
       </el-button>
       <!--     <el-button class="filter-item" style="margin-left: 10px;" type="warning" icon="el-icon-download" @click="handleCreate">
@@ -43,170 +55,239 @@
       </el-button> -->
     </div>
 
-    <el-table :key="tableKey"
-              v-loading="listLoading"
-              :data="list"
-              border
-              fit
-              highlight-current-row
-              style="width: 100%;"
-              @sort-change="sortChange">
-      <el-table-column label="登陆id"
-                       prop="id"
-                       sortable="custom"
-                       align="center"
-                       :class-name="getSortClass('id')">
+    <el-table
+      :key="tableKey"
+      v-loading="listLoading"
+      :data="list"
+      border
+      fit
+      highlight-current-row
+      style="width: 100%;"
+      @sort-change="sortChange"
+    >
+      <el-table-column
+        label="登陆id"
+        prop="id"
+        sortable="custom"
+        align="center"
+        :class-name="getSortClass('id')"
+      >
         <template slot-scope="{row}">
           <span>{{ row.loginId }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="登陆名"
-                       align="center"
-                       min-width="120px">
+      <el-table-column
+        label="登陆名"
+        align="center"
+        min-width="120px"
+      >
         <template slot-scope="{row}">
-          <span class="link-type"
-                @click="handleUpdate(row)">{{ row.loginName }}</span>
+          <span
+            class="link-type"
+            @click="handleUpdate(row)"
+          >{{ row.loginName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="登陆密码"
-                       min-width="200px"
-                       align="center">
+      <el-table-column
+        label="登陆密码"
+        min-width="200px"
+        align="center"
+      >
         <template slot-scope="{row}">
           <span>{{ row.loginPass }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="用户名"
-                       align="center">
+      <el-table-column
+        label="用户名"
+        align="center"
+      >
         <template slot-scope="{row}">
           <span>{{ row.operator.operatorName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="工作状态"
-                       align="center">
+      <el-table-column
+        label="工作状态"
+        align="center"
+      >
         <template slot-scope="{row}">
-          <el-tag v-if="row.userInWork"
-                  type="success">
+          <el-tag
+            v-if="row.userInWork"
+            type="success"
+          >
             在线
           </el-tag>
-          <el-tag v-else
-                  type="danger">
+          <el-tag
+            v-else
+            type="danger"
+          >
             离线
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="启用状态"
-                       align="center">
+      <el-table-column
+        label="启用状态"
+        align="center"
+      >
         <template slot-scope="{row}">
-          <el-tag v-if="row.useFlag"
-                  type="success">
+          <el-tag
+            v-if="row.useFlag"
+            type="success"
+          >
             启用
           </el-tag>
-          <el-tag v-else
-                  type="danger">
+          <el-tag
+            v-else
+            type="danger"
+          >
             禁用
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作"
-                       fixed="right"
-                       align="center"
-                       min-width="218px"
-                       class-name="small-padding fixed-width">
+      <el-table-column
+        label="操作"
+        fixed="right"
+        align="center"
+        min-width="218px"
+        class-name="small-padding fixed-width"
+      >
         <template slot-scope="{row}">
-          <el-button type="primary"
-                     size="mini"
-                     @click="handleUpdate(row)">
+          <el-button
+            type="primary"
+            size="mini"
+            @click="handleUpdate(row)"
+          >
             修改
           </el-button>
-          <el-button v-if="row.useFlag"
-                     size="mini"
-                     type="warning"
-                     @click="handleModifyUseFlag(row,false)">禁用</el-button>
-          <el-button v-else
-                     size="mini"
-                     type="success"
-                     @click="handleModifyUseFlag(row,true)">启用</el-button>
-          <el-button size="mini"
-                     type="danger"
-                     @click="handleDelete(row)">删除</el-button>
+          <el-button
+            v-if="row.useFlag"
+            size="mini"
+            type="warning"
+            @click="handleModifyUseFlag(row,false)"
+          >禁用</el-button>
+          <el-button
+            v-else
+            size="mini"
+            type="success"
+            @click="handleModifyUseFlag(row,true)"
+          >启用</el-button>
+          <el-button
+            size="mini"
+            type="danger"
+            @click="handleDelete(row)"
+          >删除</el-button>
 
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0"
-                :total="total"
-                :page.sync="listQuery.page"
-                :limit.sync="listQuery.limit"
-                @pagination="getList" />
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="listQuery.page"
+      :limit.sync="listQuery.limit"
+      @pagination="getList"
+    />
 
-    <el-dialog :title="textMap[dialogStatus]"
-               :visible.sync="dialogFormVisible"
-               width="55%">
-      <el-form ref="dataForm"
-               :rules="rules"
-               :model="temp"
-               label-position="left"
-               size="mini"
-               label-width="100px"
-               style="width: 650px; margin-left:45px;">
+    <el-dialog
+      :title="textMap[dialogStatus]"
+      :visible.sync="dialogFormVisible"
+      width="55%"
+    >
+      <el-form
+        ref="dataForm"
+        :rules="rules"
+        :model="temp"
+        label-position="left"
+        size="mini"
+        label-width="100px"
+        style="width: 650px; margin-left:45px;"
+      >
         <el-row>
           <el-col :span="12">
-            <el-form-item label="用户名称"
-                          prop="operatorId">
+            <el-form-item
+              label="用户名称"
+              prop="operatorId"
+            >
               <!-- <el-input v-model="temp.operatorId"
                         type="text"
                         placeholder="请输入用户id" /> -->
-              <el-select v-model="temp.operatorId"
-                         filterable
-                         placeholder="请搜索或者选择">
-                <el-option v-for="item in operatorOption"
-                           :key="item.value"
-                           :label="item.label"
-                           :value="item.value">
-                </el-option>
+              <el-select
+                v-model="temp.operatorId"
+                filterable
+                placeholder="请搜索或者选择"
+              >
+                <el-option
+                  v-for="item in operatorOption"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
               </el-select>
             </el-form-item>
 
-            <el-form-item label="登陆名"
-                          prop="loginName">
-              <el-input v-model="temp.loginName"
-                        type="text"
-                        placeholder="请输入登陆名" />
+            <el-form-item
+              label="登陆名"
+              prop="loginName"
+            >
+              <el-input
+                v-model="temp.loginName"
+                type="text"
+                placeholder="请输入登陆名"
+              />
             </el-form-item>
-            <el-form-item label="登陆密码"
-                          prop="loginPass">
-              <el-input v-model="temp.loginPass"
-                        type="password"
-                        placeholder="请输入登陆密码" />
+            <el-form-item
+              label="登陆密码"
+              prop="loginPass"
+            >
+              <el-input
+                v-model="temp.loginPass"
+                type="password"
+                placeholder="请输入登陆密码"
+              />
             </el-form-item>
 
-            <el-form-item label="工作状态"
-                          prop="userInWork">
-              <el-switch v-model="temp.userInWork"
-                         active-color="#13ce66"
-                         inactive-color="#ff4949" />
+            <el-form-item
+              label="工作状态"
+              prop="userInWork"
+            >
+              <el-switch
+                v-model="temp.userInWork"
+                active-color="#13ce66"
+                inactive-color="#ff4949"
+              />
             </el-form-item>
-            <el-form-item label="启用状态"
-                          prop="useFlag">
-              <el-switch v-model="temp.useFlag"
-                         active-color="#13ce66"
-                         inactive-color="#ff4949" />
+            <el-form-item
+              label="启用状态"
+              prop="useFlag"
+            >
+              <el-switch
+                v-model="temp.useFlag"
+                active-color="#13ce66"
+                inactive-color="#ff4949"
+              />
             </el-form-item>
 
           </el-col>
-          <el-col :span="9"
-                  :offset="3">
-            <el-form-item label="用户角色"
-                          prop="roleIds">
-              <el-checkbox-group v-model="checkedRoles"
-                                 size="small">
+          <el-col
+            :span="9"
+            :offset="3"
+          >
+            <el-form-item
+              label="用户角色"
+              prop="roleIds"
+            >
+              <el-checkbox-group
+                v-model="checkedRoles"
+                size="small"
+              >
                 <ul>
                   <li>
-                    <el-checkbox v-for="role in roleOptions"
-                                 :key="role"
-                                 :label="role">{{ role }}</el-checkbox>
+                    <el-checkbox
+                      v-for="role in roleOptions"
+                      :key="role"
+                      :label="role"
+                    >{{ role }}</el-checkbox>
                   </li>
                 </ul>
                 <!-- <el-checkbox label="备选项2" border /> -->
@@ -216,34 +297,50 @@
           </el-col>
         </el-row>
       </el-form>
-      <div slot="footer"
-           class="dialog-footer">
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
         <el-button @click="dialogFormVisible = false">
           返回
         </el-button>
-        <el-button type="primary"
-                   @click="dialogStatus==='create'?createData():updateData()">
+        <el-button
+          type="primary"
+          @click="dialogStatus==='create'?createData():updateData()"
+        >
           确认
         </el-button>
       </div>
     </el-dialog>
 
-    <el-dialog :visible.sync="dialogPvVisible"
-               title="Reading statistics">
-      <el-table :data="pvData"
-                border
-                fit
-                highlight-current-row
-                style="width: 100%">
-        <el-table-column prop="key"
-                         label="Channel" />
-        <el-table-column prop="pv"
-                         label="Pv" />
+    <el-dialog
+      :visible.sync="dialogPvVisible"
+      title="Reading statistics"
+    >
+      <el-table
+        :data="pvData"
+        border
+        fit
+        highlight-current-row
+        style="width: 100%"
+      >
+        <el-table-column
+          prop="key"
+          label="Channel"
+        />
+        <el-table-column
+          prop="pv"
+          label="Pv"
+        />
       </el-table>
-      <span slot="footer"
-            class="dialog-footer">
-        <el-button type="primary"
-                   @click="dialogPvVisible = false">Confirm</el-button>
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button
+          type="primary"
+          @click="dialogPvVisible = false"
+        >Confirm</el-button>
       </span>
     </el-dialog>
   </div>
@@ -274,7 +371,7 @@ export default {
   components: { Pagination },
   directives: { waves },
   filters: {
-    statusFilter (status) {
+    statusFilter(status) {
       const statusMap = {
         published: 'success',
         draft: 'info',
@@ -282,11 +379,11 @@ export default {
       }
       return statusMap[status]
     },
-    typeFilter (type) {
+    typeFilter(type) {
       return calendarTypeKeyValue[type]
     }
   },
-  data () {
+  data() {
     return {
       tableKey: 0,
       list: null,
@@ -302,8 +399,8 @@ export default {
       },
       importanceOptions: [1, 2, 3],
       operatorOption: [],
-      checkedRoles: [],//已选的角色
-      roleOptions: [],//所有的角色
+      checkedRoles: [], // 已选的角色
+      roleOptions: [], // 所有的角色
       useFlagOptions, // 启用状态
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       statusOptions: ['published', 'draft', 'deleted'],
@@ -338,12 +435,12 @@ export default {
     }
   },
   // 初始化获取数据列表
-  created () {
+  created() {
     this.getList()
   },
   methods: {
     // 有加载圈的加载数据列表
-    getList () {
+    getList() {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
@@ -355,7 +452,7 @@ export default {
         }, 1 * 1000)
       })
     },
-    getRoles () {
+    getRoles() {
       fetchRoleList().then(response => {
         // console.log('tag', response.data)
         // this.roleList = response.roleList
@@ -365,7 +462,7 @@ export default {
       })
     },
     // 获取所有的menus并设置值
-    getRoleOwnMenus (userId) {
+    getRoleOwnMenus(userId) {
       fetchUserOwnRole(userId).then(response => {
         // this.temp.roleIds = response.roleIds
 
@@ -373,13 +470,13 @@ export default {
       })
     },
     // 立即刷新数据列表
-    refreshList () {
+    refreshList() {
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
       })
     },
-    handleFilter () {
+    handleFilter() {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
@@ -392,7 +489,7 @@ export default {
       })
     },
     // 用户禁用启用操作
-    handleModifyUseFlag (row, useFlag) {
+    handleModifyUseFlag(row, useFlag) {
       updateUseFlag(row.loginId).then(response => {
         this.$message({
           message: response.message,
@@ -403,21 +500,21 @@ export default {
 
       row.status = status
     },
-    handleModifyStatus (row, status) {
+    handleModifyStatus(row, status) {
       this.$message({
         message: '操作Success',
         type: 'success'
       })
       row.status = status
     },
-    sortChange (data) {
+    sortChange(data) {
       const { prop, order } = data
       if (prop === 'id') {
         this.sortByID(order)
       }
     },
     // id排序操作
-    sortByID (order) {
+    sortByID(order) {
       if (order === 'ascending') {
         this.listQuery.sort = '+id'
       } else {
@@ -426,7 +523,7 @@ export default {
       this.handleFilter()
     },
     // 重置temp实体类变量属性
-    resetTemp () {
+    resetTemp() {
       this.temp = {
         loginId: undefined,
         operatorId: '',
@@ -438,7 +535,7 @@ export default {
 
       }
     },
-    resetListQuery () {
+    resetListQuery() {
       this.listQuery = {
         page: 1,
         limit: 10,
@@ -448,12 +545,12 @@ export default {
         sort: '+id'
       }
     },
-    handleReset () {
+    handleReset() {
       this.resetListQuery()
       this.getList()
     },
     // 监听create dialog事件
-    handleCreate () {
+    handleCreate() {
       this.resetTemp()
       // 获取所有的角色
       this.getRoles()
@@ -464,7 +561,7 @@ export default {
       })
     },
     // 添加操作
-    createData () {
+    createData() {
       this.$refs['dataForm'].validate((valid) => {
         // date格式化
         this.temp.startDate = parseTime(this.temp.startDate)
@@ -490,7 +587,7 @@ export default {
       })
     },
     // 监听修改 update dialog事件
-    handleUpdate (row) {
+    handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
       // this.temp.timestamp = new Date(this.temp.timestamp)
       this.getRoles()// 获取角色
@@ -504,7 +601,7 @@ export default {
       })
     },
     // 修改操作
-    updateData () {
+    updateData() {
       // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
       this.temp.checkedRole = this.checkedRoles
       updateLoginUser(this.temp).then(() => {
@@ -520,7 +617,7 @@ export default {
       })
     },
     // 监听删除dialog事件
-    handleDelete (row) {
+    handleDelete(row) {
       this.$confirm('您确定要删除该数据吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -540,13 +637,13 @@ export default {
         })
       })
     },
-    handleFetchPv (pv) {
+    handleFetchPv(pv) {
       fetchPv(pv).then(response => {
         this.pvData = response.data.pvData
         this.dialogPvVisible = true
       })
     },
-    handleDownload () {
+    handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
@@ -560,7 +657,7 @@ export default {
         this.downloadLoading = false
       })
     },
-    formatJson (filterVal, jsonData) {
+    formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
         if (j === 'timestamp') {
           return parseTime(v[j])
@@ -569,7 +666,7 @@ export default {
         }
       }))
     },
-    getSortClass: function (key) {
+    getSortClass: function(key) {
       const sort = this.listQuery.sort
       return sort === `+${key}`
         ? 'ascending'

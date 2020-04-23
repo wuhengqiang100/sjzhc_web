@@ -2,180 +2,234 @@
   <div class="app-container">
     <div class="filter-container">
       车号：
-      <el-input v-model="listQuery.cartNumber"
-                placeholder="请输入车号"
-                style="width: 120px;"
-                class="filter-item"
-                @keyup.enter.native="handleFilter" />
+      <el-input
+        v-model="listQuery.cartNumber"
+        placeholder="请输入车号"
+        style="width: 120px;"
+        class="filter-item"
+        @keyup.enter.native="handleFilter"
+      />
       产品：
-      <el-select v-model="listQuery.productName"
-                 filterable
-                 placeholder="请搜索或者选择">
-        <el-option v-for="item in productOption"
-                   :key="item.value"
-                   :label="item.label"
-                   :value="item.label"
-                   @keyup.enter.native="handleFilter">
-        </el-option>
+      <el-select
+        v-model="listQuery.productName"
+        filterable
+        placeholder="请搜索或者选择"
+      >
+        <el-option
+          v-for="item in productOption"
+          :key="item.value"
+          :label="item.label"
+          :value="item.label"
+          @keyup.enter.native="handleFilter"
+        />
       </el-select>
 
       工序：
-      <el-select v-model="listQuery.operationName"
-                 filterable
-                 placeholder="请搜索或者选择">
-        <el-option v-for="item in operationOption"
-                   :key="item.value"
-                   :label="item.label"
-                   :value="item.label"
-                   @keyup.enter.native="handleFilter">
-        </el-option>
+      <el-select
+        v-model="listQuery.operationName"
+        filterable
+        placeholder="请搜索或者选择"
+      >
+        <el-option
+          v-for="item in operationOption"
+          :key="item.value"
+          :label="item.label"
+          :value="item.label"
+          @keyup.enter.native="handleFilter"
+        />
       </el-select>
 
       设备：
-      <el-select v-model="listQuery.machineName"
-                 filterable
-                 placeholder="请搜索或者选择">
-        <el-option v-for="item in machineOption"
-                   :key="item.value"
-                   :label="item.label"
-                   :value="item.label"
-                   @keyup.enter.native="handleFilter">
-        </el-option>
+      <el-select
+        v-model="listQuery.machineName"
+        filterable
+        placeholder="请搜索或者选择"
+      >
+        <el-option
+          v-for="item in machineOption"
+          :key="item.value"
+          :label="item.label"
+          :value="item.label"
+          @keyup.enter.native="handleFilter"
+        />
       </el-select>
 
       机台：
-      <el-select v-model="listQuery.workUnitName"
-                 filterable
-                 placeholder="请搜索或者选择">
-        <el-option v-for="item in dicWorkUnitOption"
-                   :key="item.value"
-                   :label="item.label"
-                   :value="item.label"
-                   @keyup.enter.native="handleFilter">
-        </el-option>
+      <el-select
+        v-model="listQuery.workUnitName"
+        filterable
+        placeholder="请搜索或者选择"
+      >
+        <el-option
+          v-for="item in dicWorkUnitOption"
+          :key="item.value"
+          :label="item.label"
+          :value="item.label"
+          @keyup.enter.native="handleFilter"
+        />
       </el-select>
 
       <div class="filter-item">
-        <el-date-picker v-model="dateValue"
-                        type="datetimerange"
-                        align="right"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                        :default-time="['00:00:01', '23:59:59']"
-                        value-format="yyyy-MM-dd HH:mm:ss"
-                        @keyup.enter.native="handleFilter" />
+        <el-date-picker
+          v-model="dateValue"
+          type="datetimerange"
+          align="right"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          :default-time="['00:00:01', '23:59:59']"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          @keyup.enter.native="handleFilter"
+        />
       </div>
-      <el-button v-waves
-                 class="filter-item"
-                 type="primary"
-                 icon="el-icon-search"
-                 @click="handleFilter">
+      <el-button
+        v-waves
+        class="filter-item"
+        type="primary"
+        icon="el-icon-search"
+        @click="handleFilter"
+      >
         搜索
       </el-button>
-      <el-button class="filter-item"
-                 style="margin-left: 10px;"
-                 type="primary"
-                 icon="el-icon-refresh"
-                 @click="handleReset">
+      <el-button
+        class="filter-item"
+        style="margin-left: 10px;"
+        type="primary"
+        icon="el-icon-refresh"
+        @click="handleReset"
+      >
         重置
       </el-button>
     </div>
 
-    <el-table :key="tableKey"
-              v-loading="listLoading"
-              :data="list"
-              border
-              fit
-              highlight-current-row
-              style="width: 100%;"
-              @sort-change="sortChange">
-      <el-table-column label="生产日志id"
-                       prop="id"
-                       sortable="custom"
-                       align="center"
-                       :class-name="getSortClass('id')">
+    <el-table
+      :key="tableKey"
+      v-loading="listLoading"
+      :data="list"
+      border
+      fit
+      highlight-current-row
+      style="width: 100%;"
+      @sort-change="sortChange"
+    >
+      <el-table-column
+        label="生产日志id"
+        prop="id"
+        sortable="custom"
+        align="center"
+        :class-name="getSortClass('id')"
+      >
         <template slot-scope="{row}">
           <span>{{ row.logId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="生产车号"
-                       align="center">
+      <el-table-column
+        label="生产车号"
+        align="center"
+      >
         <template slot-scope="{row}">
           <span>{{ row.cartNumber }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="产品名称"
-                       align="center">
+      <el-table-column
+        label="产品名称"
+        align="center"
+      >
         <template slot-scope="{row}">
           <span>{{ row.productName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="工序名称"
-                       align="center">
+      <el-table-column
+        label="工序名称"
+        align="center"
+      >
         <template slot-scope="{row}">
           <span>{{ row.operationName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="设备名称"
-                       align="center">
+      <el-table-column
+        label="设备名称"
+        align="center"
+      >
         <template slot-scope="{row}">
           <span>{{ row.machineName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="机台名称"
-                       align="center">
+      <el-table-column
+        label="机台名称"
+        align="center"
+      >
         <template slot-scope="{row}">
           <span>{{ row.workUnitName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="信息数量"
-                       align="center">
+      <el-table-column
+        label="信息数量"
+        align="center"
+      >
         <template slot-scope="{row}">
           <span>{{ row.qainfonum }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="报错数量"
-                       align="center">
+      <el-table-column
+        label="报错数量"
+        align="center"
+      >
         <template slot-scope="{row}">
           <span>{{ row.qawasternum }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="识码数量"
-                       align="center">
+      <el-table-column
+        label="识码数量"
+        align="center"
+      >
         <template slot-scope="{row}">
           <span>{{ row.sminfonum }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="整万错误数量"
-                       align="center">
+      <el-table-column
+        label="整万错误数量"
+        align="center"
+      >
         <template slot-scope="{row}">
           <span>{{ row.machineWasterNumber }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="整万信息数量"
-                       align="center">
+      <el-table-column
+        label="整万信息数量"
+        align="center"
+      >
         <template slot-scope="{row}">
           <span>{{ row.infoNumber }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="人员名称"
-                       align="center">
+      <el-table-column
+        label="人员名称"
+        align="center"
+      >
         <template slot-scope="{row}">
           <span>{{ row.operatorName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="开始时间"
-                       align="center">
-        <template v-if="row.startDate !==null"
-                  slot-scope="{row}">
+      <el-table-column
+        label="开始时间"
+        align="center"
+      >
+        <template
+          v-if="row.startDate !==null"
+          slot-scope="{row}"
+        >
           <span>{{ row.startDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="结束时间"
-                       align="center">
-        <template v-if="row.endDate !==null"
-                  slot-scope="{row}">
+      <el-table-column
+        label="结束时间"
+        align="center"
+      >
+        <template
+          v-if="row.endDate !==null"
+          slot-scope="{row}"
+        >
           <span>{{ row.endDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
@@ -192,11 +246,13 @@
       </el-table-column> -->
     </el-table>
 
-    <pagination v-show="total>0"
-                :total="total"
-                :page.sync="listQuery.page"
-                :limit.sync="listQuery.limit"
-                @pagination="getList" />
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="listQuery.page"
+      :limit.sync="listQuery.limit"
+      @pagination="getList"
+    />
 
   </div>
 </template>
@@ -227,7 +283,7 @@ export default {
   components: { Pagination },
   directives: { waves },
   filters: {
-    statusFilter (status) {
+    statusFilter(status) {
       const statusMap = {
         published: 'success',
         draft: 'info',
@@ -235,11 +291,11 @@ export default {
       }
       return statusMap[status]
     },
-    typeFilter (type) {
+    typeFilter(type) {
       return calendarTypeKeyValue[type]
     }
   },
-  data () {
+  data() {
     return {
       tableKey: 0,
       list: null,
@@ -315,13 +371,13 @@ export default {
     }
   },
   // 初始化获取数据列表
-  created () {
-    this.getSelectOption()//获取查询的条件options
+  created() {
+    this.getSelectOption()// 获取查询的条件options
     this.getList()
   },
   methods: {
     // 有加载圈的加载数据列表
-    getList () {
+    getList() {
       this.listLoading = true
       if (this.dateValue !== '') {
         this.listQuery.startDate = parseTime(this.dateValue[0])
@@ -337,7 +393,7 @@ export default {
         }, 1 * 1000)
       })
     },
-    getSelectOption () {
+    getSelectOption() {
       listOption().then(response => {
         this.productOption = response.productOption
         this.machineOption = response.machineOption
@@ -346,20 +402,20 @@ export default {
       })
     },
     // 立即刷新数据列表
-    refreshList () {
+    refreshList() {
       fetchCheckQueryList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
       })
     },
-    sortChange (data) {
+    sortChange(data) {
       const { prop, order } = data
       if (prop === 'id') {
         this.sortByID(order)
       }
     },
     // id排序操作
-    sortByID (order) {
+    sortByID(order) {
       if (order === 'ascending') {
         this.listQuery.sort = '+id'
       } else {
@@ -368,7 +424,7 @@ export default {
       this.handleFilter()
     },
     // 重置temp实体类变量属性
-    resetTemp () {
+    resetTemp() {
       this.temp = {
         machineId: undefined,
         machineCode: '',
@@ -381,7 +437,7 @@ export default {
         imageModelPath: ''
       }
     },
-    resetListQuery () {
+    resetListQuery() {
       // this.listQuery = {
       //   page: 1,
       //   limit: 10,
@@ -405,7 +461,7 @@ export default {
         sort: '+id'
       }
     },
-    handleFilter () {
+    handleFilter() {
       this.listLoading = true
       if (this.dateValue !== '') {
         this.listQuery.startDate = parseTime(this.dateValue[0])
@@ -421,7 +477,7 @@ export default {
         }, 1 * 1000)
       })
     },
-    handleReset () {
+    handleReset() {
       this.resetListQuery()
       this.getList()
     },
@@ -549,7 +605,7 @@ export default {
         this.downloadLoading = false
       })
     }, */
-    formatJson (filterVal, jsonData) {
+    formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
         if (j === 'timestamp') {
           return parseTime(v[j])
@@ -558,7 +614,7 @@ export default {
         }
       }))
     },
-    getSortClass: function (key) {
+    getSortClass: function(key) {
       const sort = this.listQuery.sort
       return sort === `+${key}`
         ? 'ascending'

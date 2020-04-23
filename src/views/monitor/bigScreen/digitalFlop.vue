@@ -1,9 +1,9 @@
 <template>
   <div id="digital-flop">
     <div
-      class="digital-flop-item"
       v-for="item in digitalFlopData"
       :key="item.title"
+      class="digital-flop-item"
     >
       <div class="digital-flop-title">{{ item.title }}</div>
       <div class="digital-flop">
@@ -11,7 +11,7 @@
           :config="item.number"
           style="width:100px;height:50px;"
         />
-          <div class="unit">{{ item.unit }}</div>
+        <div class="unit">{{ item.unit }}</div>
       </div>
     </div>
 
@@ -22,13 +22,20 @@
 <script>
 export default {
   name: 'DigitalFlop',
-  data () {
+  data() {
     return {
       digitalFlopData: []
     }
   },
+  mounted() {
+    const { createData } = this
+
+    createData()
+
+    setInterval(createData, 30000)
+  },
   methods: {
-    createData () {
+    createData() {
       const { randomExtend } = this
 
       this.digitalFlopData = [
@@ -151,20 +158,13 @@ export default {
         }
       ]
     },
-    randomExtend (minNum, maxNum) {
+    randomExtend(minNum, maxNum) {
       if (arguments.length === 1) {
         return parseInt(Math.random() * minNum + 1, 10)
       } else {
         return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10)
       }
     }
-  },
-  mounted () {
-    const { createData } = this
-
-    createData()
-
-    setInterval(createData, 30000)
   }
 }
 </script>

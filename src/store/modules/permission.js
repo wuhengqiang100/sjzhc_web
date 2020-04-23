@@ -1,7 +1,7 @@
-import { constantRoutes } from "@/router";
-import Layout from "@/layout";
-import request from "@/utils/request";
-import { getAsyncRoutes } from "@/api/user";
+import { constantRoutes } from '@/router'
+import Layout from '@/layout'
+import request from '@/utils/request'
+import { getAsyncRoutes } from '@/api/user'
 import { getToken } from '@/utils/auth' // get token from cookie
 
 /* // eslint-disable-next-line no-unused-vars
@@ -218,17 +218,15 @@ export const asyncRoutes = [
       }
     }]
   } */
-];
+]
 
 /**
  * Use meta.role to determine if the current user has permission
  * @param roles
  * @param route
  */
-function hasPermission (roles, route) {
+function hasPermission(roles, route) {
   if (route.meta && route.meta.roles) {
-
-
     // roles.some(role => {
 
     //   console.log(role)
@@ -237,9 +235,9 @@ function hasPermission (roles, route) {
     // }
     // )
     // return roles.includes(route.meta.roles);
-    return roles.some(role => route.meta.roles.includes(role));
+    return roles.some(role => route.meta.roles.includes(role))
   } else {
-    return true;
+    return true
   }
 }
 
@@ -248,45 +246,45 @@ function hasPermission (roles, route) {
  * @param routes asyncRoutes
  * @param roles
  */
-export function filterAsyncRoutes (routes, roles) {
-  const res = [];
+export function filterAsyncRoutes(routes, roles) {
+  const res = []
 
   routes.forEach(route => {
-    const tmp = { ...route };
+    const tmp = { ...route }
     if (hasPermission(roles, tmp)) {
       if (tmp.children) {
-        tmp.children = filterAsyncRoutes(tmp.children, roles);
+        tmp.children = filterAsyncRoutes(tmp.children, roles)
       }
-      res.push(tmp);
+      res.push(tmp)
     }
-  });
+  })
 
-  return res;
+  return res
 }
 const state = {
   routes: [],
   addRoutes: []
-};
+}
 
 const mutations = {
   SET_ROUTES: (state, routes) => {
-    state.addRoutes = routes;
-    state.routes = constantRoutes.concat(routes);
+    state.addRoutes = routes
+    state.routes = constantRoutes.concat(routes)
   }
-};
+}
 
 /**
  * 后台查询的菜单数据拼装成路由格式的数据
  * @param routes
  */
-export function generaMenu (routes, data) {
+export function generaMenu(routes, data) {
   data.forEach(item => {
     // alert(JSON.stringify(item))
     // const menu = ''
     const menu = {
       path: item.path,
       component:
-        item.component === "#"
+        item.component === '#'
           ? Layout
           : () => import(`@/views${item.component}`),
       redirect: item.redirect,
@@ -298,58 +296,57 @@ export function generaMenu (routes, data) {
         icon: item.meta.icon,
         roles: [item.meta.roles]
       }
-    };
+    }
 
     // 如果有children
     if (item.children) {
-      generaMenu(menu.children, item.children);
+      generaMenu(menu.children, item.children)
     }
-    routes.push(menu);
-
-  });
-  //加一个404页面路由在最后
+    routes.push(menu)
+  })
+  // 加一个404页面路由在最后
   const menu404 = {
     path: '*',
     redirect: '/404',
-    hidden: true,
-  };
-  routes.push(menu404);
+    hidden: true
+  }
+  routes.push(menu404)
 }
 
 const actions = {
-  generateRoutes ({ commit }, roles) {
+  generateRoutes({ commit }, roles) {
     return new Promise(resolve => {
       // let accessedRoutes
-      const loadMenuData = [];
+      const loadMenuData = []
       console.log(getToken())
       getAsyncRoutes(getToken()).then(res => {
-        let data = res;
+        let data = res
         // accessedRoutes = asyncRoutes || []
-        data = res.asyncRoutes || [];
-        Object.assign(loadMenuData, data);
+        data = res.asyncRoutes || []
+        Object.assign(loadMenuData, data)
         console.log(loadMenuData)
-        generaMenu(asyncRoutes, loadMenuData);
-        let accessedRoutes;
-        //前台控制菜单
+        generaMenu(asyncRoutes, loadMenuData)
+        let accessedRoutes
+        // 前台控制菜单
         /*   if (roles.includes("最高权限")) {
             accessedRoutes = asyncRoutes || [];
           } else {
             accessedRoutes = filterAsyncRoutes(asyncRoutes, roles);
           } */
-        //后台控制菜单
-        accessedRoutes = asyncRoutes || [];
-        commit("SET_ROUTES", accessedRoutes);
+        // 后台控制菜单
+        accessedRoutes = asyncRoutes || []
+        commit('SET_ROUTES', accessedRoutes)
         console.log(accessedRoutes)
 
-        resolve(accessedRoutes);
-      });
-    });
+        resolve(accessedRoutes)
+      })
+    })
   }
-};
+}
 
 export default {
   namespaced: true,
   state,
   mutations,
   actions
-};
+}

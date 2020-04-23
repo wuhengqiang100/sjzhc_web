@@ -12,7 +12,7 @@
           <div style="width:75%">
 
             <cards />
-            <span style="margin-top:2%"></span>
+            <span style="margin-top:2%" />
             <cards />
           </div>
           <div style="width:25%">
@@ -58,9 +58,10 @@ export default {
     // waterLevelChart,
     scrollBoard,
     cards,
+    // eslint-disable-next-line vue/no-unused-components
     decora
   },
-  data () {
+  data() {
     return {}
   },
   methods: {}

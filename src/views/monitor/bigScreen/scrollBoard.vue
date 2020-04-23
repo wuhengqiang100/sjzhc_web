@@ -1,17 +1,17 @@
 <template>
   <div id="scroll-board" style="height:98%;background-color: #091a2d;">
-       <!-- <div class="table-name">
+    <!-- <div class="table-name">
         <img src="./img/icon1.png" />人员贡献排行榜
       </div> -->
 
-    <dv-scroll-board :config="config"  @click="testClick"/>
+    <dv-scroll-board :config="config" @click="testClick" />
   </div>
 </template>
 
 <script>
 export default {
   name: 'ScrollBoard',
-  data () {
+  data() {
     return {
       config: {
         header: ['站点', '报警描述'],
@@ -40,7 +40,7 @@ export default {
           ['站点0022', '这是一条报警描述1'],
           ['站点0023', '这是一条报警描述1'],
           ['站点0024', '这是一条报警描述1'],
-          ['站点0025', '这是一条报警描述1'],
+          ['站点0025', '这是一条报警描述1']
           // ['2019-07-02 17:25:00', '路面危害-路面油污清理', '13', 'xxxxxxx'],
 
         ],
@@ -52,19 +52,19 @@ export default {
         headerHeight: 45,
         oddRowBGC: 'rgba(0, 44, 81, 0.8)',
         evenRowBGC: 'rgba(10, 29, 50, 0.8)',
-        carousel:'single',
-        indexHeader:'序号'
+        carousel: 'single',
+        indexHeader: '序号'
       }
     }
   },
- methods: {
-   //预留后面用来展示报警的具体信息
-    testClick(row,ceil,rowIndex,columnIndex) {
+  methods: {
+    // 预留后面用来展示报警的具体信息
+    testClick(row, ceil, rowIndex, columnIndex) {
       console.log(row)
       console.log(row.ceil)
       console.log(row.rowIndex)
       console.log(row.columnIndex)
-    },
+    }
   }
 }
 </script>

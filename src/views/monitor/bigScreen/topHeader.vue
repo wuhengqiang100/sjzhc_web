@@ -4,12 +4,16 @@
     <!-- <span class="header-left-decoration">{{nowDate| parseTime('{y}-{m}-{d} {h}:{i}')  }}</span> -->
     <dv-decoration-5 class="header-center-decoration" />
 
-    <dv-decoration-8 class="header-right-decoration"
-                     :reverse="true" />
+    <dv-decoration-8
+      class="header-right-decoration"
+      :reverse="true"
+    />
 
     <div class="center-title">北京安全线机检数据监控
-      <screenfull id="screenfull"
-                  class="right-menu-item hover-effect" />
+      <screenfull
+        id="screenfull"
+        class="right-menu-item hover-effect"
+      />
     </div>
   </div>
 </template>
@@ -23,7 +27,7 @@ export default {
   components: {
     Screenfull
   },
-  data () {
+  data() {
     return {
       nowDate: new Date()
     }

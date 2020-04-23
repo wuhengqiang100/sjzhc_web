@@ -5,7 +5,6 @@ import Cookies from 'js-cookie'
 import 'normalize.css/normalize.css' // a modern alternative to CSS resets
 import animated from 'animate.css'
 
-
 import Element from 'element-ui'
 import './styles/element-variables.scss'
 import './assets//bigScreen/common.less' // 大屏的less

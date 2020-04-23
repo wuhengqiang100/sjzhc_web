@@ -8,13 +8,20 @@
 <script>
 export default {
   name: 'RoseChart',
-  data () {
+  data() {
     return {
       option: {}
     }
   },
+  mounted() {
+    const { createData } = this
+
+    createData()
+
+    setInterval(createData, 30000)
+  },
   methods: {
-    createData () {
+    createData() {
       const { randomExtend } = this
 
       this.option = {
@@ -53,20 +60,13 @@ export default {
         color: ['#da2f00', '#fa3600', '#ff4411', '#ff724c', '#541200', '#801b00', '#a02200', '#5d1400', '#b72700']
       }
     },
-    randomExtend (minNum, maxNum) {
+    randomExtend(minNum, maxNum) {
       if (arguments.length === 1) {
         return parseInt(Math.random() * minNum + 1, 10)
       } else {
         return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10)
       }
     }
-  },
-  mounted () {
-    const { createData } = this
-
-    createData()
-
-    setInterval(createData, 30000)
   }
 }
 </script>

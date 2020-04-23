@@ -9,11 +9,11 @@
 import datav from './bigScreen/index.vue'
 
 export default {
-  name: 'bigScreen',
+  name: 'BigScreen',
   components: {
     datav
   },
-  data () {
+  data() {
     return {}
   }
 }

@@ -1,38 +1,38 @@
 import request from '@/utils/request'
 
-export function fetchList () {
+export function fetchList() {
   return request({
     url: '/machine/check',
-    method: 'get',
-    //baseURL: "http://127.0.0.1:8088"
+    method: 'get'
+    // baseURL: "http://127.0.0.1:8088"
   })
 }
-export function updateMachineCheck (data) {
+export function updateMachineCheck(data) {
   return request({
     url: '/machine/check/save',
     method: 'post',
-    data,
-    //baseURL: "http://127.0.0.1:8088"
+    data
+    // baseURL: "http://127.0.0.1:8088"
   })
 }
-export function fetchMachineTypeList () {
+export function fetchMachineTypeList() {
   return request({
     url: '/machine/checkType/listOption',
-    method: 'get',
-    //baseURL: "http://127.0.0.1:8088"
+    method: 'get'
+    // baseURL: "http://127.0.0.1:8088"
   })
 }
 
-export function updateUseFlag (id) {
+export function updateUseFlag(id) {
   return request({
     url: '/machine/check/updateUseFlag',
     method: 'post',
-    params: { id },
-    //baseURL: "http://127.0.0.1:8088"
+    params: { id }
+    // baseURL: "http://127.0.0.1:8088"
   })
 }
 
-export function fetchMachine (id) {
+export function fetchMachine(id) {
   return request({
     url: '/machine/check/detail',
     method: 'get',
@@ -40,7 +40,7 @@ export function fetchMachine (id) {
   })
 }
 
-export function fetchPv (pv) {
+export function fetchPv(pv) {
   return request({
     url: '/machine/check/pv',
     method: 'get',
@@ -48,28 +48,28 @@ export function fetchPv (pv) {
   })
 }
 
-export function createMachine (data) {
+export function createMachine(data) {
   return request({
     url: '/machine/check/create',
     method: 'post',
-    data,
-    //baseURL: "http://127.0.0.1:8088"
+    data
+    // baseURL: "http://127.0.0.1:8088"
   })
 }
 
-export function updateMachine (data) {
+export function updateMachine(data) {
   return request({
     url: '/machine/check/update',
     method: 'post',
-    data,
-    //baseURL: "http://127.0.0.1:8088"
+    data
+    // baseURL: "http://127.0.0.1:8088"
   })
 }
-export function deleteMachine (id) {
+export function deleteMachine(id) {
   return request({
     url: '/machine/check/delete',
     method: 'post',
-    params: { id },
-    //baseURL: "http://127.0.0.1:8088"
+    params: { id }
+    // baseURL: "http://127.0.0.1:8088"
   })
 }

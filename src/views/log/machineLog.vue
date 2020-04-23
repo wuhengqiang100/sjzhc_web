@@ -4,82 +4,102 @@
       <!-- <el-input v-model="listQuery.title" placeholder="请输入设备日志名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" /> -->
 
       <div class="filter-item">
-        <el-date-picker v-model="dateValue"
-                        type="datetimerange"
-                        align="right"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                        :default-time="['00:00:01', '23:59:59']"
-                        value-format="yyyy-MM-dd HH:mm:ss"
-                        @keyup.enter.native="handleFilter" />
+        <el-date-picker
+          v-model="dateValue"
+          type="datetimerange"
+          align="right"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          :default-time="['00:00:01', '23:59:59']"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          @keyup.enter.native="handleFilter"
+        />
       </div>
-      <el-button v-waves
-                 class="filter-item"
-                 type="primary"
-                 icon="el-icon-search"
-                 @click="handleFilter">
+      <el-button
+        v-waves
+        class="filter-item"
+        type="primary"
+        icon="el-icon-search"
+        @click="handleFilter"
+      >
         搜索
       </el-button>
-      <el-button class="filter-item"
-                 style="margin-left: 10px;"
-                 type="primary"
-                 icon="el-icon-refresh"
-                 @click="handleReset">
+      <el-button
+        class="filter-item"
+        style="margin-left: 10px;"
+        type="primary"
+        icon="el-icon-refresh"
+        @click="handleReset"
+      >
         重置
       </el-button>
     </div>
 
-    <el-table :key="tableKey"
-              v-loading="listLoading"
-              :data="list"
-              border
-              fit
-              highlight-current-row
-              style="width: 100%;"
-              @sort-change="sortChange">
-      <el-table-column label="设备日志id"
-                       prop="id"
-                       sortable="custom"
-                       align="center"
-                       :class-name="getSortClass('id')">
+    <el-table
+      :key="tableKey"
+      v-loading="listLoading"
+      :data="list"
+      border
+      fit
+      highlight-current-row
+      style="width: 100%;"
+      @sort-change="sortChange"
+    >
+      <el-table-column
+        label="设备日志id"
+        prop="id"
+        sortable="custom"
+        align="center"
+        :class-name="getSortClass('id')"
+      >
         <template slot-scope="{row}">
           <span>{{ row.logMachineId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作人员名称"
-                       align="center">
+      <el-table-column
+        label="操作人员名称"
+        align="center"
+      >
         <template slot-scope="{row}">
           <span>{{ row.operator.operatorName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="设备ip"
-                       align="center">
+      <el-table-column
+        label="设备ip"
+        align="center"
+      >
         <template slot-scope="{row}">
           <span>{{ row.machineIp }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="日志时间"
-                       width="200px"
-                       align="center">
+      <el-table-column
+        label="日志时间"
+        width="200px"
+        align="center"
+      >
         <template slot-scope="{row}">
           <span>{{ row.logDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="日志记录"
-                       min-width="250px"
-                       align="center">
+      <el-table-column
+        label="日志记录"
+        min-width="250px"
+        align="center"
+      >
         <template slot-scope="{row}">
           <span>{{ row.logInfo }}</span>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0"
-                :total="total"
-                :page.sync="listQuery.page"
-                :limit.sync="listQuery.limit"
-                @pagination="getList" />
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="listQuery.page"
+      :limit.sync="listQuery.limit"
+      @pagination="getList"
+    />
 
   </div>
 </template>
@@ -109,7 +129,7 @@ export default {
   components: { Pagination },
   directives: { waves },
   filters: {
-    statusFilter (status) {
+    statusFilter(status) {
       const statusMap = {
         published: 'success',
         draft: 'info',
@@ -117,11 +137,11 @@ export default {
       }
       return statusMap[status]
     },
-    typeFilter (type) {
+    typeFilter(type) {
       return calendarTypeKeyValue[type]
     }
   },
-  data () {
+  data() {
     return {
       tableKey: 0,
       list: null,
@@ -137,7 +157,7 @@ export default {
         title: undefined,
         sort: '+id',
         startDate: Date,
-        endDate: Date,
+        endDate: Date
       },
       importanceOptions: [1, 2, 3],
       useFlagOptions, // 启用状态
@@ -176,12 +196,12 @@ export default {
     }
   },
   // 初始化获取数据列表
-  created () {
+  created() {
     this.getList()
   },
   methods: {
     // 有加载圈的加载数据列表
-    getList () {
+    getList() {
       this.listLoading = true
       if (this.dateValue !== '') {
         this.listQuery.startDate = parseTime(this.dateValue[0])
@@ -205,7 +225,7 @@ export default {
       })
     }, */
     // 立即刷新数据列表
-    refreshList () {
+    refreshList() {
       if (this.dateValue !== '') {
         this.listQuery.startDate = parseTime(this.dateValue[0])
         this.listQuery.endDate = parseTime(this.dateValue[1])
@@ -215,14 +235,14 @@ export default {
         this.total = response.data.total
       })
     },
-    sortChange (data) {
+    sortChange(data) {
       const { prop, order } = data
       if (prop === 'id') {
         this.sortByID(order)
       }
     },
     // id排序操作
-    sortByID (order) {
+    sortByID(order) {
       if (order === 'ascending') {
         this.listQuery.sort = '+id'
       } else {
@@ -231,7 +251,7 @@ export default {
       this.handleFilter()
     },
     // 重置temp实体类变量属性
-    resetTemp () {
+    resetTemp() {
       this.temp = {
         machineId: undefined,
         machineCode: '',
@@ -244,7 +264,7 @@ export default {
         imageModelPath: ''
       }
     },
-    resetListQuery () {
+    resetListQuery() {
       this.listQuery = {
         page: 1,
         limit: 10,
@@ -256,7 +276,7 @@ export default {
         endDate: Date
       }
     },
-    handleFilter () {
+    handleFilter() {
       this.listLoading = true
       if (this.dateValue !== '') {
         this.listQuery.startDate = parseTime(this.dateValue[0])
@@ -272,12 +292,12 @@ export default {
         }, 1 * 1000)
       })
     },
-    handleReset () {
+    handleReset() {
       this.resetListQuery()
       this.getList()
     },
 
-    formatJson (filterVal, jsonData) {
+    formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
         if (j === 'timestamp') {
           return parseTime(v[j])
@@ -286,7 +306,7 @@ export default {
         }
       }))
     },
-    getSortClass: function (key) {
+    getSortClass: function(key) {
       const sort = this.listQuery.sort
       return sort === `+${key}`
         ? 'ascending'

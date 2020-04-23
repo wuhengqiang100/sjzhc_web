@@ -1,22 +1,32 @@
 <template>
   <div id="cards">
-    <div class="card-item"
-         v-for="(card,i) in cards"
-         :key="card.title">
+    <div
+      v-for="(card,i) in cards"
+      :key="card.title"
+      class="card-item"
+    >
       <div class="card-header">
 
         <div class="card-header-left">
-          <dv-decoration-11 v-if="i==0"
-                            class="card-title">{{ card.title }}</dv-decoration-11>
-          <dv-decoration-11 v-if="i==1"
-                            class="card-title1">{{ card.title }}</dv-decoration-11>
-          <dv-decoration-11 v-if="i==2"
-                            class="card-title2">{{ card.title }}</dv-decoration-11>
+          <dv-decoration-11
+            v-if="i==0"
+            class="card-title"
+          >{{ card.title }}</dv-decoration-11>
+          <dv-decoration-11
+            v-if="i==1"
+            class="card-title1"
+          >{{ card.title }}</dv-decoration-11>
+          <dv-decoration-11
+            v-if="i==2"
+            class="card-title2"
+          >{{ card.title }}</dv-decoration-11>
         </div>
         <div class="card-header-right">
-          <dv-decoration-1 style="width:160px;height:40px;"
-                           :color="['red', 'green']"
-                           dur="9" />
+          <dv-decoration-1
+            style="width:160px;height:40px;"
+            :color="['red', 'green']"
+            dur="9"
+          />
         </div>
 
       </div>
@@ -24,39 +34,51 @@
       <div class="card-content">
         <el-row :gutter="10">
           <el-col :span="12">
-            <el-row class="row-class main-value"
-                    type="flex"
-                    justify="center">
+            <el-row
+              class="row-class main-value"
+              type="flex"
+              justify="center"
+            >
               <el-col :span="10">产品名称</el-col>
               <el-col :span="10"><span>7T</span></el-col>
             </el-row>
-            <el-row class="row-class compare-value"
-                    type="flex"
-                    justify="center">
+            <el-row
+              class="row-class compare-value"
+              type="flex"
+              justify="center"
+            >
               <el-col :span="10">卷轴号</el-col>
               <el-col :span="10"><span>0001</span></el-col>
             </el-row>
-            <el-row class="row-class compare-value"
-                    type="flex"
-                    justify="center">
+            <el-row
+              class="row-class compare-value"
+              type="flex"
+              justify="center"
+            >
               <el-col :span="10">机速</el-col>
               <el-col :span="10"><span>50m</span></el-col>
             </el-row>
-            <el-row class="row-class compare-value"
-                    type="flex"
-                    justify="center">
+            <el-row
+              class="row-class compare-value"
+              type="flex"
+              justify="center"
+            >
               <el-col :span="10">生产班组</el-col>
               <el-col :span="10"><span>001</span></el-col>
             </el-row>
-            <el-row class="row-class compare-value"
-                    type="flex"
-                    justify="center">
+            <el-row
+              class="row-class compare-value"
+              type="flex"
+              justify="center"
+            >
               <el-col :span="10">怀疑品数</el-col>
               <el-col :span="10"><span class="question-number">20</span></el-col>
             </el-row>
-            <el-row class="row-class compare-value"
-                    type="flex"
-                    justify="center">
+            <el-row
+              class="row-class compare-value"
+              type="flex"
+              justify="center"
+            >
               <el-col :span="10">废品数</el-col>
               <el-col :span="10"><span class="error-number">10</span></el-col>
             </el-row>
@@ -64,9 +86,11 @@
           </el-col>
           <el-col :span="12">
             <el-col>
-              <el-row class="row-class compare-value"
-                      type="flex"
-                      justify="center">
+              <el-row
+                class="row-class compare-value"
+                type="flex"
+                justify="center"
+              >
                 <el-col :span="10">节点</el-col>
                 <el-col :span="10"><span>分切</span></el-col>
               </el-row>
@@ -82,8 +106,10 @@
                 <dv-charts class="ring-charts"
                            :option="card.ring" />
               </el-row> -->
-              <dv-charts class="ring-charts"
-                         :option="card.ring" />
+              <dv-charts
+                class="ring-charts"
+                :option="card.ring"
+              />
             </el-col>
           </el-col>
 
@@ -94,15 +120,19 @@
         <div class="card-footer-item">
           <div class="footer-title">生产总数</div>
           <div class="footer-detail">
-            <dv-digital-flop :config="card.total"
-                             style="width:70%;height:35px;" />
+            <dv-digital-flop
+              :config="card.total"
+              style="width:70%;height:35px;"
+            />
           </div>
         </div>
         <div class="card-footer-item">
           <div class="footer-title">好品数</div>
           <div class="footer-detail">
-            <dv-digital-flop :config="card.num"
-                             style="width:70%;height:35px;" />
+            <dv-digital-flop
+              :config="card.num"
+              style="width:70%;height:35px;"
+            />
           </div>
         </div>
       </div>
@@ -113,13 +143,20 @@
 <script>
 export default {
   name: 'Cards',
-  data () {
+  data() {
     return {
       cards: []
     }
   },
+  mounted() {
+    const { createData } = this
+
+    createData()
+
+    setInterval(this.createData, 30000)
+  },
   methods: {
-    createData () {
+    createData() {
       const { randomExtend } = this
 
       this.cards = new Array(3).fill(0).map((foo, i) => ({
@@ -181,20 +218,13 @@ export default {
         }
       }))
     },
-    randomExtend (minNum, maxNum) {
+    randomExtend(minNum, maxNum) {
       if (arguments.length === 1) {
         return parseInt(Math.random() * minNum + 1, 10)
       } else {
         return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10)
       }
     }
-  },
-  mounted () {
-    const { createData } = this
-
-    createData()
-
-    setInterval(this.createData, 30000)
   }
 }
 </script>

@@ -1,21 +1,21 @@
 <template>
   <div id="decora">
-    {{new Date()}}
+    {{ new Date() }}
   </div>
 </template>
 
 <script>
 export default {
   name: 'Decora',
-  data () {
+  data() {
     return {
       digitalFlopData: []
     }
   },
-  methods: {
+  mounted() {
 
   },
-  mounted () {
+  methods: {
 
   }
 }

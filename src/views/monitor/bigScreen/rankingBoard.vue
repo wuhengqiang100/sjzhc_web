@@ -8,7 +8,7 @@ decoration
 <script>
 export default {
   name: 'RankingBoard',
-  data () {
+  data() {
     return {
       config: {
         data: [

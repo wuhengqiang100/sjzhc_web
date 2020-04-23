@@ -76,7 +76,7 @@ export const constantRoutes = [
     component: () => import('@/views/error-page/401'),
     hidden: true
   },
-  //重定向到大屏监控
+  // 重定向到大屏监控
   {
     path: '/bigScreen',
     component: () => import('@/views/monitor/bigScreen/index'),
@@ -417,7 +417,7 @@ const createRouter = () => new Router({
 const router = createRouter()
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
-export function resetRouter () {
+export function resetRouter() {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router
 }
