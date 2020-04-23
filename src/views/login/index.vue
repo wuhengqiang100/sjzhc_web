@@ -8,7 +8,11 @@
              label-position="left">
 
       <div class="title-container">
-        <h3 class="title">石家庄核查信息综合管理系统</h3>
+
+        <!-- <h3 class="box animated wobble title "><img :src="logo"
+               class="sidebar-logo" />石家庄核查信息综合管理系统</h3> -->
+        <h3 class="animated wobble title "><img :src="logo"
+               class="sidebar-logo" />石家庄核查信息综合管理系统</h3>
       </div>
       <el-tabs v-model="activeName"
                stretch="true"
@@ -21,7 +25,7 @@
             </span>
             <el-input ref="username"
                       v-model="loginForm.username"
-                      placeholder="Username"
+                      placeholder="请输入用户名"
                       name="username"
                       type="text"
                       tabindex="1"
@@ -40,7 +44,7 @@
                         ref="password"
                         v-model="loginForm.password"
                         :type="passwordType"
-                        placeholder="Password"
+                        placeholder="请输入密码"
                         name="password"
                         tabindex="2"
                         autocomplete="on"
@@ -111,6 +115,8 @@ export default {
       }
     }
     return {
+      logo: process.env.VUE_APP_BASE_API + '/static/admin/img/logo1.png',
+
       loginForm: {
         // username: 'admin',
         // password: '111111'
@@ -253,7 +259,12 @@ export default {
 $bg: #283443;
 $light_gray: #fff;
 $cursor: #fff;
-
+.sidebar-logo {
+  width: 40px;
+  height: 40px;
+  vertical-align: middle;
+  margin-right: 20px;
+}
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
   .login-container .el-input input {
     color: $cursor;

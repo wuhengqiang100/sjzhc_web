@@ -3,7 +3,7 @@ import Vue from 'vue'
 import Cookies from 'js-cookie'
 
 import 'normalize.css/normalize.css' // a modern alternative to CSS resets
-
+import animated from 'animate.css'
 
 
 import Element from 'element-ui'
@@ -43,6 +43,8 @@ Vue.use(Element, {
 })
 
 Vue.use(dataV)
+
+Vue.use(animated)
 // register global utility filters
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])

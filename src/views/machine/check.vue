@@ -70,7 +70,14 @@
                        active-color="#13ce66"
                        inactive-color="#ff4949"
                        @change="changeSwitch" />
+
           </el-button>
+          <span slot="left-footer"
+                class="transfer-footer"
+                style="font-size:12px;padding-right:0px;">配置</span>
+          <el-button slot="left-footer"
+                     class="transfer-footer"
+                     size="small">审核参数</el-button>
           <!-- <el-button slot="left-footer" class="transfer-footer" size="small" @click="refreshQa">定时获取</el-button> -->
           <!-- <el-button slot="left-footer" v-popover:popover class="transfer-footer" size="small">定时获取</el-button> -->
 

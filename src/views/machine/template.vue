@@ -96,10 +96,10 @@
                      @click="handleUpload(row)">
             上传
           </el-button>
-          <el-button v-if="row.imageModelNum > 0"
+          <!--  <el-button v-if="row.imageModelNum > 0"
                      size="mini"
                      type="success"
-                     @click="handlDownload(row)">下载</el-button>
+                     @click="handlDownload(row)">下载</el-button> -->
 
         </template>
       </el-table-column>
