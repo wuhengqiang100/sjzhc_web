@@ -109,9 +109,11 @@ export default {
   components: {
     Breadcrumb,
     Hamburger,
+    // eslint-disable-next-line vue/no-unused-components
     ErrorLog,
     Screenfull,
     SizeSelect,
+    // eslint-disable-next-line vue/no-unused-components
     Search,
     BigScreen
   },

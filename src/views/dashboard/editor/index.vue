@@ -17,7 +17,12 @@
         <span class="display_name">{{ name }}</span>
         <!-- <span style="font-size:20px;padding-top:20px;display:inline-block;">Editor's Dashboard</span> -->
         <span style="font-size:20px;padding-top:20px;display:inline-block;">欢迎使用 核查信息综合管理系统</span>
+
+        <!--  <a-button type="primary">Button></a-button>
+        <a-icon type="step-backward" />
+        <a-input placeholder="Basic usage" /> -->
       </div>
+
     </div>
     <div>
       <img
@@ -25,10 +30,12 @@
         class="emptyGif"
       >
     </div>
+    <div />
   </div>
 </template>
 
 <script>
+
 import { mapGetters } from 'vuex'
 import PanThumb from '@/components/PanThumb'
 import GithubCorner from '@/components/GithubCorner'

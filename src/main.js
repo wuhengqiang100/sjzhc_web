@@ -6,6 +6,7 @@ import 'normalize.css/normalize.css' // a modern alternative to CSS resets
 import animated from 'animate.css'
 
 import Element from 'element-ui'
+
 import './styles/element-variables.scss'
 import './assets//bigScreen/common.less' // 大屏的less
 
@@ -36,10 +37,14 @@ import { mockXHR } from '../mock'
 if (process.env.NODE_ENV === 'production') {
   mockXHR()
 }
-
+import Button from 'ant-design-vue/lib/button'
+import Table from 'ant-design-vue/lib/table'
+import 'ant-design-vue/dist/antd.css'
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium' // set element-ui default size
 })
+Vue.component(Button.name, Button)
+Vue.component(Table.name, 	Table)
 
 Vue.use(dataV)
 

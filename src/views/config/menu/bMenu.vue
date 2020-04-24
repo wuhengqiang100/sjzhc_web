@@ -2,19 +2,14 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <!-- <el-input v-model="listQuery.title" placeholder="请输入上传日志名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" /> -->
-      <div class="filter-item">
-        <el-date-picker
-          v-model="dateValue"
-          type="datetimerange"
-          align="right"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          :default-time="['00:00:01', '23:59:59']"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          @keyup.enter.native="handleFilter"
-        />
-      </div>
+      <!-- <el-input v-model="listQuery.title" placeholder="请输入菜单日志名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" /> -->
+      <el-input
+        v-model="listQuery.title"
+        placeholder="请输入菜单名称"
+        style="width: 200px;"
+        class="filter-item"
+        @keyup.enter.native="handleFilter"
+      />
       <el-button
         v-waves
         class="filter-item"
@@ -42,45 +37,106 @@
       :data="list"
       border
       fit
+      row-key="functonId"
       highlight-current-row
       style="width: 100%;"
+      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
       @sort-change="sortChange"
+      @selection-change="handleSelectionChange"
     >
+
       <el-table-column
-        label="上传日志id"
+        type="selection"
+        width="36"
+      />
+      <el-table-column
+        label="菜单id"
         prop="id"
         sortable="custom"
         align="center"
         :class-name="getSortClass('id')"
       >
         <template slot-scope="{row}">
-          <span>{{ row.dataupSetId }}</span>
+          <span>{{ row.functonId }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        label="上传人员名称"
-        align="center"
-      >
+      <el-table-column label="菜单名称" min-width="100px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.operatorName }}</span>
+          <span>{{ row.title }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        label="说明"
-        align="center"
-        min-width="200px"
-      >
+
+      <el-table-column label="模块name" min-width="100px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.note }}</span>
+          <span>{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        label="上传时间"
-        min-width="200px"
-        align="center"
-      >
+      <el-table-column label="链接地址" min-width="110px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.dateupSetDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ row.path }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="请求组件" min-width="130px" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.component }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="菜单图标" min-width="80px" align="center">
+        <template slot-scope="{row}">
+          <span><svg-icon :icon-class="row.icon" /></span>
+
+        </template>
+      </el-table-column>
+
+      <el-table-column label="重定向" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.redirect }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="父类id" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.parentId }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="子模块联集" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.childrenIds }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="缓存" align="center" min-width="60px">
+        <template slot-scope="{row}">
+          <span>{{ row.noCache }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="模块排序" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.sort }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="显示状态" align="center" min-width="60px">
+        <template slot-scope="{row}">
+          <span>{{ row.hidden }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="角色权限" align="center" min-width="60px">
+        <template slot-scope="{row}">
+          <span>{{ row.roles }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="根路由显示" align="center" min-width="60px">
+        <template slot-scope="{row}">
+          <span>{{ row.alwaysShow }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="面包屑显示" align="center" min-width="60px">
+        <template slot-scope="{row}">
+          <span>{{ row.breadcrumb }}</span>
         </template>
       </el-table-column>
 
@@ -97,7 +153,7 @@
 
 <script>
 
-import { fetchDataUpList } from '@/api/verifyLog'
+import { fetchBmenuList } from '@/api/menu'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -115,7 +171,7 @@ const calendarTypeKeyValue = machineTypeOptions.reduce((acc, cur) => {
 }, {})
 
 export default {
-  name: 'DataupLogTable',
+  name: 'BMenu',
   // eslint-disable-next-line vue/no-unused-components
   components: { Pagination },
   directives: { waves },
@@ -134,6 +190,7 @@ export default {
   },
   data() {
     return {
+      multipleSelection: [],
       tableKey: 0,
       list: null,
       total: 0,
@@ -143,12 +200,10 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        // useFlag: undefined,
+        useFlag: undefined,
         // importance: undefined,
         title: undefined,
-        sort: '+id',
-        startDate: Date,
-        endDate: Date
+        sort: '+id'
       },
       importanceOptions: [1, 2, 3],
       useFlagOptions, // 启用状态
@@ -169,16 +224,16 @@ export default {
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: '修改上传日志',
-        create: '添加上传日志'
+        update: '修改菜单日志',
+        create: '添加菜单日志'
       },
       dialogPvVisible: false,
       pvData: [],
       rules: {
         // type: [{ required: true, message: 'type is required', trigger: 'change' }],
         // timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        machineCode: [{ required: true, message: '请填写上传日志code', trigger: 'blur' }],
-        machineName: [{ required: true, message: '请填写上传日志name', trigger: 'blur' }],
+        machineCode: [{ required: true, message: '请填写菜单日志code', trigger: 'blur' }],
+        machineName: [{ required: true, message: '请填写菜单日志name', trigger: 'blur' }],
         startDate: [{ type: 'date', required: true, message: '请填写开始时间', trigger: 'change' }]
         // endDate: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }]
 
@@ -191,6 +246,21 @@ export default {
     this.getList()
   },
   methods: {
+
+    toggleSelection(rows) {
+      if (rows) {
+        rows.forEach(row => {
+          this.$refs.multipleTable.toggleRowSelection(row)
+        })
+      } else {
+        this.$refs.multipleTable.clearSelection()
+      }
+    },
+    handleSelectionChange(val) {
+      // val 是整个行对象
+      this.multipleSelection = val
+      console.log(this.multipleSelection)
+    },
     // 有加载圈的加载数据列表
     getList() {
       this.listLoading = true
@@ -198,7 +268,7 @@ export default {
         this.listQuery.startDate = parseTime(this.dateValue[0])
         this.listQuery.endDate = parseTime(this.dateValue[1])
       }
-      fetchDataUpList(this.listQuery).then(response => {
+      fetchBmenuList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
 
@@ -221,7 +291,7 @@ export default {
         this.listQuery.startDate = parseTime(this.dateValue[0])
         this.listQuery.endDate = parseTime(this.dateValue[1])
       }
-      fetchDataUpList(this.listQuery).then(response => {
+      fetchBmenuList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
       })
@@ -259,12 +329,10 @@ export default {
       this.listQuery = {
         page: 1,
         limit: 10,
-        // useFlag: undefined,
+        useFlag: undefined,
         // importance: undefined,
         title: undefined,
-        sort: '+id',
-        startDate: Date,
-        endDate: Date
+        sort: '+id'
       }
     },
     handleFilter() {
@@ -273,7 +341,7 @@ export default {
         this.listQuery.startDate = parseTime(this.dateValue[0])
         this.listQuery.endDate = parseTime(this.dateValue[1])
       }
-      fetchDataUpList(this.listQuery).then(response => {
+      fetchBmenuList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
 
@@ -287,7 +355,7 @@ export default {
       this.resetListQuery()
       this.getList()
     },
-    // 上传日志禁用启用操作
+    // 菜单日志禁用启用操作
     /*    handleModifyUseFlag(row, useFlag) {
       updateUseFlag(row.machineId).then(response => {
         this.$message({
@@ -433,7 +501,7 @@ export default {
 </script>
 
 <style scoped>
-.el-dialog .el-form .el-form-item .el-input {
+/* .el-dialog .el-form .el-form-item .el-input {
   width: 300px;
-}
+} */
 </style>
