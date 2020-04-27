@@ -60,7 +60,7 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="启用时间" width="112" align="center">
+      <el-table-column label="启用时间" min-width="130" align="center">
         <template slot-scope="{row}">
           <span>{{ row.startDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
@@ -70,7 +70,7 @@
           <span>{{ row.endDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="说明" min-width="200px" align="center">
+      <el-table-column label="说明" min-width="130px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.note }}</span>
         </template>

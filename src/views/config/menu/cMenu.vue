@@ -66,7 +66,7 @@
       @sort-change="sortChange"
     >
       <el-table-column
-        label="菜单id"
+        label="权限id"
         prop="id"
         sortable="custom"
         align="center"
@@ -76,13 +76,13 @@
           <span>{{ row.functonId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="菜单名称" min-width="100px" align="center">
+      <el-table-column label="权限名称" min-width="100px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.title }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="模块name" min-width="100px" align="center">
+      <el-table-column label="权限name" min-width="100px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.name }}</span>
         </template>
