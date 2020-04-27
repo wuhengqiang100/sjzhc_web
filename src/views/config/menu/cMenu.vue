@@ -154,7 +154,7 @@
     <el-dialog
       :title="textMap[dialogStatus]"
       :visible.sync="dialogFormVisible"
-      width="50%"
+      width="35%"
     >
       <el-form
         ref="dataForm"
@@ -163,7 +163,7 @@
         label-position="left"
         size="mini"
         label-width="125px"
-        style="width: 600px; margin-left:50px;"
+        style="width: 400px; margin-left:40px;"
       >
         <el-form-item
           label="操作权限code"
@@ -186,7 +186,7 @@
           />
         </el-form-item>
 
-        <el-form-item
+        <!--         <el-form-item
           label="操作权限模块名称"
           prop="name"
         >
@@ -196,7 +196,7 @@
             placeholder="请输入操作权限模块名称"
           />
         </el-form-item>
-
+ -->
         <el-form-item
           label="启用状态"
           prop="hidden"
@@ -461,6 +461,7 @@ export default {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
           // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
+          this.temp.name = this.temp.title
           createCmenu(this.temp).then(() => {
             this.refreshList()
             // this.list.unshift(this.temp)
@@ -488,10 +489,13 @@ export default {
     // 修改操作
     updateData() {
       // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
+      this.temp.name = this.temp.title
       updateCmenu(this.temp).then(() => {
         this.refreshList()
         // this.list.unshift(this.temp)
         this.dialogFormVisible = false
+        this.resetTemp()
+
         this.$notify({
           title: 'Success',
           message: '修改成功',

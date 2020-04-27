@@ -167,7 +167,8 @@
     <el-dialog
       :title="textMap[dialogStatus]"
       :visible.sync="dialogFormVisible"
-      width="60%"
+      width="80%"
+      top="	5vh"
     >
       <el-form
         ref="dataForm"
@@ -175,19 +176,19 @@
         :model="temp"
         label-position="left"
         size="mini"
-        label-width="125px"
-        style="width: 750px; margin-left:20px;"
+        label-width="100px"
+        style="width: 1100px; margin-left:2px;"
       >
         <el-row>
-          <el-col :span="12">
+          <el-col :span="8">
             <el-form-item
-              label="角色name"
+              label="角色名称"
               prop="roleName"
             >
               <el-input
                 v-model="temp.roleName"
                 type="text"
-                placeholder="请输入角色name"
+                placeholder="请输入角色名称"
               />
             </el-form-item>
 
@@ -211,38 +212,31 @@
                 placeholder="请输入备注"
               />
             </el-form-item>
-            <el-form-item label="c端权限">
-              <el-checkbox
-                v-model="checkAll"
-                :indeterminate="isIndeterminate"
-                @change="handleCheckAllChange"
-              >全选</el-checkbox>
+            <!--    <el-form-item label="操作权限">
+              <el-checkbox   v-model="checkAll"  :indeterminate="isIndeterminate"  @change="handleCheckAllChange" >全选</el-checkbox>
               <div style="margin: 15px 0;" />
-              <el-checkbox-group
-                v-model="checkedcPermiss"
-                @change="handleCheckedCitiesChange"
-              >
-                <el-checkbox
-                  v-for="permiss in cPermissOptions"
-                  :key="permiss"
-                  :label="permiss"
-                >{{ permiss }}</el-checkbox>
+              <el-checkbox-group   v-model="checkedcPermiss"  @change="handleCheckedCitiesChange"  >
+                <el-checkbox  v-for="permiss in cPermissOptions"  :key="permiss"  :label="permiss" >
+                  {{ permiss }}
+                </el-checkbox>
               </el-checkbox-group>
+            </el-form-item> -->
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="菜单权限">
+              <el-tree ref="tree" :data="menuTree" show-checkbox default-expand-all node-key="id" highlight-current :props="defaultProps" />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="b端权限">
-              <el-tree
-                ref="tree"
-                :data="menuTree"
-                show-checkbox
-                default-expand-all
-                node-key="id"
-                highlight-current
-                :props="defaultProps"
-              />
+          <el-col :span="8">
+            <el-form-item label="操作权限">
+              <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange">全选</el-checkbox>
+              <div style="margin: 15px 0;" />
+              <el-checkbox-group v-model="checkedcPermiss" @change="handleCheckedCitiesChange">
+                <el-checkbox v-for="permiss in cPermissOptions" :key="permiss" :label="permiss">
+                  {{ permiss }}
+                </el-checkbox>
+              </el-checkbox-group>
             </el-form-item>
-
           </el-col>
         </el-row>
       </el-form>

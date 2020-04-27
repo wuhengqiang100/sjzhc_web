@@ -106,6 +106,7 @@
             slot="left-footer"
             class="transfer-footer"
             size="small"
+            @click="dialogVisible = true"
           >审核参数</el-button>
           <!-- <el-button slot="left-footer" class="transfer-footer" size="small" @click="refreshQa">定时获取</el-button> -->
           <!-- <el-button slot="left-footer" v-popover:popover class="transfer-footer" size="small">定时获取</el-button> -->
@@ -114,29 +115,35 @@
         </el-transfer>
       </div>
     </div>
-    <el-popover
-      ref="popover"
-      v-model="visible"
-      placement="top"
-      title="设置定时刷新"
-      width="200"
-      trigger="click"
+    <el-dialog
+      title="自动审核参数设置"
+      :visible.sync="dialogVisible"
+      width="30%"
+      :before-close="handleClose"
+      top="	50vh"
     >
-      <!-- <el-input v-model="input1" placeholder="请输入内容" />
-      <el-input v-model="input2" placeholder="请输入内容" /> -->
-      <div style="text-align: right; margin: 0">
-        <el-button
-          size="mini"
-          type="text"
-          @click="visible = false"
-        >取消</el-button>
-        <el-button
-          type="primary"
-          size="mini"
-          @click="visible = false"
-        >确定</el-button>
-      </div>
-    </el-popover>
+      <el-form
+        ref="dataForm"
+        :rules="rules"
+        :model="tempCanshu"
+        label-position="left"
+        size="mini"
+        label-width="70px"
+        style="width: 300px; margin-left:2px;"
+      >
+        <el-form-item label="参数一">
+          <el-input-number v-model="tempCanshu.num1" :precision="2" :step="0.1" :max="10" />
+        </el-form-item>
+        <el-form-item label="参数二">
+          <el-input-number v-model="tempCanshu.num2" :precision="2" :step="0.1" :max="10" />
+        </el-form-item>
+
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="handleClose">取 消</el-button>
+        <el-button type="primary" @click="editCanshu">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -155,6 +162,7 @@ export default {
   filters: {},
   data() {
     return {
+      dialogVisible: false,
       visible: false,
       data: [],
       value: [],
@@ -168,6 +176,10 @@ export default {
         return item.wipJobs.cartNumber.indexOf(query) > -1
       },
       qaInspectMasterList: [], // 总的核查数据list
+      tempCanshu: {
+        num1: Number,
+        num2: Number
+      },
       temp: {
         direction: '',
         movedKeys: [],
@@ -234,26 +246,6 @@ export default {
     this.getList()
   },
   mounted() {
-    // setInterval(() => {
-    //   this.resetTemp() // 先初始化
-    //   this.getList()// 定时刷新获取数据
-    // }, 2 * 2000)
-    /*   var Interval
-      if (this.switchWalue) { // 开启自动刷新功能
-        Interval = setInterval(() => {
-          this.resetTemp() // 先初始化
-          this.getList()// 定时刷新获取数据
-          console.log(this.switchWalue)
-        }, 2 * 2000)
-      } else {
-        console.log(this.switchWalue)
-        clearInterval(Interval)
-      } */
-    /*     setInterval(() => {
-      this.resetTemp() // 先初始化
-      this.getList()// 定时刷新获取数据
-      console.log('获取数据')
-    }, 2 * 2000) */
   },
   methods: {
     // 有加载圈的加载数据列表
@@ -356,21 +348,15 @@ export default {
     refreshQa() {
       this.resetTemp() // 重置数据
       this.getList() // 获取数据
-      console.log('获取数据成功')
     },
     changeSwitch(data) {
-      console.log(data)
       if (data) {
         // 开启自动刷新功能
         this.interval = setInterval(() => {
           this.resetTemp() // 先初始化
           this.getList() // 定时刷新获取数据
-          console.log('获取数据成功')
         }, 2 * 2000)
-        console.log('获取数据成功')
       } else {
-        console.log('关闭定时器')
-
         clearInterval(this.interval)
       }
     },
@@ -383,7 +369,25 @@ export default {
       }
       this.data = []
       this.value = []
+    },
+    handleClose(done) {
+      this.dialogVisible = false
+      /*    this.$confirm('确认关闭？')
+        .then(_ => {
+
+          done()
+        })
+        .catch(_ => {}) */
+    },
+    editCanshu() {
+      this.$message({
+        message: '恭喜你，这是一条成功消息',
+        type: 'success'
+      })
+      // 增加修改参数的后台请求操作
+      this.dialogVisible = false
     }
+
   }
 }
 </script>
