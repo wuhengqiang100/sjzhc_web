@@ -604,8 +604,11 @@ export default {
     updateData() {
       // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
       this.temp.checkedRole = this.checkedRoles
+      console.log(this.temp)
       updateLoginUser(this.temp).then(() => {
         this.refreshList()
+        this.resetTemp()
+
         // this.list.unshift(this.temp)
         this.dialogFormVisible = false
         this.$notify({

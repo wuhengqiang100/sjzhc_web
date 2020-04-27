@@ -486,6 +486,7 @@ export default {
         menuIds: [],
         checkedPermiss: []
       }
+      this.checkedPermiss = []
     },
     resetListQuery() {
       this.listQuery = {
@@ -517,11 +518,6 @@ export default {
     createData() {
       // console.log(this.$refs.tree.getCheckedKeys())
       this.$refs['dataForm'].validate((valid) => {
-        // date格式化
-        this.temp.startDate = parseTime(this.temp.startDate)
-        if (this.temp.endDate !== '') {
-          this.temp.endDate = parseTime(this.temp.endDate)
-        }
         this.temp.menuIds = this.$refs.tree.getCheckedKeys()
         this.temp.checkedPermiss = this.checkedcPermiss
         if (valid) {
@@ -557,8 +553,13 @@ export default {
       // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
       this.temp.menuIds = this.$refs.tree.getCheckedKeys()
       this.temp.checkedPermiss = this.checkedcPermiss
+      // this.list.unshift(this.temp)
+      this.dialogFormVisible = false
+      console.log(this.temp)
+
       updateRole(this.temp).then(() => {
         this.refreshList()
+        this.resetTemp()
         // this.list.unshift(this.temp)
         this.dialogFormVisible = false
         this.$notify({
