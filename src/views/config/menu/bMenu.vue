@@ -28,7 +28,9 @@
       >
         重置
       </el-button>
-
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
+        添加
+      </el-button>
     </div>
 
     <el-table
@@ -148,12 +150,89 @@
       :limit.sync="listQuery.limit"
       @pagination="getList"
     />
+    <el-dialog
+      :title="textMap[dialogStatus]"
+      :visible.sync="dialogFormVisible"
+      width="50%"
+      top="	5vh"
+    >
+      <el-form
+        ref="dataForm"
+        :rules="rules"
+        :model="temp"
+        label-position="left"
+        size="mini"
+        label-width="100px"
+        style="width: 700px; margin-left:2px;"
+      >
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="菜单名称" prop="title">
+              <el-input v-model="temp.title" type="text" placeholder="请输入菜单名称" />
+            </el-form-item>
+            <el-form-item label="模块名称" prop="name">
+              <el-input v-model="temp.name" type="text" placeholder="请输入模块名称" />
+            </el-form-item>
+            <el-form-item label="路由地址" prop="path">
+              <el-input v-model="temp.path" type="text" placeholder="请输入路由地址" />
+            </el-form-item>
+            <el-form-item label="请求组件" prop="icon">
+              <el-input v-model="temp.icon" type="text" placeholder="请输入菜单图标" />
+            </el-form-item>
+            <el-form-item label="菜单图标" prop="component">
+              <el-input v-model="temp.component" type="text" placeholder="请输入请求组件" />
+            </el-form-item>
+            <el-form-item label="重定向" prop="redirect">
+              <el-input v-model="temp.redirect" type="text" placeholder="请输入重定向地址" />
+            </el-form-item>
+
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="父菜单" prop="parentId">
+              <el-input v-model="temp.parentId" type="text" placeholder="请输入父菜单" />
+            </el-form-item>
+            <el-form-item label="子菜单" prop="childrenIds">
+              <el-input v-model="temp.childrenIds" type="text" placeholder="请输入子菜单" />
+            </el-form-item>
+            <el-form-item label="缓存" prop="noCache">
+              <el-input v-model="temp.noCache" type="text" placeholder="请输入缓存" />
+            </el-form-item>
+            <el-form-item label="排序" prop="sort">
+              <el-input v-model="temp.sort" type="text" placeholder="请输入排序" />
+            </el-form-item>
+            <el-form-item label="显示状态" prop="hidden">
+              <el-input v-model="temp.hidden" type="text" placeholder="请输入显示状态" />
+            </el-form-item>
+            <el-form-item label="根路由显示" prop="alwaysShow">
+              <el-input v-model="temp.alwaysShow" type="text" placeholder="请输入根路由显示" />
+            </el-form-item>
+            <el-form-item label="面包屑显示" prop="breadcrumb">
+              <el-input v-model="temp.breadcrumb" type="text" placeholder="请输入面包屑显示" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="dialogFormVisible = false">
+          返回
+        </el-button>
+        <el-button
+          type="primary"
+          @click="dialogStatus==='create'?createData():updateData()"
+        >
+          确认
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 
-import { fetchBmenuList } from '@/api/menu'
+import { fetchBmenuList, createCmenu, updateCmenu } from '@/api/menu'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -211,21 +290,29 @@ export default {
       statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
       temp: {
-        machineId: undefined,
-        machineCode: '',
-        machineName: '',
-        useFlag: true,
-        startDate: new Date(),
-        endDate: '',
-        note: '',
-        imageModelNum: '',
-        imageModelPath: ''
+        functonId: undefined,
+        functonCode: '',
+        name: '',
+        title: '',
+        parentId: '',
+        childrenIds: '',
+        sort: '',
+        path: '',
+        hidden: '',
+        roles: '',
+        delFlag: '',
+        component: '',
+        alwaysShow: '',
+        icon: '',
+        noCache: '',
+        breadcrumb: '',
+        redirect: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: '修改菜单日志',
-        create: '添加菜单日志'
+        update: '修改菜单',
+        create: '添加菜单'
       },
       dialogPvVisible: false,
       pvData: [],
@@ -355,33 +442,12 @@ export default {
       this.resetListQuery()
       this.getList()
     },
-    // 菜单日志禁用启用操作
-    /*    handleModifyUseFlag(row, useFlag) {
-      updateUseFlag(row.machineId).then(response => {
-        this.$message({
-          message: response.message,
-          type: 'success'
-        })
-        this.refreshList()
-      })
-
-      row.status = status
-    },
-    handleModifyStatus(row, status) {
-      this.$message({
-        message: '操作Success',
-        type: 'success'
-      })
-      row.status = status
-    },
-
-    handleReset() {
-      this.resetListQuery()
-      this.getList()
-    },
     // 监听create dialog事件
     handleCreate() {
-      this.resetTemp()
+      // this.resetTemp()
+      // 获取权限menuTree
+      // this.getRoleMenus()
+      // this.$refs.tree.setCheckedKeys([])
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -390,16 +456,13 @@ export default {
     },
     // 添加操作
     createData() {
+      // console.log(this.$refs.tree.getCheckedKeys())
       this.$refs['dataForm'].validate((valid) => {
-        // date格式化
-        this.temp.startDate = parseTime(this.temp.startDate)
-        if (this.temp.endDate !== '') {
-          this.temp.endDate = parseTime(this.temp.endDate)
-        }
-
+        // this.temp.menuIds = this.$refs.tree.getCheckedKeys()
+        // this.temp.checkedPermiss = this.checkedcPermiss
         if (valid) {
           // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          createMachine(this.temp).then(() => {
+          createCmenu(this.temp).then(() => {
             this.refreshList()
             // this.list.unshift(this.temp)
             this.dialogFormVisible = false
@@ -416,6 +479,8 @@ export default {
     // 监听修改 update dialog事件
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
+      this.getRoleMenus()
+      this.getRoleOwnMenus(this.temp.roleId)
       // this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
@@ -426,8 +491,15 @@ export default {
     // 修改操作
     updateData() {
       // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-      updateMachine(this.temp).then(() => {
+      this.temp.menuIds = this.$refs.tree.getCheckedKeys()
+      this.temp.checkedPermiss = this.checkedcPermiss
+      // this.list.unshift(this.temp)
+      this.dialogFormVisible = false
+      console.log(this.temp)
+
+      updateCmenu(this.temp).then(() => {
         this.refreshList()
+        this.resetTemp()
         // this.list.unshift(this.temp)
         this.dialogFormVisible = false
         this.$notify({
@@ -438,47 +510,6 @@ export default {
         })
       })
     },
-    // 监听删除dialog事件
-    handleDelete(row) {
-      this.$confirm('您确定要删除该数据吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        deleteMachine(row.machineId).then(() => {
-          this.refreshList()
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          })
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
-      })
-    },
-    handleFetchPv(pv) {
-      fetchPv(pv).then(response => {
-        this.pvData = response.data.pvData
-        this.dialogPvVisible = true
-      })
-    },
-    handleDownload() {
-      this.downloadLoading = true
-      import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-        const filterVal = ['timestamp', 'title', 'type', 'importance', 'status']
-        const data = this.formatJson(filterVal, this.list)
-        excel.export_json_to_excel({
-          header: tHeader,
-          data,
-          filename: 'table-list'
-        })
-        this.downloadLoading = false
-      })
-    }, */
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
         if (j === 'timestamp') {
@@ -501,7 +532,8 @@ export default {
 </script>
 
 <style scoped>
-/* .el-dialog .el-form .el-form-item .el-input {
-  width: 300px;
-} */
+
+.el-dialog .el-form .el-form-item .el-input {
+  width: 220px;
+}
 </style>

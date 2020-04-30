@@ -18,24 +18,6 @@ export function fetchCmenuList(data) {
     // baseURL: "http://127.0.0.1:8088"
   })
 }
-
-/* export function fetchList(query) {
-  return request({
-    url: '/machine/list',
-    method: 'get',
-    params: query
-    // baseURL: "http://127.0.0.1:8088"
-  })
-} */
-
-/* export function fetchCmenuList() {
-  return request({
-    url: '/system/cMenu/listOption',
-    method: 'get'
-    // baseURL: "http://127.0.0.1:8088"
-  })
-} */
-
 export function updateUseFlag(id) {
   return request({
     url: '/system/cMenu/updateUseFlag',

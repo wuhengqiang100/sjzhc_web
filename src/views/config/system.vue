@@ -7,41 +7,46 @@
     </el-steps>
     <div class="filter-container" />
     <el-row>
-      <el-col :span="9"><div class="grid-content bg-purple" />
+      <el-col :span="9">
         <el-card class="box-card1" style="overflow-y: scroll;">
-          <h2 style="text-align: center;">工厂------------------------->系统</h2>
+          <div slot="header" class="clearfix">
+            <span style="padding:0px">工厂----------------------------------------------->系统</span>
+            <el-button style="float: right;" type="success" icon="el-icon-check" circle />
+          </div>
           <el-col :span="8" style="border-right:2px">
-            <el-radio-group v-model="radio1"  size="medium">
+            <el-radio-group v-model="radio1" size="medium">
               <el-row style="margin-top: 10px;">
-                <el-radio-button style="width:97.6px;" label="石家庄"></el-radio-button>
+                <el-radio-button style="width:97.6px;" label="石家庄" />
               </el-row>
               <el-row style="margin-top: 10px;">
-                <el-radio-button style="width:97.6px;"  label="西安"></el-radio-button>
+                <el-radio-button style="width:97.6px;" label="西安" />
               </el-row>
               <el-row style="margin-top: 10px;">
-                <el-radio-button style="width:97.6px;" label="北京印钞"></el-radio-button>
+                <el-radio-button style="width:97.6px;" label="北京印钞" />
               </el-row>
               <el-row style="margin-top: 10px;">
-                <el-radio-button style="width:97.6px;" label="北京防伪"></el-radio-button>
+                <el-radio-button style="width:97.6px;" label="北京防伪" />
               </el-row>
             </el-radio-group>
           </el-col>
           <el-col :span="16">
-            <el-card style="height: 480px;overflow-y: scroll;">
-              <el-radio-group v-model="radio2" size="mini">
-              <el-row style="margin-top: 10px;">
-                <el-radio label="1" border size="medium">石家庄核查信息综合管理系统</el-radio>
-              </el-row>
-              <el-row style="margin-top: 10px;">
-                <el-radio label="2" border size="medium">北京开窗安全线机检信息系统</el-radio>
-              </el-row>
-            </el-radio-group>
+            <el-card style="height: 460px;overflow-y: scroll;">
+              <el-checkbox-group v-model="checkboxGroup1" size="mini">
+                <el-row style="margin-top: 10px;">
+                  <el-col :span="22"><el-checkbox label="石家庄核查信息综合管理系统" border /></el-col>
+                  <el-col :span="2"><el-button type="primary" icon="el-icon-edit" circle size="mini" /></el-col>
+                </el-row>
+                <el-row style="margin-top: 10px;">
+                  <el-col :span="22"><el-checkbox label="北京开窗安全线机检信息系统" border /></el-col>
+                  <el-col :span="2"><el-button type="primary" icon="el-icon-edit" circle size="mini" /></el-col>
+                </el-row>
+              </el-checkbox-group>
             </el-card>
 
           </el-col>
         </el-card>
       </el-col>
-      <el-col :span="7" >
+      <el-col :span="7">
         <el-card class="box-card2" style="overflow-y: scroll;">
           <el-tree ref="tree" :data="menuTree" show-checkbox default-expand-all node-key="id" highlight-current :props="defaultProps" />
         </el-card>
@@ -72,9 +77,7 @@ export default {
   data() {
     return {
       radio1: '1',
-      radio2: '1',
-      radio3: '1',
-      radio4: '1',
+      checkboxGroup1: [],
       menuTree: [], // 菜单树
       defaultProps: {
         children: 'children',
@@ -136,6 +139,18 @@ export default {
 .el-dialog .el-form .el-form-item .el-input {
   width: 220px;
 }
+.el-card .el-card__header{
+  padding: 8px;
+}
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
+  .clearfix:after {
+    clear: both
+  }
+
   .text {
     font-size: 14px;
   }
