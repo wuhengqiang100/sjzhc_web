@@ -222,7 +222,7 @@
               </el-checkbox-group>
             </el-form-item> -->
           </el-col>
-          <el-col :span="8">
+          <el-col :span="8" >
             <el-form-item label="菜单权限">
               <el-tree ref="tree" :data="menuTree" show-checkbox default-expand-all node-key="id" highlight-current :props="defaultProps" />
             </el-form-item>
@@ -232,7 +232,7 @@
               <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange">全选</el-checkbox>
               <div style="margin: 15px 0;" />
               <el-checkbox-group v-model="checkedcPermiss" @change="handleCheckedCitiesChange">
-                <el-checkbox v-for="permiss in cPermissOptions" :key="permiss" :label="permiss">
+                <el-checkbox style="margin-bottom: 10px;" v-for="permiss in cPermissOptions" :key="permiss" :label="permiss" >
                   {{ permiss }}
                 </el-checkbox>
               </el-checkbox-group>
