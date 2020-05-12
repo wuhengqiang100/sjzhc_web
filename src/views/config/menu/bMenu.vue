@@ -39,7 +39,7 @@
       :data="list"
       border
       fit
-      row-key="functonId"
+      row-key="functionId"
       highlight-current-row
       style="width: 100%;"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
@@ -59,7 +59,7 @@
         :class-name="getSortClass('id')"
       >
         <template slot-scope="{row}">
-          <span>{{ row.functonId }}</span>
+          <span>{{ row.functionId }}</span>
         </template>
       </el-table-column>
       <el-table-column label="菜单名称" min-width="100px" align="center">
@@ -290,8 +290,8 @@ export default {
       statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
       temp: {
-        functonId: undefined,
-        functonCode: '',
+        functionId: undefined,
+        functIonCode: '',
         name: '',
         title: '',
         parentId: '',

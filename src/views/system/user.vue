@@ -209,9 +209,6 @@
               label="用户名称"
               prop="operatorId"
             >
-              <!-- <el-input v-model="temp.operatorId"
-                        type="text"
-                        placeholder="请输入用户id" /> -->
               <el-select
                 v-model="temp.operatorId"
                 filterable
@@ -454,9 +451,6 @@ export default {
     },
     getRoles() {
       fetchRoleList().then(response => {
-        // console.log('tag', response.data)
-        // this.roleList = response.roleList
-        // console.log('tag', this.roleOptions)
         this.operatorOption = response.operatorOption
         this.roleOptions = response.roleOptions
       })
@@ -593,7 +587,7 @@ export default {
       this.getRoles()// 获取角色
       // 获取已拥有的角色
       // console.log('tag', this.temp)
-      this.getRoleOwnMenus(this.temp.operatorId)//
+      this.getRoleOwnMenus(this.temp.loginId)//
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {

@@ -35,27 +35,11 @@ export function updateOperationType(data) {
     // baseURL: "http://127.0.0.1:8088"
   })
 }
-
-export function fetchOperationType(id) {
+export function deleteOperationType(id) {
   return request({
-    url: '/operationType/detail',
-    method: 'get',
+    url: '/operationType/delete',
+    method: 'post',
     params: { id }
-  })
-}
-
-export function fetchPv(pv) {
-  return request({
-    url: '/operationType/pv',
-    method: 'get',
-    params: { pv }
-  })
-}
-
-export function fetchMachineTypeList() {
-  return request({
-    url: '/operationType/listOption',
-    method: 'get'
     // baseURL: "http://127.0.0.1:8088"
   })
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="请输入工序名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.title" placeholder="请输入工序种类名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
 
       <el-select v-model="listQuery.useFlag" placeholder="状态" clearable class="filter-item" style="width: 130px">
         <el-option v-for="item in useFlagOptions" :key="item.key" :label="item.display_name" :value="item.key" />
@@ -30,24 +30,19 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="工序id" prop="id" sortable="custom" align="center" :class-name="getSortClass('id')">
+      <el-table-column label="工序种类id" prop="id" sortable="custom" align="center" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.operationId }}</span>
+          <span>{{ row.operationTypeId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="工序code" align="center">
+      <el-table-column label="工序种类code" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.operationCode }}</span>
+          <span>{{ row.operationTypeCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="工序名称" align="center">
+      <el-table-column label="工序种类名称" align="center">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleUpdate(row)">{{ row.operationName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="工序类别" align="center">
-        <template slot-scope="{row}">
-          <span v-if="row.operationType!=null">{{ row.operationType.operatoionName }}</span>
+          <span class="link-type" @click="handleUpdate(row)">{{ row.operationTypeName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="启用状态" align="center">
@@ -93,20 +88,12 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="50%">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="125px" style="width: 600px; margin-left:50px;">
 
-        <el-form-item label="工序code" prop="operationCode">
-          <el-input v-model="temp.operationCode" type="text" placeholder="请输入工序code" />
+        <el-form-item label="工序种类code" prop="operationTypeCode">
+          <el-input v-model="temp.operationTypeCode" type="text" placeholder="请输入工序种类code" />
         </el-form-item>
-        <el-form-item label="工序名称" prop="operationName">
-          <el-input v-model="temp.operationName" type="text" placeholder="请输入工序名称" />
+        <el-form-item label="工序种类名称" prop="operationTypeName">
+          <el-input v-model="temp.operationTypeName" type="text" placeholder="请输入工序种类name" />
         </el-form-item>
-        <el-form-item label="工序种类" prop="operationTypeId">
-          <el-select v-model="temp.operationTypeId" filterable placeholder="请搜索或者选择">
-            <el-option v-for="item in operationTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
-          </el-select>
-        </el-form-item>
-        <!--         <el-form-item label="工序类别" prop="operationType">
-          <el-input v-model="temp.operationTypeId" type="text" placeholder="请输入工序类别" />
-        </el-form-item> -->
         <el-form-item label="启用状态" prop="useFlag">
           <el-switch v-model="temp.useFlag" active-color="#13ce66" inactive-color="#ff4949" />
         </el-form-item>
@@ -147,12 +134,12 @@
 
 <script>
 
-import { fetchList, fetchPv, createOperation, updateOperation, updateUseFlag, deleteOperation, fetchOperationTypeList } from '@/api/operation'
+import { fetchList, createOperationType, updateOperationType, updateUseFlag, deleteOperationType } from '@/api/operationType'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
-// const operationTypeOptions = []
+const operationTypeTypeOptions = []
 
 const useFlagOptions = [
   { key: '0', display_name: '禁用' },
@@ -160,13 +147,13 @@ const useFlagOptions = [
 ]
 
 // arr to obj, such as { CN : "China", US : "USA" }
-// const calendarTypeKeyValue = operationTypeOptions.reduce((acc, cur) => {
-//   acc[cur.key] = cur.display_name
-//   return acc
-// }, {})
+const calendarTypeKeyValue = operationTypeTypeOptions.reduce((acc, cur) => {
+  acc[cur.key] = cur.display_name
+  return acc
+}, {})
 
 export default {
-  name: 'OperationTable',
+  name: 'OperationTypeTable',
   components: { Pagination },
   directives: { waves },
   filters: {
@@ -179,7 +166,7 @@ export default {
       return statusMap[status]
     },
     typeFilter(type) {
-      // return calendarTypeKeyValue[type]
+      return calendarTypeKeyValue[type]
     }
   },
   data() {
@@ -196,17 +183,15 @@ export default {
         title: undefined,
         sort: '+id'
       },
-      operationTypeOptions: [],
       importanceOptions: [1, 2, 3],
       useFlagOptions, // 启用状态
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
       temp: {
-        operationId: undefined,
-        operationCode: '',
-        operationName: '',
-        operationTypeId: '',
+        operationTypeId: undefined,
+        operationTypeCode: '',
+        operationTypeName: '',
         useFlag: true,
         startDate: new Date(),
         endDate: '',
@@ -215,16 +200,16 @@ export default {
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: '修改工序',
-        create: '添加工序'
+        update: '修改工序种类',
+        create: '添加工序种类'
       },
       dialogPvVisible: false,
       pvData: [],
       rules: {
         // type: [{ required: true, message: 'type is required', trigger: 'change' }],
         // timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        operationCode: [{ required: true, message: '请填写工序code', trigger: 'blur' }],
-        operationName: [{ required: true, message: '请填写工序name', trigger: 'blur' }],
+        operationTypeCode: [{ required: true, message: '请填写工序种类code', trigger: 'blur' }],
+        operationTypeName: [{ required: true, message: '请填写工序种类name', trigger: 'blur' }],
         startDate: [{ type: 'date', required: true, message: '请填写开始时间', trigger: 'change' }]
         // endDate: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }]
 
@@ -250,6 +235,13 @@ export default {
         }, 1 * 1000)
       })
     },
+    /*     getMachineTypes() {
+      fetchMachineTypeList().then(response => {
+        console.log('tag', response.data)
+        this.operationTypeTypeOptions = response.data
+        console.log('tag', this.operationTypeTypeOptions)
+      })
+    }, */
     // 立即刷新数据列表
     refreshList() {
       fetchList(this.listQuery).then(response => {
@@ -269,15 +261,9 @@ export default {
         }, 1 * 1000)
       })
     },
-    // 获取工序种类类别oprions
-    getOperationTypes() {
-      fetchOperationTypeList().then(response => {
-        this.operationTypeOptions = response.operationTypeOptions
-      })
-    },
-    // 工序禁用启用操作
+    // 工序种类禁用启用操作
     handleModifyUseFlag(row, useFlag) {
-      updateUseFlag(row.operationId).then(response => {
+      updateUseFlag(row.operationTypeId).then(response => {
         this.$message({
           message: response.message,
           type: 'success'
@@ -312,10 +298,9 @@ export default {
     // 重置temp实体类变量属性
     resetTemp() {
       this.temp = {
-        operationId: undefined,
-        operationCode: '',
-        operationName: '',
-        operationTypeId: '',
+        operationTypeId: undefined,
+        operationTypeCode: '',
+        operationTypeName: '',
         useFlag: true,
         startDate: new Date(),
         endDate: '',
@@ -339,7 +324,6 @@ export default {
     // 监听create dialog事件
     handleCreate() {
       this.resetTemp()
-      this.getOperationTypes()
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -357,7 +341,7 @@ export default {
 
         if (valid) {
           // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          createOperation(this.temp).then(() => {
+          createOperationType(this.temp).then(() => {
             this.refreshList()
             // this.list.unshift(this.temp)
             this.dialogFormVisible = false
@@ -375,7 +359,6 @@ export default {
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
       // this.temp.timestamp = new Date(this.temp.timestamp)
-      this.getOperationTypes()
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -385,7 +368,7 @@ export default {
     // 修改操作
     updateData() {
       // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-      updateOperation(this.temp).then(() => {
+      updateOperationType(this.temp).then(() => {
         this.refreshList()
         // this.list.unshift(this.temp)
         this.dialogFormVisible = false
@@ -404,7 +387,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteOperation(row.operationId).then(() => {
+        deleteOperationType(row.operationTypeId).then(() => {
           this.refreshList()
           this.$message({
             type: 'success',
@@ -416,12 +399,6 @@ export default {
           type: 'info',
           message: '已取消删除'
         })
-      })
-    },
-    handleFetchPv(pv) {
-      fetchPv(pv).then(response => {
-        this.pvData = response.data.pvData
-        this.dialogPvVisible = true
       })
     },
     handleDownload() {

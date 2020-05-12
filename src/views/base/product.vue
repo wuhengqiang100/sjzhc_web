@@ -51,11 +51,7 @@
           <span>{{ row.cartnumFirstId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="前缀字母启用日期" width="112" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.cartnumFirstDate| parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
-        </template>
-      </el-table-column>
+
       <el-table-column label="前缀字母启用次数" align="center">
         <template slot-scope="{row}">
           <span>{{ row.cartnumFirstCount }}</span>
@@ -76,6 +72,21 @@
           <span>{{ row.convertSheetNumber }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="大张废数量" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.sheetWasterNum }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="防重号系统的名称" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.qaCodeName }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="机检系统本地产品名称" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.localProductName }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="启用状态" align="center">
         <template slot-scope="{row}">
           <el-tag v-if="row.useFlag" type="success">
@@ -84,6 +95,16 @@
           <el-tag v-else type="danger">
             禁用
           </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="说明" min-width="50px" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.note }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="前缀字母启用日期" width="112" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.cartnumFirstDate| parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="启用时间" width="112" align="center">
@@ -96,16 +117,7 @@
           <span>{{ row.endDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="说明" min-width="50px" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.note }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="大张废数量" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.sheetWasterNum }}</span>
-        </template>
-      </el-table-column>
+
       <el-table-column label="操作" fixed="right" align="center" min-width="225px" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
@@ -121,8 +133,8 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="55%">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="125px" style="width: 750px; margin-left:20px;">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="60%">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="160px" style="width: 800px; margin-left:20px;">
         <el-row>
           <el-col :span="12">
             <el-form-item label="产品code" prop="productCode">
@@ -153,6 +165,9 @@
             <el-form-item label="开数" prop="convertSheetNumber">
               <el-input v-model="temp.convertSheetNumber" type="text" placeholder="请输入开数" />
             </el-form-item>
+            <el-form-item label="大张废数量" prop="sheetWasterNum">
+              <el-input v-model="temp.sheetWasterNum" type="text" placeholder="请输入大张废数量" />
+            </el-form-item>
             <el-form-item label="启用状态" prop="useFlag">
               <el-switch v-model="temp.useFlag" active-color="#13ce66" inactive-color="#ff4949" />
             </el-form-item>
@@ -163,8 +178,11 @@
               <el-date-picker v-model="temp.endDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择一个结束时间" />
 
             </el-form-item>
-            <el-form-item label="大张废数量" prop="sheetWasterNum">
-              <el-input v-model="temp.sheetWasterNum" type="text" placeholder="请输入产品name" />
+            <el-form-item label="防重号系统的名称" prop="qaCodeName">
+              <el-input v-model="temp.qaCodeName" type="text" placeholder="请输入防重号系统的名称" />
+            </el-form-item>
+            <el-form-item label="机检系统本地产品名称" prop="localProductName">
+              <el-input v-model="temp.localProductName" type="text" placeholder="请输入机检系统本地产品名称" />
             </el-form-item>
             <el-form-item label="备注">
               <el-input v-model="temp.note" style="width:220px;" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入备注" />
@@ -260,12 +278,14 @@ export default {
         cartnumFirstCount: '',
         rowNumber: '',
         colNumber: '',
-        convertSheetNumber: '',
+        convertSheetNumber: '', // 总开数
+        sheetWasterNum: '', // 大张废数量
         useFlag: true,
         startDate: new Date(),
         endDate: '',
         note: '',
-        sheetWasterNum: ''
+        qaCodeName: '', // 防重号系统的名称
+        localProductName: ''//
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -380,12 +400,14 @@ export default {
         cartnumFirstCount: '',
         rowNumber: '',
         colNumber: '',
-        convertSheetNumber: '',
+        convertSheetNumber: '', // 总开数
+        sheetWasterNum: '', // 大张废数量
         useFlag: true,
         startDate: new Date(),
         endDate: '',
         note: '',
-        sheetWasterNum: ''
+        qaCodeName: '', // 防重号系统的名称
+        localProductName: ''//
       }
     },
     resetListQuery() {

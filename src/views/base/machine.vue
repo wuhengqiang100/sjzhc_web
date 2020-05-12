@@ -84,6 +84,7 @@
           <span>{{ row.machineCode }}</span>
         </template>
       </el-table-column>
+
       <el-table-column
         label="设备名称"
         align="center"
@@ -99,20 +100,19 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="模板image目录"
-        min-width="200px"
+        label="设备ip"
         align="center"
       >
         <template slot-scope="{ row }">
-          <span>{{ row.imageModelPath }}</span>
+          <span>{{ row.machineIp }}</span>
         </template>
       </el-table-column>
       <el-table-column
-        label="模板image数量"
+        label="机检严重废人工不干预标志"
         align="center"
       >
         <template slot-scope="{ row }">
-          <span>{{ row.imageModelNum }}</span>
+          <span>{{ row.useMachineWasteNoJudge }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -219,7 +219,7 @@
         :model="temp"
         label-position="left"
         size="mini"
-        label-width="125px"
+        label-width="180px"
         style="width: 600px; margin-left:50px;"
       >
         <el-form-item
@@ -243,24 +243,24 @@
           />
         </el-form-item>
         <el-form-item
-          label="模板image目录"
-          prop="imageModelPath"
+          label="设备ip"
+          prop="machineIp"
         >
           <el-input
-            v-model="temp.imageModelPath"
-            :autosize="{ minRows: 2, maxRows: 5 }"
-            type="textarea"
-            placeholder="请输入模板image目录"
+            v-model="temp.machineIp"
+            type="text"
+            placeholder="请输入设备ip"
           />
         </el-form-item>
+
         <el-form-item
-          label="模板image数量"
-          prop="imageModelNum"
+          label="机检严重废人工不干预标志"
+          prop="useMachineWasteNoJudge"
         >
-          <el-input-number
-            v-model="temp.imageModelNum"
-            :min="0"
-            label="描述文字"
+          <el-input
+            v-model="temp.useMachineWasteNoJudge"
+            type="text"
+            placeholder="请选择机检严重废人工不干预标志"
           />
         </el-form-item>
 
@@ -425,12 +425,12 @@ export default {
         machineId: undefined,
         machineCode: '',
         machineName: '',
+        machineIp: '',
+        useMachineWasteNoJudge: '',
         useFlag: true,
         startDate: new Date(),
         endDate: '',
-        note: '',
-        imageModelNum: '',
-        imageModelPath: ''
+        note: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -546,12 +546,12 @@ export default {
         machineId: undefined,
         machineCode: '',
         machineName: '',
+        machineIp: '',
+        useMachineWasteNoJudge: '',
         useFlag: true,
         startDate: new Date(),
         endDate: '',
-        note: '',
-        imageModelNum: '',
-        imageModelPath: ''
+        note: ''
       }
     },
     resetListQuery() {

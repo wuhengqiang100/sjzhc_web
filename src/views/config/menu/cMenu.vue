@@ -73,7 +73,7 @@
         :class-name="getSortClass('id')"
       >
         <template slot-scope="{row}">
-          <span>{{ row.functonId }}</span>
+          <span>{{ row.functionId }}</span>
         </template>
       </el-table-column>
       <el-table-column label="权限名称" min-width="100px" align="center">
@@ -167,10 +167,10 @@
       >
         <el-form-item
           label="操作权限code"
-          prop="functonCode"
+          prop="functionCode"
         >
           <el-input
-            v-model="temp.functonCode"
+            v-model="temp.functionCode"
             type="text"
             placeholder="请输入操作权限code"
           />
@@ -318,8 +318,8 @@ export default {
       statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
       temp: {
-        functonId: undefined,
-        functonCode: '',
+        functionId: undefined,
+        functionCode: '',
         name: '',
         title: '',
         hidden: true
@@ -335,7 +335,7 @@ export default {
       rules: {
         // type: [{ required: true, message: 'type is required', trigger: 'change' }],
         // timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        functonCode: [
+        functionCode: [
           { required: true, message: '请填写操作权限code', trigger: 'blur' }
         ],
         title: [
@@ -426,8 +426,8 @@ export default {
     // 重置temp实体类变量属性
     resetTemp() {
       this.temp = {
-        functonId: undefined,
-        functonCode: '',
+        functionId: undefined,
+        functionCode: '',
         name: '',
         title: '',
         hidden: true

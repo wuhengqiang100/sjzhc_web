@@ -191,7 +191,16 @@
                 placeholder="请输入角色名称"
               />
             </el-form-item>
-
+            <el-form-item
+              label="角色code"
+              prop="roleCode"
+            >
+              <el-input
+                v-model="temp.roleCode"
+                type="text"
+                placeholder="请输入角色code"
+              />
+            </el-form-item>
             <el-form-item
               label="启用状态"
               prop="useFlag"
@@ -357,6 +366,7 @@ export default {
       showReviewer: false,
       temp: {
         roleId: undefined,
+        roleCode: '',
         roleName: '',
         useFlag: true,
         note: '',
@@ -374,7 +384,7 @@ export default {
       rules: {
         // type: [{ required: true, message: 'type is required', trigger: 'change' }],
         // timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        // roleCode: [{ required: true, message: '请填写角色code', trigger: 'blur' }],
+        roleCode: [{ required: true, message: '请填写角色code', trigger: 'blur' }],
         roleName: [{ required: true, message: '请填写角色name', trigger: 'blur' }]
         // startDate: [{ type: 'date', required: true, message: '请填写开始时间', trigger: 'change' }]
         // endDate: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }]
@@ -474,6 +484,7 @@ export default {
     resetTemp() {
       this.temp = {
         roleId: undefined,
+        roleCode: '',
         roleName: '',
         useFlag: true,
         note: '',
