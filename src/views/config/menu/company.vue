@@ -1,9 +1,10 @@
 <template>
   <div class="app-container">
+    11111111
     <div class="filter-container">
       <el-input
         v-model="listQuery.title"
-        placeholder="请输入设备名称"
+        placeholder="请输入操作权限名称"
         style="width: 200px;"
         class="filter-item"
         @keyup.enter.native="handleFilter"
@@ -66,53 +67,25 @@
       @sort-change="sortChange"
     >
       <el-table-column
-        label="设备id"
+        label="权限id"
         prop="id"
         sortable="custom"
         align="center"
         :class-name="getSortClass('id')"
       >
-        <template slot-scope="{ row }">
-          <span>{{ row.machineId }}</span>
+        <template slot-scope="{row}">
+          <span>{{ row.functionId }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        label="设备code"
-        align="center"
-      >
-        <template slot-scope="{ row }">
-          <span>{{ row.machineCode }}</span>
+      <el-table-column label="权限名称" min-width="100px" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.title }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column
-        label="设备名称"
-        align="center"
-        min-width="120px"
-      >
-        <template slot-scope="{ row }">
-          <span
-            class="link-type"
-            @click="handleUpdate(row)"
-          >{{
-            row.machineName
-          }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="设备ip"
-        align="center"
-      >
-        <template slot-scope="{ row }">
-          <span>{{ row.machineIp }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="机检严重废人工不干预标志"
-        align="center"
-      >
-        <template slot-scope="{ row }">
-          <span>{{ row.useMachineWasteNoJudge }}</span>
+      <el-table-column label="权限name" min-width="100px" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.name }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -121,7 +94,7 @@
       >
         <template slot-scope="{ row }">
           <el-tag
-            v-if="row.useFlag"
+            v-if="row.hidden"
             type="success"
           >
             启用
@@ -134,36 +107,7 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column
-        label="启用时间"
-        width="112"
-        align="center"
-      >
-        <template v-if="row.startDate !== null" slot-scope="{ row }">
-          <span>{{ row.startDate | parseTime("{y}-{m}-{d} {h}:{i}") }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="停用时间"
-        width="112"
-        align="center"
-      >
-        <template
-          v-if="row.endDate !== null"
-          slot-scope="{ row }"
-        >
-          <span>{{ row.endDate | parseTime("{y}-{m}-{d} {h}:{i}") }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="说明"
-        min-width="50px"
-        align="center"
-      >
-        <template slot-scope="{ row }">
-          <span>{{ row.note }}</span>
-        </template>
-      </el-table-column>
+
       <el-table-column
         label="操作"
         fixed="right"
@@ -180,7 +124,7 @@
             修改
           </el-button>
           <el-button
-            v-if="row.useFlag"
+            v-if="row.hidden"
             size="mini"
             type="warning"
             @click="handleModifyUseFlag(row, false)"
@@ -211,7 +155,7 @@
     <el-dialog
       :title="textMap[dialogStatus]"
       :visible.sync="dialogFormVisible"
-      width="50%"
+      width="35%"
     >
       <el-form
         ref="dataForm"
@@ -219,93 +163,52 @@
         :model="temp"
         label-position="left"
         size="mini"
-        label-width="180px"
-        style="width: 600px; margin-left:50px;"
+        label-width="125px"
+        style="width: 400px; margin-left:40px;"
       >
         <el-form-item
-          label="设备code"
-          prop="machineCode"
+          label="操作权限code"
+          prop="functionCode"
         >
           <el-input
-            v-model="temp.machineCode"
+            v-model="temp.functionCode"
             type="text"
-            placeholder="请输入设备code"
+            placeholder="请输入操作权限code"
           />
         </el-form-item>
         <el-form-item
-          label="设备name"
-          prop="machineName"
+          label="操作权限名称"
+          prop="title"
         >
           <el-input
-            v-model="temp.machineName"
+            v-model="temp.title"
             type="text"
-            placeholder="请输入设备name"
-          />
-        </el-form-item>
-        <el-form-item
-          label="设备ip"
-          prop="machineIp"
-        >
-          <el-input
-            v-model="temp.machineIp"
-            type="text"
-            placeholder="请输入设备ip"
+            placeholder="请输入操作权限名称"
           />
         </el-form-item>
 
-        <el-form-item
-          label="机检严重废人工不干预标志"
-          prop="useMachineWasteNoJudge"
+        <!--         <el-form-item
+          label="操作权限模块名称"
+          prop="name"
         >
           <el-input
-            v-model="temp.useMachineWasteNoJudge"
+            v-model="temp.name"
             type="text"
-            placeholder="请选择机检严重废人工不干预标志"
+            placeholder="请输入操作权限模块名称"
           />
         </el-form-item>
-
+ -->
         <el-form-item
           label="启用状态"
-          prop="useFlag"
+          prop="hidden"
         >
           <el-switch
-            v-model="temp.useFlag"
+            v-model="temp.hidden"
             active-color="#13ce66"
             inactive-color="#ff4949"
           />
         </el-form-item>
-        <el-form-item
-          label="启用时间"
-          prop="startDate"
-        >
-          <el-date-picker
-            v-model="temp.startDate"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="请选择一个开始时间"
-          />
-        </el-form-item>
-        <el-form-item
-          label="停用时间"
-          prop="endDate"
-        >
-          <el-date-picker
-            v-model="temp.endDate"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="请选择一个结束时间"
-          />
-        </el-form-item>
 
-        <el-form-item label="备注">
-          <el-input
-            v-model="temp.note"
-            style="width:220px;"
-            :autosize="{ minRows: 2, maxRows: 5 }"
-            type="textarea"
-            placeholder="请输入备注"
-          />
-        </el-form-item>
       </el-form>
       <div
         slot="footer"
@@ -357,14 +260,8 @@
 </template>
 
 <script>
-import {
-  fetchList,
-  fetchPv,
-  createMachine,
-  updateMachine,
-  updateUseFlag,
-  deleteMachine
-} from '@/api/machine'
+
+import { fetchCmenuList, updateUseFlag, createCmenu, updateCmenu, deleteCmenu } from '@/api/menu'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -383,7 +280,7 @@ const calendarTypeKeyValue = machineTypeOptions.reduce((acc, cur) => {
 }, {})
 
 export default {
-  name: 'MachineTable',
+  name: 'CompanyTable',
   components: { Pagination },
   directives: { waves },
   filters: {
@@ -422,42 +319,29 @@ export default {
       statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
       temp: {
-        machineId: undefined,
-        machineCode: '',
-        machineName: '',
-        machineIp: '',
-        useMachineWasteNoJudge: '',
-        useFlag: true,
-        startDate: new Date(),
-        endDate: '',
-        note: ''
+        functionId: undefined,
+        functionCode: '',
+        name: '',
+        title: '',
+        hidden: true
       },
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: '修改设备',
-        create: '添加设备'
+        update: '修改操作权限',
+        create: '添加操作权限'
       },
       dialogPvVisible: false,
       pvData: [],
       rules: {
         // type: [{ required: true, message: 'type is required', trigger: 'change' }],
         // timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        machineCode: [
-          { required: true, message: '请填写设备code', trigger: 'blur' }
+        functionCode: [
+          { required: true, message: '请填写操作权限code', trigger: 'blur' }
         ],
-        machineName: [
-          { required: true, message: '请填写设备name', trigger: 'blur' }
-        ],
-        startDate: [
-          {
-            type: 'date',
-            required: true,
-            message: '请填写开始时间',
-            trigger: 'change'
-          }
+        title: [
+          { required: true, message: '请填写操作权限name', trigger: 'blur' }
         ]
-        // endDate: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }]
       },
       downloadLoading: false
     }
@@ -470,7 +354,7 @@ export default {
     // 有加载圈的加载数据列表
     getList() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
+      fetchCmenuList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
 
@@ -489,14 +373,14 @@ export default {
     }, */
     // 立即刷新数据列表
     refreshList() {
-      fetchList(this.listQuery).then(response => {
+      fetchCmenuList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
       })
     },
     handleFilter() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
+      fetchCmenuList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
 
@@ -506,9 +390,9 @@ export default {
         }, 1 * 1000)
       })
     },
-    // 设备禁用启用操作
+    // 操作权限禁用启用操作
     handleModifyUseFlag(row, useFlag) {
-      updateUseFlag(row.machineId).then(response => {
+      updateUseFlag(row.functonId).then(response => {
         this.$message({
           message: response.message,
           type: 'success'
@@ -543,15 +427,11 @@ export default {
     // 重置temp实体类变量属性
     resetTemp() {
       this.temp = {
-        machineId: undefined,
-        machineCode: '',
-        machineName: '',
-        machineIp: '',
-        useMachineWasteNoJudge: '',
-        useFlag: true,
-        startDate: new Date(),
-        endDate: '',
-        note: ''
+        functionId: undefined,
+        functionCode: '',
+        name: '',
+        title: '',
+        hidden: true
       }
     },
     resetListQuery() {
@@ -580,15 +460,10 @@ export default {
     // 添加操作
     createData() {
       this.$refs['dataForm'].validate(valid => {
-        // date格式化
-        this.temp.startDate = parseTime(this.temp.startDate)
-        if (this.temp.endDate !== '') {
-          this.temp.endDate = parseTime(this.temp.endDate)
-        }
-
         if (valid) {
           // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          createMachine(this.temp).then(() => {
+          this.temp.name = this.temp.title
+          createCmenu(this.temp).then(() => {
             this.refreshList()
             // this.list.unshift(this.temp)
             this.dialogFormVisible = false
@@ -615,10 +490,13 @@ export default {
     // 修改操作
     updateData() {
       // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-      updateMachine(this.temp).then(() => {
+      this.temp.name = this.temp.title
+      updateCmenu(this.temp).then(() => {
         this.refreshList()
         // this.list.unshift(this.temp)
         this.dialogFormVisible = false
+        this.resetTemp()
+
         this.$notify({
           title: 'Success',
           message: '修改成功',
@@ -635,7 +513,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          deleteMachine(row.machineId).then(() => {
+          deleteCmenu(row.functonId).then(() => {
             this.refreshList()
             this.$message({
               type: 'success',
@@ -650,12 +528,12 @@ export default {
           })
         })
     },
-    handleFetchPv(pv) {
+    /*     handleFetchPv(pv) {
       fetchPv(pv).then(response => {
         this.pvData = response.data.pvData
         this.dialogPvVisible = true
       })
-    },
+    }, */
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {

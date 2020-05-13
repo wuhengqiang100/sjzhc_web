@@ -108,7 +108,7 @@
         </template>
       </el-table-column>
       <el-table-column label="启用时间" width="112" align="center">
-        <template slot-scope="{row}">
+        <template v-if="row.startDate !== null" slot-scope="{row}">
           <span>{{ row.startDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>

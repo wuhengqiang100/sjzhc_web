@@ -2,16 +2,16 @@
 <template>
   <div class="app-container">
     <el-tabs type="border-card">
-      <el-tab-pane label="网站菜单" style="width:100%;min-height:540px">
+      <el-tab-pane label="网站菜单" class="tab-pane">
         <BMenu />
       </el-tab-pane>
-      <el-tab-pane label="操作权限" style="width:100%;min-height:540px">
+      <el-tab-pane label="操作权限" class="tab-pane">
         <CMenu />
       </el-tab-pane>
-      <el-tab-pane label="工厂配置" style="width:100%;min-height:540px">
-        <CMenu />
+      <el-tab-pane label="公司配置" class="tab-pane">
+        <company />
       </el-tab-pane>
-      <el-tab-pane label="系统配置" style="width:100%;min-height:540px">
+      <el-tab-pane label="系统配置" class="tab-pane">
         <CMenu />
       </el-tab-pane>
     </el-tabs>
@@ -25,11 +25,12 @@ import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import BMenu from '@/views/config/menu/bMenu'
 import CMenu from '@/views/config/menu/cMenu'
+import company from '@/views/config/menu/company'
 
 export default {
   name: 'MenuTable',
   // eslint-disable-next-line vue/no-unused-components
-  components: { Pagination, BMenu, CMenu },
+  components: { Pagination, BMenu, CMenu, company },
   directives: { waves },
   filters: {
 
@@ -50,5 +51,9 @@ export default {
 <style scoped>
   .el-dialog .el-form .el-form-item .el-input {
     width: 300px;
+  }
+  .tab-pane {
+    width:100%;
+    min-height:650px;
   }
 </style>
