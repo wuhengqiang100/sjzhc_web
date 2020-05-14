@@ -19,7 +19,7 @@
           v-for="item in productOption"
           :key="item.value"
           :label="item.label"
-          :value="item.label"
+          :value="item.value"
           @keyup.enter.native="handleFilter"
         />
       </el-select>
@@ -34,7 +34,7 @@
           v-for="item in operationOption"
           :key="item.value"
           :label="item.label"
-          :value="item.label"
+          :value="item.value"
           @keyup.enter.native="handleFilter"
         />
       </el-select>
@@ -49,7 +49,7 @@
           v-for="item in machineOption"
           :key="item.value"
           :label="item.label"
-          :value="item.label"
+          :value="item.value"
           @keyup.enter.native="handleFilter"
         />
       </el-select>

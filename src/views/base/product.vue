@@ -149,11 +149,9 @@
             <el-form-item label="前缀字母序号" prop="cartnumFirstId">
               <el-input v-model="temp.cartnumFirstId" type="text" placeholder="请输入前缀字母序号" />
             </el-form-item>
-            <el-form-item label="前缀字母启用日期" prop="cartnumFirstDate">
-              <!-- <el-input v-model="temp.cartnumFirstCount" type="text" placeholder="请输入产品name" /> -->
+            <!--     <el-form-item label="前缀字母启用日期" prop="cartnumFirstDate">
               <el-date-picker v-model="temp.cartnumFirstDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择前缀字母启用日期" />
-
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="前缀字母启用次数" prop="cartnumFirstCount">
               <el-input v-model="temp.cartnumFirstCount" type="text" placeholder="请输入前缀字母启用次数" />
             </el-form-item>
@@ -174,13 +172,12 @@
             <el-form-item label="启用状态" prop="useFlag">
               <el-switch v-model="temp.useFlag" active-color="#13ce66" inactive-color="#ff4949" />
             </el-form-item>
-            <el-form-item label="启用时间" prop="startDate">
+            <!--       <el-form-item label="启用时间" prop="startDate">
               <el-date-picker v-model="temp.startDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择一个开始时间" />
             </el-form-item>
             <el-form-item label="停用时间" prop="endDate">
               <el-date-picker v-model="temp.endDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择一个结束时间" />
-
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="防重号系统的名称" prop="qaCodeName">
               <el-input v-model="temp.qaCodeName" type="text" placeholder="请输入防重号系统的名称" />
             </el-form-item>

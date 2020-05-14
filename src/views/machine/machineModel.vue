@@ -6,6 +6,19 @@
       <el-select v-model="listQuery.useFlag" placeholder="状态" clearable class="filter-item" style="width: 130px">
         <el-option v-for="item in useFlagOptions" :key="item.key" :label="item.display_name" :value="item.key" />
       </el-select>
+
+      设备：
+      <el-select v-model="listQuery.machineName" filterable placeholder="请搜索或者选择">
+        <el-option v-for="item in machineOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="handleFilter" />
+      </el-select>
+      工序：
+      <el-select v-model="listQuery.operationName" filterable placeholder="请搜索或者选择">
+        <el-option v-for="item in operationOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="handleFilter" />
+      </el-select>
+      产品：
+      <el-select v-model="listQuery.productName" filterable placeholder="请搜索或者选择">
+        <el-option v-for="item in productOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="handleFilter" />
+      </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-refresh" @click="handleReset">重置</el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate"> 添加 </el-button>
@@ -32,11 +45,11 @@
           <span>{{ row.machineModelNum }}</span>
         </template>
       </el-table-column>
-      <!--       <el-table-column label="模板路径" align="center" min-width="160px">
+      <el-table-column label="模板路径" align="center" min-width="160px">
         <template slot-scope="{row}">
           <span>{{ row.machineModelPath }}</span>
         </template>
-      </el-table-column> -->
+      </el-table-column>
       <el-table-column label="设备" align="center" min-width="130px">
         <template slot-scope="{row}">
           <span>{{ row.machine.machineName }}</span>
@@ -59,7 +72,7 @@
           <el-tag v-else type="danger"> 禁用</el-tag>
         </template>
       </el-table-column>
-      <!--     <el-table-column label="启用时间" width="112" align="center">
+      <el-table-column label="启用时间" width="112" align="center">
         <template v-if="row.startDate!=null" slot-scope="{ row }">
           <span>{{ row.startDate | parseTime("{y}-{m}-{d} {h}:{i}") }}</span>
         </template>
@@ -68,7 +81,7 @@
         <template v-if="row.endDate !== null" slot-scope="{ row }">
           <span>{{ row.endDate | parseTime("{y}-{m}-{d} {h}:{i}") }}</span>
         </template>
-      </el-table-column> -->
+      </el-table-column>
       <el-table-column label="说明" min-width="50px" align="center">
         <template slot-scope="{ row }">
           <span>{{ row.note }}</span>
@@ -92,38 +105,49 @@
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="125px" style="width: 600px; margin-left:50px;">
 
         <el-form-item label="模板code" prop="machineModelCode">
-          <el-input v-model="temp.machineModelCode" type="text" placeholder="请输入模板code" />
+          <el-input v-if="dialogStatus == 'create'" v-model="temp.machineModelCode" type="text" placeholder="请输入模板code" />
+          <el-input v-else v-model="temp.machineModelCode" type="text" placeholder="请输入模板code" disabled />
         </el-form-item>
         <el-form-item label="模板名称" prop="machineModelName">
-          <el-input v-model="temp.machineModelName" type="text" placeholder="请输入模板名称" />
+          <el-input v-if="dialogStatus == 'create'" v-model="temp.machineModelName" type="text" placeholder="请输入模板名称" />
+          <el-input v-else v-model="temp.machineModelName" type="text" placeholder="请输入模板名称" disabled />
         </el-form-item>
-        <el-form-item label="模板路径" prop="machineModelPath">
+        <!--    <el-form-item label="模板路径" prop="machineModelPath">
           <el-input v-model="temp.machineModelPath" type="text" placeholder="请输入模板路径" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="设备" prop="machineId">
-          <el-select v-model="temp.machineId" filterable placeholder="请搜索或者选择">
+          <el-select v-if="dialogStatus == 'create'" v-model="temp.machineId" filterable placeholder="请搜索或者选择">
+            <el-option v-for="item in machineOption" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+          <el-select v-else v-model="temp.machineId" filterable placeholder="请搜索或者选择" disabled>
             <el-option v-for="item in machineOption" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
         <el-form-item label="工序" prop="operationId">
-          <el-select v-model="temp.operationId" filterable placeholder="请搜索或者选择">
+          <el-select v-if="dialogStatus == 'create'" v-model="temp.operationId" filterable placeholder="请搜索或者选择">
+            <el-option v-for="item in operationOption" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+          <el-select v-else v-model="temp.operationId" filterable placeholder="请搜索或者选择" disabled>
             <el-option v-for="item in operationOption" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
         <el-form-item label="产品" prop="productId">
-          <el-select v-model="temp.productId" filterable placeholder="请搜索或者选择">
+          <el-select v-if="dialogStatus == 'create'" v-model="temp.productId" filterable placeholder="请搜索或者选择">
+            <el-option v-for="item in productOption" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+          <el-select v-else v-model="temp.productId" filterable placeholder="请搜索或者选择" disabled>
             <el-option v-for="item in productOption" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
         <el-form-item label="启用状态" prop="useFlag">
           <el-switch v-model="temp.useFlag" active-color="#13ce66" inactive-color="#ff4949" />
         </el-form-item>
-        <el-form-item label="启用时间" prop="startDate">
+        <!--       <el-form-item label="启用时间" prop="startDate">
           <el-date-picker v-model="temp.startDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择一个开始时间" />
         </el-form-item>
         <el-form-item label="停用时间" prop="endDate">
           <el-date-picker v-model="temp.endDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择一个结束时间" />
-        </el-form-item>
+        </el-form-item> -->
 
         <el-form-item label="备注">
           <el-input v-model="temp.note" style="width:220px;" :autosize="{ minRows: 2, maxRows: 5}" type="textarea" placeholder="请输入备注" />
@@ -140,13 +164,38 @@
       :visible.sync="dialogAddFile"
       width="500px"
       style="padding:0;"
+    >
+      <el-upload
+        class="upload-demo"
+        action="http://127.0.0.1:8088/machine/machineModel/upload1"
+        :on-preview="handlePreview"
+        :on-remove="handleRemove"
+        :before-remove="beforeRemove"
+        multiple="false"
+        :limit="1"
+        :on-exceed="handleExceed"
+        :file-list="fileList"
+        accept=".rar, .zip"
+        :data="fileData"
+      >
+        <el-button size="small" type="primary">点击上传</el-button>
+        <div slot="tip" class="el-upload__tip">只能上传.rar .zip文件，且不超过2G</div>
+      </el-upload>
+
+      <div slot="footer" class="dialog-footer">
+        <!-- <el-button type="primary" size="small" @click="dialogAddFile==false">开始上传</el-button> -->
+        <el-button size="small" @click="resetAdd">关闭</el-button>
+      </div>
+    </el-dialog>
+    <!--     <el-dialog
+      :title="addName"
+      :visible.sync="dialogAddFile"
+      width="500px"
+      style="padding:0;"
       @close="resetAdd"
     >
-      <!-- <el-form-item label="设备模板名称"> -->
       设备模板名称:
       <el-input v-model="addFileName" disabled="true" type="text" style="width:200px" />
-      <!-- </el-form-item> -->
-      <!-- 附件名称：<el-input v-model="addFileName" autocomplete="off" size="small" style="width: 250x;" /> -->
       <div class="add-file-right" style="height:70px;margin-left:100px;margin-top:15px;">
         <div class="add-file-right-img" style="margin-left:70px;">上传文件：</div>
         <input
@@ -175,13 +224,14 @@
         <el-button type="primary" size="small" @click="submitAddFile">开始上传</el-button>
         <el-button size="small" @click="resetAdd">全部删除</el-button>
       </div>
-    </el-dialog>
+    </el-dialog> -->
 
   </div>
 </template>
 
 <script>
-import { fetchList, upload, download, createMachineModel, updateMachineModel, deleteMachineModel, updateUseFlag, listOption } from '@/api/machineModel'
+import { fetchList, upload, download, createMachineModel, updateMachineModel, deleteMachineModel, updateUseFlag } from '@/api/machineModel'
+import { listOptionMachineModel } from '@/api/querySelectOption'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -263,6 +313,7 @@ export default {
         update: '修改机检模板',
         create: '添加机检模板'
       },
+      editFlag: 0, // 弹窗标志 0 添加,1修改
       dialogPvVisible: false,
       pvData: [],
       addArr: [],
@@ -281,7 +332,12 @@ export default {
         // endDate: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }]
       },
       downloadLoading: false,
-      ftpUrl: ''
+      ftpUrl: '',
+      fileList: [],
+      fileData: {
+        tokenId: getToken(),
+        machineModelId: ''
+      }// 文件上传是附带的额外参数
     }
   },
   // 初始化获取数据列表
@@ -310,20 +366,33 @@ export default {
         }
       }
     },
+    // 获取所有的下拉选择查询条件
     getSelectOption() {
-      listOption().then(response => {
+      listOptionMachineModel().then(response => {
         this.productOption = response.productOption
         this.machineOption = response.machineOption
         this.operationOption = response.operationOption
-        this.dicWorkUnitOption = response.dicWorkUnitOption
       })
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList)
+    },
+    handlePreview(file) {
+      console.log(file)
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
+    },
+    beforeRemove(file, fileList) {
+      return this.$confirm(`确定移除 ${file.name}？`)
     },
     handleUpload(row) {
       // this.resetTemp()
       // this.dialogStatus = 'create'
-      this.addId = row.machineModelId
-      this.addFileName = row.machineModelName
+      // this.addId = row.machineModelId
+      // this.addFileName = row.machineModelName
       // this.addId = Object.assign({}, row.machineId) // copy obj
+      this.fileData.machineModelId = row.machineModelId
       this.dialogAddFile = true
       // this.$nextTick(() => {
       //   this.$refs['dataForm'].clearValidate()
@@ -384,8 +453,15 @@ export default {
       this.addId = ''
       this.addFileName = ''
     },
+    resetFileData() {
+      this.fileList = []
+      this.fileData = {
+        tokenId: getToken(),
+        machineModelId: ''
+      }
+    },
     resetAdd() {
-      this.resetFile()
+      this.resetFileData()
       this.dialogAddFile = false
     },
     getList() {

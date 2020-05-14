@@ -8,13 +8,13 @@ export function fetchList(query) {
   })
 }
 
-export function listOption() {
+/* export function listOption() {
   return request({
     url: '/log/listOption',
     method: 'post'
     // baseURL: "http://127.0.0.1:8088"
   })
-}
+} */
 
 export function upload(forData) {
   return request({
