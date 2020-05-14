@@ -32,11 +32,11 @@
           <span>{{ row.machineModelNum }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="模板路径" align="center" min-width="160px">
+      <!--       <el-table-column label="模板路径" align="center" min-width="160px">
         <template slot-scope="{row}">
           <span>{{ row.machineModelPath }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="设备" align="center" min-width="130px">
         <template slot-scope="{row}">
           <span>{{ row.machine.machineName }}</span>
@@ -59,7 +59,7 @@
           <el-tag v-else type="danger"> 禁用</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="启用时间" width="112" align="center">
+      <!--     <el-table-column label="启用时间" width="112" align="center">
         <template v-if="row.startDate!=null" slot-scope="{ row }">
           <span>{{ row.startDate | parseTime("{y}-{m}-{d} {h}:{i}") }}</span>
         </template>
@@ -68,7 +68,7 @@
         <template v-if="row.endDate !== null" slot-scope="{ row }">
           <span>{{ row.endDate | parseTime("{y}-{m}-{d} {h}:{i}") }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="说明" min-width="50px" align="center">
         <template slot-scope="{ row }">
           <span>{{ row.note }}</span>
@@ -78,8 +78,8 @@
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">  修改  </el-button>
           <el-button type="primary" size="mini" @click="handleUpload(row)">上传</el-button>
-          <el-button v-if="row.useFlag" size="mini" type="warning" @click="handleModifyUseFlag(row, false)">禁用</el-button>
-          <el-button v-else size="mini" type="success" @click="handleModifyUseFlag(row, true)">启用</el-button>
+          <!-- <el-button v-if="row.useFlag" size="mini" type="warning" @click="handleModifyUseFlag(row, false)">禁用</el-button>
+          <el-button v-else size="mini" type="success" @click="handleModifyUseFlag(row, true)">启用</el-button> -->
           <el-button size="mini" type="danger" @click="handleDelete(row)">删除</el-button>
           <!--  <el-button v-if="row.imageModelNum > 0"  size="mini" type="success" @click="handlDownload(row)">下载</el-button>-->
         </template>

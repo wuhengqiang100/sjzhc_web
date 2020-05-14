@@ -159,7 +159,7 @@
           >
             修改
           </el-button>
-          <el-button
+          <!--           <el-button
             v-if="row.useFlag"
             size="mini"
             type="warning"
@@ -170,7 +170,7 @@
             size="mini"
             type="success"
             @click="handleModifyUseFlag(row,true)"
-          >启用</el-button>
+          >启用</el-button> -->
           <el-button
             size="mini"
             type="danger"

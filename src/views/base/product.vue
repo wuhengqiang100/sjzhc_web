@@ -123,8 +123,8 @@
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             修改
           </el-button>
-          <el-button v-if="row.useFlag" size="mini" type="warning" @click="handleModifyUseFlag(row,false)">禁用</el-button>
-          <el-button v-else size="mini" type="success" @click="handleModifyUseFlag(row,true)">启用</el-button>
+          <!--  <el-button v-if="row.useFlag" size="mini" type="warning" @click="handleModifyUseFlag(row,false)">禁用</el-button>
+          <el-button v-else size="mini" type="success" @click="handleModifyUseFlag(row,true)">启用</el-button> -->
           <el-button size="mini" type="danger" @click="handleDelete(row)">删除</el-button>
 
         </template>
@@ -137,11 +137,14 @@
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="160px" style="width: 800px; margin-left:20px;">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="产品code" prop="productCode">
-              <el-input v-model="temp.productCode" type="text" placeholder="请输入产品code" />
+            <el-form-item label="产品编号" prop="productCode">
+              <el-input v-model="temp.productCode" type="text" placeholder="请输入产品编码" />
             </el-form-item>
-            <el-form-item label="产品name" prop="productName">
-              <el-input v-model="temp.productName" type="text" placeholder="请输入产品name" />
+            <el-form-item label="MES产品编号" prop="productCode">
+              <el-input v-model="temp.productCodeMes" type="text" placeholder="请输入MES产品编号" />
+            </el-form-item>
+            <el-form-item label="产品名称" prop="productName">
+              <el-input v-model="temp.productName" type="text" placeholder="请输入产品名称" />
             </el-form-item>
             <el-form-item label="前缀字母序号" prop="cartnumFirstId">
               <el-input v-model="temp.cartnumFirstId" type="text" placeholder="请输入前缀字母序号" />
@@ -285,7 +288,8 @@ export default {
         endDate: '',
         note: '',
         qaCodeName: '', // 防重号系统的名称
-        localProductName: ''//
+        localProductName: '', // 机检系统本地产品名称
+        productCodeMes: ''// MES产品代码
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -407,7 +411,8 @@ export default {
         endDate: '',
         note: '',
         qaCodeName: '', // 防重号系统的名称
-        localProductName: ''//
+        localProductName: '', // 机检系统本地产品名称
+        productCodeMes: ''// MES产品代码
       }
     },
     resetListQuery() {
