@@ -93,7 +93,7 @@
       >
         <template slot-scope="{ row }">
           <el-tag
-            v-if="row.hidden"
+            v-if="row.useFlag"
             type="success"
           >
             启用
@@ -123,7 +123,7 @@
             修改
           </el-button>
           <el-button
-            v-if="row.hidden"
+            v-if="row.useFlag"
             size="mini"
             type="warning"
             @click="handleModifyUseFlag(row, false)"
@@ -199,10 +199,10 @@
  -->
         <el-form-item
           label="启用状态"
-          prop="hidden"
+          prop="useFlag"
         >
           <el-switch
-            v-model="temp.hidden"
+            v-model="temp.useFlag"
             active-color="#13ce66"
             inactive-color="#ff4949"
           />
@@ -322,7 +322,7 @@ export default {
         functionCode: '',
         name: '',
         title: '',
-        hidden: true
+        useFlag: true
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -391,7 +391,7 @@ export default {
     },
     // 操作权限禁用启用操作
     handleModifyUseFlag(row, useFlag) {
-      updateUseFlag(row.functonId).then(response => {
+      updateUseFlag(row.functionId).then(response => {
         this.$message({
           message: response.message,
           type: 'success'
@@ -430,7 +430,7 @@ export default {
         functionCode: '',
         name: '',
         title: '',
-        hidden: true
+        useFlag: true
       }
     },
     resetListQuery() {
@@ -512,7 +512,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          deleteCmenu(row.functonId).then(() => {
+          deleteCmenu(row.functionId).then(() => {
             this.refreshList()
             this.$message({
               type: 'success',

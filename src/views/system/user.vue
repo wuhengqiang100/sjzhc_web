@@ -86,10 +86,10 @@
           <span
             class="link-type"
             @click="handleUpdate(row)"
-          >{{ row.loginName }}</span>
+          >{{ row.loginUserName }}</span>
         </template>
       </el-table-column>
-      <el-table-column
+      <!--      <el-table-column
         label="登陆密码"
         min-width="200px"
         align="center"
@@ -97,7 +97,7 @@
         <template slot-scope="{row}">
           <span>{{ row.loginPass }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         label="用户名"
         align="center"
@@ -106,7 +106,7 @@
           <span>{{ row.operator.operatorName }}</span>
         </template>
       </el-table-column>
-      <el-table-column
+      <!--       <el-table-column
         label="工作状态"
         align="center"
       >
@@ -124,8 +124,8 @@
             离线
           </el-tag>
         </template>
-      </el-table-column>
-      <el-table-column
+      </el-table-column> -->
+      <!--       <el-table-column
         label="启用状态"
         align="center"
       >
@@ -143,7 +143,7 @@
             禁用
           </el-tag>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         label="操作"
         fixed="right"
@@ -176,7 +176,12 @@
             type="danger"
             @click="handleDelete(row)"
           >删除</el-button>
-
+          <el-button
+            size="mini"
+            type="warning"
+            style="width:70px"
+            @click="handleResetPassword(row)"
+          >重置密码</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -192,7 +197,7 @@
     <el-dialog
       :title="textMap[dialogStatus]"
       :visible.sync="dialogFormVisible"
-      width="55%"
+      width="50%"
     >
       <el-form
         ref="dataForm"
@@ -201,7 +206,7 @@
         label-position="left"
         size="mini"
         label-width="100px"
-        style="width: 650px; margin-left:45px;"
+        style="width: 650px; margin-left:45px;height:300px"
       >
         <el-row>
           <el-col :span="12">
@@ -225,15 +230,15 @@
 
             <el-form-item
               label="登陆名"
-              prop="loginName"
+              prop="loginUserName"
             >
               <el-input
-                v-model="temp.loginName"
+                v-model="temp.loginUserName"
                 type="text"
                 placeholder="请输入登陆名"
               />
             </el-form-item>
-            <el-form-item
+            <!--       <el-form-item
               label="登陆密码"
               prop="loginPass"
             >
@@ -242,9 +247,9 @@
                 type="password"
                 placeholder="请输入登陆密码"
               />
-            </el-form-item>
+            </el-form-item> -->
 
-            <el-form-item
+            <!--         <el-form-item
               label="工作状态"
               prop="userInWork"
             >
@@ -263,7 +268,7 @@
                 active-color="#13ce66"
                 inactive-color="#ff4949"
               />
-            </el-form-item>
+            </el-form-item> -->
 
           </el-col>
           <el-col
@@ -274,21 +279,15 @@
               label="用户角色"
               prop="roleIds"
             >
-              <el-checkbox-group
-                v-model="checkedRoles"
-                size="small"
-              >
-                <ul>
-                  <li>
-                    <el-checkbox
-                      v-for="role in roleOptions"
-                      :key="role"
-                      :label="role"
-                    >{{ role }}</el-checkbox>
-                  </li>
-                </ul>
-                <!-- <el-checkbox label="备选项2" border /> -->
-              </el-checkbox-group>
+
+              <el-select v-model="roleIdss" multiple placeholder="请选择角色">
+                <el-option
+                  v-for="item in roleOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
             </el-form-item>
 
           </el-col>
@@ -309,46 +308,16 @@
         </el-button>
       </div>
     </el-dialog>
-
-    <el-dialog
-      :visible.sync="dialogPvVisible"
-      title="Reading statistics"
-    >
-      <el-table
-        :data="pvData"
-        border
-        fit
-        highlight-current-row
-        style="width: 100%"
-      >
-        <el-table-column
-          prop="key"
-          label="Channel"
-        />
-        <el-table-column
-          prop="pv"
-          label="Pv"
-        />
-      </el-table>
-      <span
-        slot="footer"
-        class="dialog-footer"
-      >
-        <el-button
-          type="primary"
-          @click="dialogPvVisible = false"
-        >Confirm</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
 <script>
 
-import { fetchList, fetchPv, createLoginUser, updateLoginUser, updateUseFlag, deleteLoginUser, fetchRoleList, fetchUserOwnRole } from '@/api/loginUser'
+import { fetchList, fetchPv, createLoginUser, updateLoginUser, updateUseFlag, deleteLoginUser, fetchRoleList, fetchUserOwnRole, resetPassword } from '@/api/loginUser'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+// import { getToken } from '@/utils/auth'
 
 const roleOptions = []
 
@@ -396,7 +365,7 @@ export default {
       },
       importanceOptions: [1, 2, 3],
       operatorOption: [],
-      checkedRoles: [], // 已选的角色
+      // checkedRoles: [], // 已选的角色
       roleOptions: [], // 所有的角色
       useFlagOptions, // 启用状态
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
@@ -405,12 +374,12 @@ export default {
       temp: {
         loginId: undefined,
         operatorId: '',
-        loginName: '',
-        loginPass: '',
         userInWork: true,
         useFlag: true,
-        checkedRole: []
+        loginUserName: '',
+        roleIds: []
       },
+      roleIdss: [],
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
@@ -451,16 +420,15 @@ export default {
     },
     getRoles() {
       fetchRoleList().then(response => {
-        this.operatorOption = response.operatorOption
         this.roleOptions = response.roleOptions
+        this.operatorOption = response.operatorOption
       })
     },
     // 获取所有的menus并设置值
-    getRoleOwnMenus(userId) {
-      fetchUserOwnRole(userId).then(response => {
+    getRoleOwnMenus(LoginId) {
+      fetchUserOwnRole(LoginId).then(response => {
         // this.temp.roleIds = response.roleIds
-
-        this.checkedRoles = response.checkedRoles
+        this.roleIdss = response.checkedRoles
       })
     },
     // 立即刷新数据列表
@@ -480,6 +448,15 @@ export default {
         setTimeout(() => {
           this.listLoading = false
         }, 1 * 1000)
+      })
+    },
+    handleResetPassword(row) {
+      resetPassword(row.loginId).then(response => {
+        this.$message({
+          message: '重置' + row.loginUserName + '账户的密码为123456',
+          type: 'success'
+        })
+        this.refreshList()
       })
     },
     // 用户禁用启用操作
@@ -525,9 +502,10 @@ export default {
         loginPass: '',
         userInWork: true,
         useFlag: true,
-        checkedRole: []
-
+        roleIds: []
       }
+      this.roleOptions = []
+      this.roleIdss = []
     },
     resetListQuery() {
       this.listQuery = {
@@ -564,8 +542,9 @@ export default {
         }
 
         if (valid) {
-          this.temp.checkedRole = this.checkedRoles
+          // this.temp.checkedRole = this.checkedRoles
           // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
+          this.temp.roleIds = this.roleIdss
           createLoginUser(this.temp).then(() => {
             this.refreshList()
             // this.list.unshift(this.temp)
@@ -582,6 +561,7 @@ export default {
     },
     // 监听修改 update dialog事件
     handleUpdate(row) {
+      this.resetTemp()
       this.temp = Object.assign({}, row) // copy obj
       // this.temp.timestamp = new Date(this.temp.timestamp)
       this.getRoles()// 获取角色
@@ -597,8 +577,9 @@ export default {
     // 修改操作
     updateData() {
       // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-      this.temp.checkedRole = this.checkedRoles
-      console.log(this.temp)
+      // this.temp.checkedRole = this.checkedRoles
+      this.temp.roleIds = this.roleIdss
+      console.log(this.temp.roleIds)
       updateLoginUser(this.temp).then(() => {
         this.refreshList()
         this.resetTemp()

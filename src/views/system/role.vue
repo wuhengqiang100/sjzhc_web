@@ -167,7 +167,7 @@
     <el-dialog
       :title="textMap[dialogStatus]"
       :visible.sync="dialogFormVisible"
-      width="80%"
+      width="60%"
       top="	5vh"
     >
       <el-form
@@ -231,12 +231,37 @@
               </el-checkbox-group>
             </el-form-item> -->
           </el-col>
-          <el-col :span="8">
+          <el-col :span="16">
+            <el-form-item label="权限">
+              <!-- <div style="text-align: justify;width:100%;  justify-content: space-between"> -->
+              <!-- <el-transfer v-model="value" filterable :data="data" style="text-align: left; display: inline-block;margin: auto" /> -->
+              <!--    <el-transfer
+                  v-model="value"
+                  style="text-align: left; display: inline-block;margin: auto"
+                  filterable
+                  :filter-method="filterMethod"
+                  :titles="titles"
+                  filter-placeholder="请输入权限名称"
+                  :data="data"
+                  @change="handleChange"
+                />  -->
+              <el-transfer
+                v-model="value"
+                style="text-align: left; display: inline-block;margin: auto"
+                :titles="titles"
+                :data="data"
+                @change="handleChange"
+              />
+              <!-- </div> -->
+            </el-form-item>
+
+          </el-col>
+          <!--           <el-col :span="12">
             <el-form-item label="菜单权限">
               <el-tree ref="tree" :data="menuTree" show-checkbox default-expand-all node-key="id" highlight-current :props="defaultProps" />
             </el-form-item>
-          </el-col>
-          <el-col :span="8">
+          </el-col> -->
+          <!--         <el-col :span="8">
             <el-form-item label="操作权限">
               <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange">全选</el-checkbox>
               <div style="margin: 15px 0;" />
@@ -246,14 +271,14 @@
                 </el-checkbox>
               </el-checkbox-group>
             </el-form-item>
-          </el-col>
+          </el-col> -->
         </el-row>
       </el-form>
       <div
         slot="footer"
         class="dialog-footer"
       >
-        <el-button @click="dialogFormVisible = false">
+        <el-button @click="returnDialog()">
           返回
         </el-button>
         <el-button
@@ -264,37 +289,6 @@
         </el-button>
       </div>
     </el-dialog>
-
-    <el-dialog
-      :visible.sync="dialogPvVisible"
-      title="Reading statistics"
-    >
-      <el-table
-        :data="pvData"
-        border
-        fit
-        highlight-current-row
-        style="width: 100%"
-      >
-        <el-table-column
-          prop="key"
-          label="Channel"
-        />
-        <el-table-column
-          prop="pv"
-          label="Pv"
-        />
-      </el-table>
-      <span
-        slot="footer"
-        class="dialog-footer"
-      >
-        <el-button
-          type="primary"
-          @click="dialogPvVisible = false"
-        >Confirm</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
@@ -304,7 +298,7 @@ import { fetchList, fetchPv, createRole, updateRole, updateUseFlag, deleteRole, 
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-
+// import { getToken } from '@/utils/auth'
 const roleTypeOptions = []
 
 const useFlagOptions = [
@@ -371,8 +365,24 @@ export default {
         useFlag: true,
         note: '',
         menuIds: [],
-        checkedPermiss: []
+        direction: ''
+        // checkedPermiss: []
       },
+      tempFunctions: {
+        direction: '',
+        movedKeys: [],
+        tokenId: ''
+      },
+      filterMethod(query, item) {
+        return item.label.indexOf(query) > -1
+      },
+      titles: [
+        '未授权',
+        '已授权'
+      ],
+      functionList: [], // 权限list
+      data: [],
+      value: [],
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
@@ -411,22 +421,53 @@ export default {
         }, 1 * 1000)
       })
     },
-    // 获取所有的menus
+    // 获取所有的menus,以及c端function
     getRoleMenus() {
       fetchRoleMenus().then(response => {
-        this.menuTree = response.menuTree
-        this.cPermissOptions = response.cPermissOptions
+        this.functionList = response.functionList
+        console.log(this.functionList)
+        this.functionList.forEach((func, index) => {
+          // this.qaInspectMaster = qa
+          this.data.push({
+            key: func.functionId,
+            label: func.title,
+            disabled: false
+          })
+        })
+        console.log(this.data)
       })
     },
     // 获取所有的menus并设置值
     getRoleOwnMenus(roleId) {
       fetchRoleOwnMenus(roleId).then(response => {
-        this.temp.menuIds = response.menuIds
-        this.$refs.tree.setCheckedKeys(this.temp.menuIds)
+        this.value = response.menuIds
+        // this.$refs.tree.setCheckedKeys(this.temp.menuIds)
         // this.$refs.tree.setCheckedKeys([3, 7])
-        this.checkedcPermiss = response.checkedcPermiss
+        // this.checkedcPermiss = response.checkedcPermiss
       })
     },
+    /**
+     * direction:right 审核操作
+     * direction:left  回退操作
+     * movedKeys改变状态的id值,质量表头id
+     */
+    handleChange(value, direction, movedKeys) {
+      this.temp.direction = direction
+      this.temp.menuIds = movedKeys
+      console(this.temp)
+      /*       this.tempFunctions.roleId = this.temp.roleId
+      updateRoleCheck(this.tempFunctions).then(response => {
+        this.getList()
+        this.resetTempFunctions()
+        this.$notify({
+          title: 'Success',
+          message: response.message,
+          type: 'success',
+          duration: 2000
+        })
+      }) */
+    },
+
     // 立即刷新数据列表
     refreshList() {
       fetchList(this.listQuery).then(response => {
@@ -489,9 +530,10 @@ export default {
         useFlag: true,
         note: '',
         menuIds: [],
-        checkedPermiss: []
+        direction: ''
       }
-      this.checkedPermiss = []
+      this.value = []
+      this.data = []
     },
     resetListQuery() {
       this.listQuery = {
@@ -523,12 +565,13 @@ export default {
     createData() {
       // console.log(this.$refs.tree.getCheckedKeys())
       this.$refs['dataForm'].validate((valid) => {
-        this.temp.menuIds = this.$refs.tree.getCheckedKeys()
-        this.temp.checkedPermiss = this.checkedcPermiss
+        // this.temp.menuIds = this.$refs.tree.getCheckedKeys()
+        // this.temp.checkedPermiss = this.checkedcPermiss
         if (valid) {
           // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
           createRole(this.temp).then(() => {
             this.refreshList()
+            this.resetTemp()
             // this.list.unshift(this.temp)
             this.dialogFormVisible = false
             this.$notify({
@@ -543,6 +586,7 @@ export default {
     },
     // 监听修改 update dialog事件
     handleUpdate(row) {
+      this.resetTemp()
       this.temp = Object.assign({}, row) // copy obj
       this.getRoleMenus()
       this.getRoleOwnMenus(this.temp.roleId)
@@ -556,8 +600,8 @@ export default {
     // 修改操作
     updateData() {
       // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-      this.temp.menuIds = this.$refs.tree.getCheckedKeys()
-      this.temp.checkedPermiss = this.checkedcPermiss
+      // this.temp.menuIds = this.$refs.tree.getCheckedKeys()
+      // this.temp.checkedPermiss = this.checkedcPermiss
       // this.list.unshift(this.temp)
       this.dialogFormVisible = false
       console.log(this.temp)
@@ -574,6 +618,10 @@ export default {
           duration: 2000
         })
       })
+    },
+    returnDialog() {
+      this.dialogFormVisible = false
+      this.resetTemp()
     },
     // 监听删除dialog事件
     handleDelete(row) {
@@ -646,8 +694,39 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="less">
 .el-dialog .el-form .el-form-item .el-input {
   width: 220px;
 }
-</style>
+/* .el-form-item__content .el-transfe .el-transfer-panel {
+    border: 1px solid #e6ebf5;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #fff;
+    display: inline-block;
+    vertical-align: middle;
+    width: 250px;
+    max-height: 100%;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    position: relative;
+    height: 500px;
+} */
+.el-transfer-panel__body {
+    height: 500px;
+}
+.el-transfer-panel__list.is-filterable {
+    height: 480px;
+    padding-top: 0;
+}
+.el-transfer-panel__list {
+    margin: 0;
+    padding: 6px 0;
+    list-style: none;
+    height: 480px;
+    overflow: auto;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+</style>>
+

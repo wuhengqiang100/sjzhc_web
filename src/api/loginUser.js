@@ -17,6 +17,14 @@ export function updateUseFlag(id) {
     // baseURL: "http://127.0.0.1:8088"
   })
 }
+export function resetPassword(id) {
+  return request({
+    url: '/loginUser/resetPassword',
+    method: 'post',
+    params: { id }
+    // baseURL: "http://127.0.0.1:8088"
+  })
+}
 
 export function createLoginUser(data) {
   return request({
@@ -66,11 +74,11 @@ export function fetchLoginUser(id) {
     params: { id }
   })
 }
-export function fetchUserOwnRole(userId) {
+export function fetchUserOwnRole(loginId) {
   return request({
     url: '/loginUser/listOwn',
     method: 'post',
-    params: { userId }
+    params: { loginId }
     // baseURL: "http://127.0.0.1:8088"
   })
 }

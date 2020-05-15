@@ -109,8 +109,7 @@
           <el-input v-else v-model="temp.machineModelCode" type="text" placeholder="请输入模板code" disabled />
         </el-form-item>
         <el-form-item label="模板名称" prop="machineModelName">
-          <el-input v-if="dialogStatus == 'create'" v-model="temp.machineModelName" type="text" placeholder="请输入模板名称" />
-          <el-input v-else v-model="temp.machineModelName" type="text" placeholder="请输入模板名称" disabled />
+          <el-input v-model="temp.machineModelName" type="text" placeholder="请输入模板名称" />
         </el-form-item>
         <!--    <el-form-item label="模板路径" prop="machineModelPath">
           <el-input v-model="temp.machineModelPath" type="text" placeholder="请输入模板路径" />
@@ -167,7 +166,7 @@
     >
       <el-upload
         class="upload-demo"
-        action="http://127.0.0.1:8088/machine/machineModel/upload1"
+        :action="action"
         :on-preview="handlePreview"
         :on-remove="handleRemove"
         :before-remove="beforeRemove"
@@ -337,7 +336,8 @@ export default {
       fileData: {
         tokenId: getToken(),
         machineModelId: ''
-      }// 文件上传是附带的额外参数
+      }, // 文件上传是附带的额外参数
+      action: process.env.VUE_APP_BASE_API + '/machine/machineModel/upload1'
     }
   },
   // 初始化获取数据列表
@@ -463,6 +463,7 @@ export default {
     resetAdd() {
       this.resetFileData()
       this.dialogAddFile = false
+      this.getList()
     },
     getList() {
       this.listLoading = true
