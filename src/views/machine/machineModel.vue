@@ -6,17 +6,17 @@
       <el-select v-model="listQuery.useFlag" placeholder="状态" clearable class="filter-item" style="width: 130px">
         <el-option v-for="item in useFlagOptions" :key="item.key" :label="item.display_name" :value="item.key" />
       </el-select>
-
-      设备：
-      <el-select v-model="listQuery.machineName" filterable placeholder="请搜索或者选择">
-        <el-option v-for="item in machineOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="handleFilter" />
-      </el-select>
       工序：
-      <el-select v-model="listQuery.operationName" filterable placeholder="请搜索或者选择">
+      <el-select v-model="listQuery.operationId" filterable placeholder="请搜索或者选择">
         <el-option v-for="item in operationOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="handleFilter" />
       </el-select>
+      设备：
+      <el-select v-model="listQuery.machineId" filterable placeholder="请搜索或者选择">
+        <el-option v-for="item in machineOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="handleFilter" />
+      </el-select>
+
       产品：
-      <el-select v-model="listQuery.productName" filterable placeholder="请搜索或者选择">
+      <el-select v-model="listQuery.productId" filterable placeholder="请搜索或者选择">
         <el-option v-for="item in productOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="handleFilter" />
       </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
@@ -30,7 +30,7 @@
           <span>{{ row.machineModelId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="模板code" align="center">
+      <el-table-column label="模板编号" align="center">
         <template slot-scope="{row}">
           <span>{{ row.machineModelCode }}</span>
         </template>
@@ -50,16 +50,17 @@
           <span>{{ row.machineModelPath }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="设备" align="center" min-width="130px">
-        <template slot-scope="{row}">
-          <span>{{ row.machine.machineName }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="工序" align="center">
         <template slot-scope="{row}">
           <span>{{ row.operation.operationName }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="设备" align="center" min-width="130px">
+        <template slot-scope="{row}">
+          <span>{{ row.machine.machineName }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column label="产品" align="center">
         <template slot-scope="{row}">
           <span>{{ row.product.productName }}</span>
@@ -104,9 +105,8 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="50%">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="125px" style="width: 600px; margin-left:50px;">
 
-        <el-form-item label="模板code" prop="machineModelCode">
-          <el-input v-if="dialogStatus == 'create'" v-model="temp.machineModelCode" type="text" placeholder="请输入模板code" />
-          <el-input v-else v-model="temp.machineModelCode" type="text" placeholder="请输入模板code" disabled />
+        <el-form-item label="模板编号" prop="machineModelCode">
+          <el-input v-model="temp.machineModelCode" type="text" placeholder="请输入模板code" />
         </el-form-item>
         <el-form-item label="模板名称" prop="machineModelName">
           <el-input v-model="temp.machineModelName" type="text" placeholder="请输入模板名称" />
@@ -114,14 +114,6 @@
         <!--    <el-form-item label="模板路径" prop="machineModelPath">
           <el-input v-model="temp.machineModelPath" type="text" placeholder="请输入模板路径" />
         </el-form-item> -->
-        <el-form-item label="设备" prop="machineId">
-          <el-select v-if="dialogStatus == 'create'" v-model="temp.machineId" filterable placeholder="请搜索或者选择">
-            <el-option v-for="item in machineOption" :key="item.value" :label="item.label" :value="item.value" />
-          </el-select>
-          <el-select v-else v-model="temp.machineId" filterable placeholder="请搜索或者选择" disabled>
-            <el-option v-for="item in machineOption" :key="item.value" :label="item.label" :value="item.value" />
-          </el-select>
-        </el-form-item>
         <el-form-item label="工序" prop="operationId">
           <el-select v-if="dialogStatus == 'create'" v-model="temp.operationId" filterable placeholder="请搜索或者选择">
             <el-option v-for="item in operationOption" :key="item.value" :label="item.label" :value="item.value" />
@@ -130,6 +122,15 @@
             <el-option v-for="item in operationOption" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
+        <el-form-item label="设备" prop="machineId">
+          <el-select v-if="dialogStatus == 'create'" v-model="temp.machineId" filterable placeholder="请搜索或者选择">
+            <el-option v-for="item in machineOption" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+          <el-select v-else v-model="temp.machineId" filterable placeholder="请搜索或者选择" disabled>
+            <el-option v-for="item in machineOption" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
+
         <el-form-item label="产品" prop="productId">
           <el-select v-if="dialogStatus == 'create'" v-model="temp.productId" filterable placeholder="请搜索或者选择">
             <el-option v-for="item in productOption" :key="item.value" :label="item.label" :value="item.value" />
@@ -279,9 +280,11 @@ export default {
         page: 1,
         limit: 10,
         useFlag: undefined,
-        // importance: undefined,
         title: undefined,
-        sort: '+id'
+        sort: '+id',
+        operationId: '',
+        machineId: '',
+        productId: ''
       },
       importanceOptions: [1, 2, 3],
       useFlagOptions, // 启用状态
@@ -559,9 +562,11 @@ export default {
         page: 1,
         limit: 10,
         useFlag: undefined,
-        // importance: undefined,
         title: undefined,
-        sort: '+id'
+        sort: '+id',
+        operationId: '',
+        machineId: '',
+        productId: ''
       }
     },
     handleReset() {

@@ -35,22 +35,6 @@ export function updateUseFlag(id) {
   })
 }
 
-export function fetchRole(id) {
-  return request({
-    url: '/role/detail',
-    method: 'get',
-    params: { id }
-  })
-}
-
-export function fetchPv(pv) {
-  return request({
-    url: '/role/pv',
-    method: 'get',
-    params: { pv }
-  })
-}
-
 export function createRole(data) {
   return request({
     url: '/role/create',
@@ -76,9 +60,9 @@ export function deleteRole(id) {
     // baseURL: "http://127.0.0.1:8088"
   })
 }
-export function updateRoleCheck(data) {
+export function updateRolePermission(data) {
   return request({
-    url: '/role/check/save',
+    url: '/role/permission',
     method: 'post',
     data
     // baseURL: "http://127.0.0.1:8088"

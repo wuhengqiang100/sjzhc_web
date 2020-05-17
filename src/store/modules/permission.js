@@ -1,6 +1,6 @@
 import { constantRoutes } from '@/router'
 import Layout from '@/layout'
-import request from '@/utils/request'
+// import request from '@/utils/request'
 import { getAsyncRoutes } from '@/api/user'
 import { getToken } from '@/utils/auth' // get token from cookie
 
@@ -326,7 +326,7 @@ const actions = {
         Object.assign(loadMenuData, data)
         console.log(loadMenuData)
         generaMenu(asyncRoutes, loadMenuData)
-        let accessedRoutes
+        // let accessedRoutes
         // 前台控制菜单
         /*   if (roles.includes("最高权限")) {
             accessedRoutes = asyncRoutes || [];
@@ -334,7 +334,7 @@ const actions = {
             accessedRoutes = filterAsyncRoutes(asyncRoutes, roles);
           } */
         // 后台控制菜单
-        accessedRoutes = asyncRoutes || []
+        const accessedRoutes = asyncRoutes || []
         commit('SET_ROUTES', accessedRoutes)
         console.log(accessedRoutes)
 

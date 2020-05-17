@@ -8,12 +8,12 @@
       <el-tab-pane label="操作权限" class="tab-pane">
         <CMenu />
       </el-tab-pane>
-      <el-tab-pane label="公司配置" class="tab-pane">
+      <!--       <el-tab-pane label="公司配置" class="tab-pane">
         <company />
       </el-tab-pane>
       <el-tab-pane label="系统配置" class="tab-pane">
         <CMenu />
-      </el-tab-pane>
+      </el-tab-pane> -->
     </el-tabs>
 
   </div>

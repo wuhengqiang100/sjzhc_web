@@ -167,7 +167,7 @@
     <el-dialog
       :title="textMap[dialogStatus]"
       :visible.sync="dialogFormVisible"
-      width="60%"
+      width="70%"
       top="	5vh"
     >
       <el-form
@@ -233,52 +233,23 @@
           </el-col>
           <el-col :span="16">
             <el-form-item label="权限">
-              <!-- <div style="text-align: justify;width:100%;  justify-content: space-between"> -->
-              <!-- <el-transfer v-model="value" filterable :data="data" style="text-align: left; display: inline-block;margin: auto" /> -->
-              <!--    <el-transfer
-                  v-model="value"
-                  style="text-align: left; display: inline-block;margin: auto"
-                  filterable
-                  :filter-method="filterMethod"
-                  :titles="titles"
-                  filter-placeholder="请输入权限名称"
-                  :data="data"
-                  @change="handleChange"
-                />  -->
+
               <el-transfer
                 v-model="value"
                 style="text-align: left; display: inline-block;margin: auto"
                 :titles="titles"
                 :data="data"
-                @change="handleChange"
               />
-              <!-- </div> -->
             </el-form-item>
 
           </el-col>
-          <!--           <el-col :span="12">
-            <el-form-item label="菜单权限">
-              <el-tree ref="tree" :data="menuTree" show-checkbox default-expand-all node-key="id" highlight-current :props="defaultProps" />
-            </el-form-item>
-          </el-col> -->
-          <!--         <el-col :span="8">
-            <el-form-item label="操作权限">
-              <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange">全选</el-checkbox>
-              <div style="margin: 15px 0;" />
-              <el-checkbox-group v-model="checkedcPermiss" @change="handleCheckedCitiesChange">
-                <el-checkbox v-for="permiss in cPermissOptions" :key="permiss" style="margin-bottom: 10px;" :label="permiss">
-                  {{ permiss }}
-                </el-checkbox>
-              </el-checkbox-group>
-            </el-form-item>
-          </el-col> -->
         </el-row>
       </el-form>
       <div
         slot="footer"
         class="dialog-footer"
       >
-        <el-button @click="returnDialog()">
+        <el-button @click="dialogFormVisible = false">
           返回
         </el-button>
         <el-button
@@ -364,14 +335,13 @@ export default {
         roleName: '',
         useFlag: true,
         note: '',
-        menuIds: [],
-        direction: ''
+        value: []// 权限相关的json串
         // checkedPermiss: []
       },
       tempFunctions: {
+        roleId: '', // 角色更新时,暂存的角色id
         direction: '',
-        movedKeys: [],
-        tokenId: ''
+        movedKeys: []
       },
       filterMethod(query, item) {
         return item.label.indexOf(query) > -1
@@ -383,6 +353,7 @@ export default {
       functionList: [], // 权限list
       data: [],
       value: [],
+
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
@@ -441,9 +412,6 @@ export default {
     getRoleOwnMenus(roleId) {
       fetchRoleOwnMenus(roleId).then(response => {
         this.value = response.menuIds
-        // this.$refs.tree.setCheckedKeys(this.temp.menuIds)
-        // this.$refs.tree.setCheckedKeys([3, 7])
-        // this.checkedcPermiss = response.checkedcPermiss
       })
     },
     /**
@@ -451,12 +419,11 @@ export default {
      * direction:left  回退操作
      * movedKeys改变状态的id值,质量表头id
      */
-    handleChange(value, direction, movedKeys) {
-      this.temp.direction = direction
-      this.temp.menuIds = movedKeys
-      console(this.temp)
-      /*       this.tempFunctions.roleId = this.temp.roleId
-      updateRoleCheck(this.tempFunctions).then(response => {
+    /*    handleChange(value, direction, movedKeys) {
+      this.tempFunctions.direction = direction
+      this.tempFunctions.movedKeys = movedKeys
+      console.log(this.tempFunctions)
+      updateRolePermission(this.tempFunctions).then(response => {
         this.getList()
         this.resetTempFunctions()
         this.$notify({
@@ -465,9 +432,9 @@ export default {
           type: 'success',
           duration: 2000
         })
-      }) */
+      })
     },
-
+ */
     // 立即刷新数据列表
     refreshList() {
       fetchList(this.listQuery).then(response => {
@@ -529,11 +496,17 @@ export default {
         roleName: '',
         useFlag: true,
         note: '',
-        menuIds: [],
-        direction: ''
+        value: []// 权限相关的json串
       }
       this.value = []
       this.data = []
+    },
+    resetTempFunctions() {
+      this.tempFunctions = {
+        roleId: '', // 角色更新时,暂存的角色id
+        direction: '',
+        movedKeys: []
+      }
     },
     resetListQuery() {
       this.listQuery = {
@@ -567,6 +540,7 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         // this.temp.menuIds = this.$refs.tree.getCheckedKeys()
         // this.temp.checkedPermiss = this.checkedcPermiss
+        this.temp.value = this.value
         if (valid) {
           // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
           createRole(this.temp).then(() => {
@@ -588,6 +562,7 @@ export default {
     handleUpdate(row) {
       this.resetTemp()
       this.temp = Object.assign({}, row) // copy obj
+      // this.tempFunctions.roleId = this.temp.roleId
       this.getRoleMenus()
       this.getRoleOwnMenus(this.temp.roleId)
       // this.temp.timestamp = new Date(this.temp.timestamp)
@@ -603,9 +578,8 @@ export default {
       // this.temp.menuIds = this.$refs.tree.getCheckedKeys()
       // this.temp.checkedPermiss = this.checkedcPermiss
       // this.list.unshift(this.temp)
-      this.dialogFormVisible = false
       console.log(this.temp)
-
+      this.temp.value = this.value
       updateRole(this.temp).then(() => {
         this.refreshList()
         this.resetTemp()

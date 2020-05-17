@@ -3,7 +3,7 @@
     <div class="filter-container">
       <el-input
         v-model="listQuery.title"
-        placeholder="请输入登录名"
+        placeholder="请输入登陆名"
         style="width: 200px;"
         class="filter-item"
         @keyup.enter.native="handleFilter"
@@ -89,61 +89,27 @@
           >{{ row.loginUserName }}</span>
         </template>
       </el-table-column>
-      <!--      <el-table-column
+      <!--        <el-table-column
         label="登陆密码"
         min-width="200px"
         align="center"
       >
         <template slot-scope="{row}">
-          <span>{{ row.loginPass }}</span>
+          <span>{{ row.loginUserPass }}</span>
         </template>
       </el-table-column> -->
       <el-table-column
         label="用户名"
         align="center"
+        min-width="200px"
       >
         <template slot-scope="{row}">
           <span>{{ row.operator.operatorName }}</span>
         </template>
       </el-table-column>
-      <!--       <el-table-column
-        label="工作状态"
-        align="center"
-      >
-        <template slot-scope="{row}">
-          <el-tag
-            v-if="row.userInWork"
-            type="success"
-          >
-            在线
-          </el-tag>
-          <el-tag
-            v-else
-            type="danger"
-          >
-            离线
-          </el-tag>
-        </template>
-      </el-table-column> -->
-      <!--       <el-table-column
-        label="启用状态"
-        align="center"
-      >
-        <template slot-scope="{row}">
-          <el-tag
-            v-if="row.useFlag"
-            type="success"
-          >
-            启用
-          </el-tag>
-          <el-tag
-            v-else
-            type="danger"
-          >
-            禁用
-          </el-tag>
-        </template>
-      </el-table-column> -->
+      <el-table-column label="角色" align="center" min-width="200px">
+        <template slot-scope="{row}"> <span>{{ row.roleString }}</span></template>
+      </el-table-column>
       <el-table-column
         label="操作"
         fixed="right"
@@ -159,18 +125,6 @@
           >
             修改
           </el-button>
-          <!--           <el-button
-            v-if="row.useFlag"
-            size="mini"
-            type="warning"
-            @click="handleModifyUseFlag(row,false)"
-          >禁用</el-button>
-          <el-button
-            v-else
-            size="mini"
-            type="success"
-            @click="handleModifyUseFlag(row,true)"
-          >启用</el-button> -->
           <el-button
             size="mini"
             type="danger"
@@ -238,37 +192,16 @@
                 placeholder="请输入登陆名"
               />
             </el-form-item>
-            <!--       <el-form-item
+            <el-form-item
               label="登陆密码"
-              prop="loginPass"
+              prop="loginUserPass"
             >
               <el-input
-                v-model="temp.loginPass"
-                type="password"
+                v-model="temp.loginUserPass"
+                type="text"
                 placeholder="请输入登陆密码"
               />
-            </el-form-item> -->
-
-            <!--         <el-form-item
-              label="工作状态"
-              prop="userInWork"
-            >
-              <el-switch
-                v-model="temp.userInWork"
-                active-color="#13ce66"
-                inactive-color="#ff4949"
-              />
             </el-form-item>
-            <el-form-item
-              label="启用状态"
-              prop="useFlag"
-            >
-              <el-switch
-                v-model="temp.useFlag"
-                active-color="#13ce66"
-                inactive-color="#ff4949"
-              />
-            </el-form-item> -->
 
           </el-col>
           <el-col
@@ -313,7 +246,7 @@
 
 <script>
 
-import { fetchList, fetchPv, createLoginUser, updateLoginUser, updateUseFlag, deleteLoginUser, fetchRoleList, fetchUserOwnRole, resetPassword } from '@/api/loginUser'
+import { fetchList, createLoginUser, updateLoginUser, updateUseFlag, deleteLoginUser, fetchRoleList, fetchUserOwnRole, resetPassword } from '@/api/loginUser'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -374,9 +307,8 @@ export default {
       temp: {
         loginId: undefined,
         operatorId: '',
-        userInWork: true,
-        useFlag: true,
         loginUserName: '',
+        loginUserPass: '',
         roleIds: []
       },
       roleIdss: [],
@@ -498,10 +430,8 @@ export default {
       this.temp = {
         loginId: undefined,
         operatorId: '',
-        loginName: '',
-        loginPass: '',
-        userInWork: true,
-        useFlag: true,
+        loginUserName: '',
+        loginUserPass: '',
         roleIds: []
       }
       this.roleOptions = []
@@ -613,26 +543,6 @@ export default {
           type: 'info',
           message: '已取消删除'
         })
-      })
-    },
-    handleFetchPv(pv) {
-      fetchPv(pv).then(response => {
-        this.pvData = response.data.pvData
-        this.dialogPvVisible = true
-      })
-    },
-    handleDownload() {
-      this.downloadLoading = true
-      import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-        const filterVal = ['timestamp', 'title', 'type', 'importance', 'status']
-        const data = this.formatJson(filterVal, this.list)
-        excel.export_json_to_excel({
-          header: tHeader,
-          data,
-          filename: 'table-list'
-        })
-        this.downloadLoading = false
       })
     },
     formatJson(filterVal, jsonData) {

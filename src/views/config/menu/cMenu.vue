@@ -111,7 +111,7 @@
         label="操作"
         fixed="right"
         align="center"
-        min-width="218px"
+        min-width="230px"
         class-name="small-padding fixed-width"
       >
         <template slot-scope="{ row }">

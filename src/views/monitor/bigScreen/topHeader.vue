@@ -20,7 +20,7 @@
 
 <script>
 
-import { parseTime } from '@/utils'
+// import { parseTime } from '@/utils'
 import Screenfull from '@/components/Screenfull'
 export default {
   name: 'TopHeader',

@@ -6,4 +6,10 @@ export function listOptionMachineModel() {
     method: 'post'
   })
 }
+export function listOptionAuditParameter() {
+  return request({
+    url: '/option/auditParameter',
+    method: 'post'
+  })
+}
 
