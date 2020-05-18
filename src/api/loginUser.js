@@ -54,7 +54,7 @@ export function deleteLoginUser(id) {
 
 export function fetchRoleList() {
   return request({
-    url: '/role/listOption',
+    url: '/character/listOption',
     method: 'get'
     // baseURL: "http://127.0.0.1:8088"
   })

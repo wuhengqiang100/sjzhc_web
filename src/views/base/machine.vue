@@ -111,8 +111,22 @@
         label="机检严重废人工不干预标志"
         align="center"
       >
-        <template slot-scope="{ row }">
+        <!--   <template slot-scope="{ row }">
           <span>{{ row.useMachineWasteNoJudge }}</span>
+        </template> -->
+        <template slot-scope="{ row }">
+          <el-tag
+            v-if="row.useMachineWasteNoJudge"
+            type="success"
+          >
+            启用
+          </el-tag>
+          <el-tag
+            v-else
+            type="danger"
+          >
+            禁用
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -257,10 +271,10 @@
           label="机检严重废人工不干预标志"
           prop="useMachineWasteNoJudge"
         >
-          <el-input
+          <el-switch
             v-model="temp.useMachineWasteNoJudge"
-            type="text"
-            placeholder="请选择机检严重废人工不干预标志"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
           />
         </el-form-item>
 
@@ -322,44 +336,12 @@
         </el-button>
       </div>
     </el-dialog>
-
-    <el-dialog
-      :visible.sync="dialogPvVisible"
-      title="Reading statistics"
-    >
-      <el-table
-        :data="pvData"
-        border
-        fit
-        highlight-current-row
-        style="width: 100%"
-      >
-        <el-table-column
-          prop="key"
-          label="Channel"
-        />
-        <el-table-column
-          prop="pv"
-          label="Pv"
-        />
-      </el-table>
-      <span
-        slot="footer"
-        class="dialog-footer"
-      >
-        <el-button
-          type="primary"
-          @click="dialogPvVisible = false"
-        >Confirm</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
 <script>
 import {
   fetchList,
-  fetchPv,
   createMachine,
   updateMachine,
   updateUseFlag,
@@ -426,7 +408,7 @@ export default {
         machineCode: '',
         machineName: '',
         machineIp: '',
-        useMachineWasteNoJudge: '',
+        useMachineWasteNoJudge: true,
         useFlag: true,
         startDate: new Date(),
         endDate: '',
@@ -547,7 +529,7 @@ export default {
         machineCode: '',
         machineName: '',
         machineIp: '',
-        useMachineWasteNoJudge: '',
+        useMachineWasteNoJudge: true,
         useFlag: true,
         startDate: new Date(),
         endDate: '',
@@ -649,32 +631,6 @@ export default {
             message: '已取消删除'
           })
         })
-    },
-    handleFetchPv(pv) {
-      fetchPv(pv).then(response => {
-        this.pvData = response.data.pvData
-        this.dialogPvVisible = true
-      })
-    },
-    handleDownload() {
-      this.downloadLoading = true
-      import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-        const filterVal = [
-          'timestamp',
-          'title',
-          'type',
-          'importance',
-          'status'
-        ]
-        const data = this.formatJson(filterVal, this.list)
-        excel.export_json_to_excel({
-          header: tHeader,
-          data,
-          filename: 'table-list'
-        })
-        this.downloadLoading = false
-      })
     },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v =>

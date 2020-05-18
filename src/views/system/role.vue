@@ -50,9 +50,7 @@
       >
         添加
       </el-button>
-      <!--     <el-button class="filter-item" style="margin-left: 10px;" type="warning" icon="el-icon-download" @click="handleCreate">
-        导入
-      </el-button> -->
+
     </div>
 
     <el-table
@@ -134,18 +132,7 @@
           >
             修改
           </el-button>
-          <!--       <el-button
-            v-if="row.useFlag"
-            size="mini"
-            type="warning"
-            @click="handleModifyUseFlag(row,false)"
-          >禁用</el-button>
-          <el-button
-            v-else
-            size="mini"
-            type="success"
-            @click="handleModifyUseFlag(row,true)"
-          >启用</el-button> -->
+
           <el-button
             size="mini"
             type="danger"
@@ -232,15 +219,15 @@
             </el-form-item> -->
           </el-col>
           <el-col :span="16">
-            <el-form-item label="权限">
+            <!-- <el-form-item label="权限">
 
               <el-transfer
-                v-model="value"
+                v-model="temp.value"
                 style="text-align: left; display: inline-block;margin: auto"
                 :titles="titles"
                 :data="data"
               />
-            </el-form-item>
+            </el-form-item> -->
 
           </el-col>
         </el-row>
@@ -249,15 +236,10 @@
         slot="footer"
         class="dialog-footer"
       >
-        <el-button @click="dialogFormVisible = false">
-          返回
-        </el-button>
-        <el-button
-          type="primary"
-          @click="dialogStatus==='create'?createData():updateData()"
-        >
-          确认
-        </el-button>
+        <el-button @click="dialogFormVisible = false"> 返回 </el-button>
+
+        <el-button v-if="dialogStatus==='create'" type="primary" @click="createData()">确认添加 </el-button>
+        <el-button v-else type="primary" @click="updateData()">确认修改 </el-button>
       </div>
     </el-dialog>
   </div>
@@ -405,13 +387,12 @@ export default {
             disabled: false
           })
         })
-        console.log(this.data)
       })
     },
     // 获取所有的menus并设置值
     getRoleOwnMenus(roleId) {
       fetchRoleOwnMenus(roleId).then(response => {
-        this.value = response.menuIds
+        this.temp.value = response.menuIds
       })
     },
     /**
@@ -498,7 +479,7 @@ export default {
         note: '',
         value: []// 权限相关的json串
       }
-      this.value = []
+      // this.value = []
       this.data = []
     },
     resetTempFunctions() {
@@ -524,7 +505,7 @@ export default {
     },
     // 监听create dialog事件
     handleCreate() {
-      this.resetTemp()
+      // this.resetTemp()
       // 获取权限menuTree
       this.getRoleMenus()
       // this.$refs.tree.setCheckedKeys([])
@@ -560,7 +541,7 @@ export default {
     },
     // 监听修改 update dialog事件
     handleUpdate(row) {
-      this.resetTemp()
+      // this.resetTemp()
       this.temp = Object.assign({}, row) // copy obj
       // this.tempFunctions.roleId = this.temp.roleId
       this.getRoleMenus()
@@ -581,6 +562,7 @@ export default {
       console.log(this.temp)
       this.temp.value = this.value
       updateRole(this.temp).then(() => {
+        console.log(this.temp)
         this.refreshList()
         this.resetTemp()
         // this.list.unshift(this.temp)

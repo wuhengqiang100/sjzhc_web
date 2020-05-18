@@ -1,27 +1,10 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <!-- <el-input v-model="listQuery.title" placeholder="请输入审核参数名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" /> -->
+      <el-input v-model="listQuery.title" placeholder="请输入角色名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
 
       <el-select v-model="listQuery.useFlag" placeholder="状态" clearable class="filter-item" style="width: 130px">
         <el-option v-for="item in useFlagOptions" :key="item.key" :label="item.display_name" :value="item.key" />
-      </el-select>
-
-      参数类别：
-      <el-select v-model="listQuery.judgeCheckTypeId" filterable placeholder="请搜索或者选择">
-        <el-option v-for="item in judgeCheckTypeOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="handleFilter" />
-      </el-select>
-      工序：
-      <el-select v-model="listQuery.operationId" filterable placeholder="请搜索或者选择">
-        <el-option v-for="item in operationOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="handleFilter" />
-      </el-select>
-      产品：
-      <el-select v-model="listQuery.productId" filterable placeholder="请搜索或者选择">
-        <el-option v-for="item in productOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="handleFilter" />
-      </el-select>
-      设备：
-      <el-select v-model="listQuery.machineId" filterable placeholder="请搜索或者选择">
-        <el-option v-for="item in machineOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="handleFilter" />
       </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
@@ -47,32 +30,26 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="审核参数序号" prop="id" sortable="custom" align="center" :class-name="getSortClass('id')">
+      <el-table-column label="角色id" prop="id" sortable="custom" align="center" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.judgeCheckId }}</span>
+          <span>{{ row.roleId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="审核参数类别" align="center">
+      <el-table-column label="角色编码" align="center">
         <template slot-scope="{row}">
-          <span v-if="row.judgeCheckType!=null">{{ row.judgeCheckType.judgeCheckTypeName }}</span>
+          <span>{{ row.roleCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="工序" align="center">
+      <el-table-column label="角色名称" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.operation.operationName }}</span>
+          <span class="link-type" @click="handleUpdate(row)">{{ row.roleName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="产品" align="center">
+      <!-- <el-table-column label="角色类别" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.products.productName }}</span>
+          <span v-if="row.roleType!=null">{{ row.roleType.operatoionName }}</span>
         </template>
-      </el-table-column>
-      <el-table-column label="设备" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.machine.machineName }}</span>
-        </template>
-      </el-table-column>
-
+      </el-table-column> -->
       <el-table-column label="启用状态" align="center">
         <template slot-scope="{row}">
           <el-tag v-if="row.useFlag" type="success">
@@ -88,7 +65,7 @@
           <span>{{ row.startDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="停用时间" width="130" align="center">
+      <el-table-column label="停用时间" width="112" align="center">
         <template v-if="row.endDate !==null" slot-scope="{row}">
           <span>{{ row.endDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
@@ -103,8 +80,8 @@
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             修改
           </el-button>
-          <!--           <el-button v-if="row.useFlag" size="mini" type="warning" @click="handleModifyUseFlag(row,false)">禁用</el-button>
-          <el-button v-else size="mini" type="success" @click="handleModifyUseFlag(row,true)">启用</el-button> -->
+          <el-button v-if="row.useFlag" size="mini" type="warning" @click="handleModifyUseFlag(row,false)">禁用</el-button>
+          <el-button v-else size="mini" type="success" @click="handleModifyUseFlag(row,true)">启用</el-button>
           <el-button size="mini" type="danger" @click="handleDelete(row)">删除</el-button>
 
         </template>
@@ -115,31 +92,30 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="50%">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="125px" style="width: 600px; margin-left:50px;">
-        <el-form-item label="审核参数种类" prop="judgeCheckTypeId">
-          <el-select v-model="temp.judgeCheckTypeId" filterable placeholder="请搜索或者选择">
-            <el-option v-for="item in judgeCheckTypeOption" :key="item.value" :label="item.label" :value="item.value" />
+
+        <el-form-item label="角色code" prop="roleCode">
+          <el-input v-model="temp.roleCode" type="text" placeholder="请输入角色code" />
+        </el-form-item>
+        <el-form-item label="角色名称" prop="roleName">
+          <el-input v-model="temp.roleName" type="text" placeholder="请输入角色名称" />
+        </el-form-item>
+        <!-- <el-form-item label="角色种类" prop="roleTypeId">
+          <el-select v-model="temp.roleTypeId" filterable placeholder="请搜索或者选择">
+            <el-option v-for="item in roleTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
-        </el-form-item>
-        <el-form-item label="工序" prop="operationId">
-          <el-select v-model="temp.operationId" filterable placeholder="请搜索或者选择">
-            <el-option v-for="item in operationOption" :key="item.value" :label="item.label" :value="item.value" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="产品" prop="productId">
-          <el-select v-model="temp.productId" filterable placeholder="请搜索或者选择">
-            <el-option v-for="item in productOption" :key="item.value" :label="item.label" :value="item.value" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="设备" prop="machineId">
-          <el-select v-model="temp.machineId" filterable placeholder="请搜索或者选择">
-            <el-option v-for="item in machineOption" :key="item.value" :label="item.label" :value="item.value" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="值" prop="value">
-          <el-input v-model="temp.value" type="text" placeholder="请输入审核参数值" />
-        </el-form-item>
+        </el-form-item> -->
+        <!--         <el-form-item label="角色类别" prop="roleType">
+          <el-input v-model="temp.roleTypeId" type="text" placeholder="请输入角色类别" />
+        </el-form-item> -->
         <el-form-item label="启用状态" prop="useFlag">
           <el-switch v-model="temp.useFlag" active-color="#13ce66" inactive-color="#ff4949" />
+        </el-form-item>
+        <el-form-item label="启用时间" prop="startDate">
+          <el-date-picker v-model="temp.startDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择一个开始时间" />
+        </el-form-item>
+        <el-form-item label="停用时间" prop="endDate">
+          <el-date-picker v-model="temp.endDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择一个结束时间" />
+
         </el-form-item>
 
         <el-form-item label="备注">
@@ -161,13 +137,12 @@
 
 <script>
 
-import { fetchList, createAuditParameter, updateAuditParameter, updateUseFlag, deleteAuditParameter } from '@/api/auditParameter'
-import { listOptionAuditParameter } from '@/api/querySelectOption'
+import { fetchList, createRole, updateRole, updateUseFlag, deleteRole } from '@/api/character'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
-// const judgeCheckTypeOption = []
+// const roleTypeOptions = []
 
 const useFlagOptions = [
   { key: '0', display_name: '禁用' },
@@ -175,13 +150,13 @@ const useFlagOptions = [
 ]
 
 // arr to obj, such as { CN : "China", US : "USA" }
-// const calendarTypeKeyValue = judgeCheckTypeOption.reduce((acc, cur) => {
+// const calendarTypeKeyValue = roleTypeOptions.reduce((acc, cur) => {
 //   acc[cur.key] = cur.display_name
 //   return acc
 // }, {})
 
 export default {
-  name: 'AuditParameterTable',
+  name: 'RoleTable',
   components: { Pagination },
   directives: { waves },
   filters: {
@@ -211,22 +186,17 @@ export default {
         title: undefined,
         sort: '+id'
       },
-      judgeCheckTypeOption: [],
-      operationOption: [],
-      productOption: [],
-      machineOption: [],
+      roleTypeOptions: [],
       importanceOptions: [1, 2, 3],
       useFlagOptions, // 启用状态
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
       temp: {
-        judgeCheckId: undefined,
-        judgeCheckTypeId: '',
-        operationId: '',
-        productId: '',
-        machineID: '',
-        value: '',
+        roleId: undefined,
+        roleCode: '',
+        roleName: '',
+        // roleTypeId: '',
         useFlag: true,
         startDate: new Date(),
         endDate: '',
@@ -235,16 +205,16 @@ export default {
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: '修改审核参数',
-        create: '添加审核参数'
+        update: '修改角色',
+        create: '添加角色'
       },
       dialogPvVisible: false,
       pvData: [],
       rules: {
         // type: [{ required: true, message: 'type is required', trigger: 'change' }],
         // timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        judgeCheckCode: [{ required: true, message: '请填写审核参数编号', trigger: 'blur' }],
-        judgeCheckName: [{ required: true, message: '请填写审核参数name', trigger: 'blur' }],
+        roleCode: [{ required: true, message: '请填写角色code', trigger: 'blur' }],
+        roleName: [{ required: true, message: '请填写角色name', trigger: 'blur' }],
         startDate: [{ type: 'date', required: true, message: '请填写开始时间', trigger: 'change' }]
         // endDate: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }]
 
@@ -255,7 +225,6 @@ export default {
   // 初始化获取数据列表
   created() {
     this.getList()
-    this.getAuditParameterTypes()
   },
   methods: {
     // 有加载圈的加载数据列表
@@ -290,18 +259,15 @@ export default {
         }, 1 * 1000)
       })
     },
-    // 获取审核参数种类类别oprions
-    getAuditParameterTypes() {
-      listOptionAuditParameter().then(response => {
-        this.judgeCheckTypeOption = response.judgeCheckTypeOption
-        this.operationOption = response.operationOption
-        this.productOption = response.productOption
-        this.machineOption = response.machineOption
+    // 获取角色种类类别oprions
+    /*   getRoleTypes() {
+      fetchRoleTypeList().then(response => {
+        this.roleTypeOptions = response.roleTypeOptions
       })
-    },
-    // 审核参数禁用启用操作
+    }, */
+    // 角色禁用启用操作
     handleModifyUseFlag(row, useFlag) {
-      updateUseFlag(row.judgeCheckId).then(response => {
+      updateUseFlag(row.roleId).then(response => {
         this.$message({
           message: response.message,
           type: 'success'
@@ -336,12 +302,10 @@ export default {
     // 重置temp实体类变量属性
     resetTemp() {
       this.temp = {
-        judgeCheckId: undefined,
-        judgeCheckTypeId: '',
-        operationId: '',
-        productId: '',
-        machineID: '',
-        value: '',
+        roleId: undefined,
+        roleCode: '',
+        roleName: '',
+        // roleTypeId: '',
         useFlag: true,
         startDate: new Date(),
         endDate: '',
@@ -365,7 +329,7 @@ export default {
     // 监听create dialog事件
     handleCreate() {
       this.resetTemp()
-      this.getAuditParameterTypes()
+      // this.getRoleTypes()
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -380,16 +344,16 @@ export default {
         if (this.temp.endDate !== '') {
           this.temp.endDate = parseTime(this.temp.endDate)
         }
-
+        console.log(valid)
         if (valid) {
           // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          createAuditParameter(this.temp).then(() => {
+          createRole(this.temp).then((res) => {
             this.refreshList()
             // this.list.unshift(this.temp)
             this.dialogFormVisible = false
             this.$notify({
               title: 'Success',
-              message: '添加成功',
+              message: res.message,
               type: 'success',
               duration: 2000
             })
@@ -401,7 +365,7 @@ export default {
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
       // this.temp.timestamp = new Date(this.temp.timestamp)
-      this.getAuditParameterTypes()
+      // this.getRoleTypes()
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -411,7 +375,7 @@ export default {
     // 修改操作
     updateData() {
       // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-      updateAuditParameter(this.temp).then(() => {
+      updateRole(this.temp).then(() => {
         this.refreshList()
         // this.list.unshift(this.temp)
         this.dialogFormVisible = false
@@ -430,7 +394,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteAuditParameter(row.judgeCheckId).then(() => {
+        deleteRole(row.roleId).then(() => {
           this.refreshList()
           this.$message({
             type: 'success',
