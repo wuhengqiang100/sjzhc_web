@@ -1,23 +1,10 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <!-- <el-input v-model="listQuery.title" placeholder="请输入审核参数名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" /> -->
-
+      <el-input v-model="listQuery.title" placeholder="请输入错误类型名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       工序：
       <el-select v-model="listQuery.operationId" filterable placeholder="请搜索或者选择">
         <el-option v-for="item in operationOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="handleFilter" />
-      </el-select>
-      产品：
-      <el-select v-model="listQuery.productId" filterable placeholder="请搜索或者选择">
-        <el-option v-for="item in productOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="handleFilter" />
-      </el-select>
-      设备：
-      <el-select v-model="listQuery.machineId" filterable placeholder="请搜索或者选择">
-        <el-option v-for="item in machineOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="handleFilter" />
-      </el-select>
-      参数类别：
-      <el-select v-model="listQuery.judgeCheckTypeId" filterable placeholder="请搜索或者选择">
-        <el-option v-for="item in judgeCheckTypeOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="handleFilter" />
       </el-select>
       <el-select v-model="listQuery.useFlag" placeholder="状态" clearable class="filter-item" style="width: 130px">
         <el-option v-for="item in useFlagOptions" :key="item.key" :label="item.display_name" :value="item.key" />
@@ -44,96 +31,33 @@
       fit
       highlight-current-row
       style="width: 100%;"
-      size="medium "
       @sort-change="sortChange"
     >
-      <el-table-column label="工序" align="center">
+      <el-table-column label="错误类型序号" prop="id" sortable="custom" align="center" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.operationName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="产品" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.productName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="设备" align="center" min-width="140px">
-        <template slot-scope="{row}">
-          <span>{{ row.machineName }}</span>
-        </template>
-      </el-table-column>
-
-      <!--    <el-table-column v-for="(item,index) in details" :key="index" label="总数" align="center">
-        <template>
-          <span>{{ item.name }}</span>
-        </template>
-      </el-table-column> -->
-      <!-- 自定义列的遍历-->
-      <el-table-column v-for="(item, index) in details" :key="index" :label="item.name">
-        <!-- 数据的遍历  scope.row就代表数据的每一个对象-->
-        <!-- <template slot-scope="scope">
-          <span>{{ scope.row.details[index].value }}</span>
-        </template>  -->
-        <template>
-          <span>{{ item.value }}</span>
-        </template>
-      </el-table-column>
-      <!--
-      <el-table-column
-        class="names_algin"
-        min-width="180px"
-        :label="names"
-        prop="values"
-      /> -->
-      <!--       <el-table-column
-        class="names_algin"
-        min-width="200px"
-        label="valueMap.name"
-        prop="valueMap.value"
-      /> -->
-      <!--   <div v-for="item in row.details" :key="item.name">
-          {{}}
-      </div> -->
-      <!-- <el-table-column
-
-        v-for="item in row.details"
-        :key="item"
-        slot-scope="{row}"
-      >
-        {{ item.name }}++{{ item.value }}
-      </el-table-column> -->
-      <!-- <el-table-column v-for="(item, index) in row.details" label="测试" align="center">
-        <template v-for="(item, index) in row.details" :key="item" slot-scope="{row}">
-          <span>{{ index }}</span>
-        </template>
-      </el-table-column> -->
-      <!--  <el-table-column label="审核参数序号" prop="id" sortable="custom" align="center" :class-name="getSortClass('id')">
-        <template slot-scope="{row}">
-          <span>{{ row.judgeCheckId }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="审核参数类别" align="center">
-        <template slot-scope="{row}">
-          <span v-if="row.judgeCheckType!=null">{{ row.judgeCheckType.judgeCheckTypeName }}</span>
+          <span>{{ row.errTypeNoteId }}</span>
         </template>
       </el-table-column>
       <el-table-column label="工序" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.operation.operationName }}</span>
+          <span v-if="row.operation!=null">{{ row.operation.operationName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="产品" align="center">
+      <el-table-column label="错误类型编码" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.products.productName }}</span>
+          <span>{{ row.errTypeNoteCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="设备" align="center">
+      <el-table-column label="错误类型名称" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.machine.machineName }}</span>
+          <span class="link-type" @click="handleUpdate(row)">{{ row.errTypeNoteName }}</span>
         </template>
       </el-table-column>
-      -->
-
+      <el-table-column label="???" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.shortCutAssicName }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="启用状态" align="center">
         <template slot-scope="{row}">
           <el-tag v-if="row.useFlag" type="success">
@@ -175,44 +99,42 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="50%">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="125px" style="width: 800px; margin-left:50px;">
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="工序" prop="operationId">
-              <el-select v-model="temp.operationId" filterable placeholder="请搜索或者选择">
-                <el-option v-for="item in operationOption" :key="item.value" :label="item.label" :value="item.value" />
-              </el-select>
-            </el-form-item>
-            <el-form-item label="产品" prop="productId">
-              <el-select v-model="temp.productId" filterable placeholder="请搜索或者选择">
-                <el-option v-for="item in productOption" :key="item.value" :label="item.label" :value="item.value" />
-              </el-select>
-            </el-form-item>
-            <el-form-item label="设备" prop="machineId">
-              <el-select v-model="temp.machineId" filterable placeholder="请搜索或者选择">
-                <el-option v-for="item in machineOption" :key="item.value" :label="item.label" :value="item.value" />
-              </el-select>
-            </el-form-item>
-            <el-form-item label="启用状态" prop="useFlag">
-              <el-switch v-model="temp.useFlag" active-color="#13ce66" inactive-color="#ff4949" />
-            </el-form-item>
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="125px" style="width: 600px; margin-left:50px;">
+        <el-form-item label="工序" prop="operationId">
+          <el-select v-model="temp.operationId" filterable placeholder="请搜索或者选择">
+            <el-option v-for="item in operationOption" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="错误类型编码" prop="errTypeNoteCode">
+          <el-input v-model="temp.errTypeNoteCode" type="text" placeholder="请输入错误类型编码" />
+        </el-form-item>
+        <el-form-item label="错误类型名称" prop="errTypeNoteName">
+          <el-input v-model="temp.errTypeNoteName" type="text" placeholder="请输入错误类型名称" />
+        </el-form-item>
 
-            <el-form-item label="备注">
-              <el-input v-model="temp.note" style="width:220px;" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入备注" />
-            </el-form-item>
+        <el-form-item label="???" prop="shortCutAssicName">
+          <el-input v-model="temp.shortCutAssicName" type="text" placeholder="请输入???" />
+        </el-form-item>
 
-            <!-- <el-form-item label="审核参数种类" prop="judgeCheckTypeId">
-              <el-select v-model="temp.judgeCheckTypeId" filterable placeholder="请搜索或者选择">
-                <el-option v-for="item in judgeCheckTypeOption" :key="item.value" :label="item.label" :value="item.value" />
-              </el-select>
-            </el-form-item> -->
-          </el-col>
-          <el-col :span="12">
-            <el-form-item v-for="(item,index) in judgeCheckTypeOption" :key="item.value" :label="item.label">
-              <el-input v-model="temp.judgeCheckType[index]" type="text" placeholder="请输入参数值" />
-            </el-form-item>
-          </el-col>
-        </el-row></el-form>
+        <!--         <el-form-item label="错误类型类别" prop="operation">
+          <el-input v-model="temp.operationId" type="text" placeholder="请输入错误类型类别" />
+        </el-form-item> -->
+        <el-form-item label="启用状态" prop="useFlag">
+          <el-switch v-model="temp.useFlag" active-color="#13ce66" inactive-color="#ff4949" />
+        </el-form-item>
+        <!--    <el-form-item label="启用时间" prop="startDate">
+          <el-date-picker v-model="temp.startDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择一个开始时间" />
+        </el-form-item>
+        <el-form-item label="停用时间" prop="endDate">
+          <el-date-picker v-model="temp.endDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择一个结束时间" />
+
+        </el-form-item> -->
+
+        <el-form-item label="备注">
+          <el-input v-model="temp.note" style="width:220px;" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入备注" />
+        </el-form-item>
+
+      </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
           返回
@@ -222,32 +144,26 @@
         </el-button>
       </div>
     </el-dialog>
+
   </div>
 </template>
 
 <script>
 
-import { fetchList, createAuditParameter, updateAuditParameter, updateUseFlag, deleteAuditParameter } from '@/api/auditParameter'
-import { listOptionAuditParameter } from '@/api/querySelectOption'
+import { fetchList, createErrorType, updateErrorType, updateUseFlag, deleteErrorType } from '@/api/errorTypeNote'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-
-// const judgeCheckTypeOption = []
+import { listOptionErrorType } from '@/api/querySelectOption'
+// const operationOption = []
 
 const useFlagOptions = [
   { key: '0', display_name: '禁用' },
   { key: '1', display_name: '启用' }
 ]
 
-// arr to obj, such as { CN : "China", US : "USA" }
-// const calendarTypeKeyValue = judgeCheckTypeOption.reduce((acc, cur) => {
-//   acc[cur.key] = cur.display_name
-//   return acc
-// }, {})
-
 export default {
-  name: 'AuditParameterTable',
+  name: 'ErrorTypeTable',
   components: { Pagination },
   directives: { waves },
   filters: {
@@ -267,8 +183,6 @@ export default {
     return {
       tableKey: 0,
       list: null,
-      details: [],
-      names: '',
       total: 0,
       listLoading: true,
       listQuery: {
@@ -277,49 +191,39 @@ export default {
         useFlag: undefined,
         // importance: undefined,
         title: undefined,
-        sort: '+id'
+        sort: '+id',
+        operationId: ''
       },
-      judgeCheckTypeOption: [],
       operationOption: [],
-      productOption: [],
-      machineOption: [],
       importanceOptions: [1, 2, 3],
       useFlagOptions, // 启用状态
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
       temp: {
-
-        operationName: '',
-        productName: '',
-        machineName: '',
-        judgeCheckType: [{
-          name: '',
-          value: ''
-        }],
+        errTypeNoteId: undefined,
+        errTypeNoteCode: '',
+        errTypeNoteName: '',
+        operationId: '',
+        shortCutAssicName: '',
         useFlag: true,
         startDate: new Date(),
         endDate: '',
         note: ''
       },
-      deleteTemp: {
-        operationName: '',
-        productName: '',
-        machineName: ''
-      },
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: '修改审核参数',
-        create: '添加审核参数'
+        update: '修改错误类型',
+        create: '添加错误类型'
       },
       dialogPvVisible: false,
       pvData: [],
       rules: {
         // type: [{ required: true, message: 'type is required', trigger: 'change' }],
         // timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        judgeCheckCode: [{ required: true, message: '请填写审核参数编号', trigger: 'blur' }],
-        judgeCheckName: [{ required: true, message: '请填写审核参数name', trigger: 'blur' }],
+        errTypeNoteCode: [{ required: true, message: '请填写错误类型编码', trigger: 'blur' }],
+        errTypeNoteName: [{ required: true, message: '请填写错误类型名称', trigger: 'blur' }],
         startDate: [{ type: 'date', required: true, message: '请填写开始时间', trigger: 'change' }]
         // endDate: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }]
 
@@ -330,7 +234,7 @@ export default {
   // 初始化获取数据列表
   created() {
     this.getList()
-    this.getAuditParameterTypes()
+    this.getErrorTypeTypes()
   },
   methods: {
     // 有加载圈的加载数据列表
@@ -339,8 +243,7 @@ export default {
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
-        this.names = this.list[0].names
-        this.details = this.list[0].details
+
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
@@ -351,7 +254,6 @@ export default {
     refreshList() {
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
-
         this.total = response.data.total
       })
     },
@@ -367,18 +269,15 @@ export default {
         }, 1 * 1000)
       })
     },
-    // 获取审核参数种类类别oprions
-    getAuditParameterTypes() {
-      listOptionAuditParameter().then(response => {
-        this.judgeCheckTypeOption = response.judgeCheckTypeOption
+    // 获取工序类别oprions
+    getErrorTypeTypes() {
+      listOptionErrorType().then(response => {
         this.operationOption = response.operationOption
-        this.productOption = response.productOption
-        this.machineOption = response.machineOption
       })
     },
-    // 审核参数禁用启用操作
+    // 错误类型禁用启用操作
     handleModifyUseFlag(row, useFlag) {
-      updateUseFlag(row.judgeCheckId).then(response => {
+      updateUseFlag(row.errTypeNoteId).then(response => {
         this.$message({
           message: response.message,
           type: 'success'
@@ -413,22 +312,17 @@ export default {
     // 重置temp实体类变量属性
     resetTemp() {
       this.temp = {
+        errTypeNoteId: undefined,
+        errTypeNoteCode: '',
+        errTypeNoteName: '',
         operationId: '',
-        productId: '',
-        machineId: '',
-        judgeCheckType: [],
+        shortCutAssicName: '',
         useFlag: true,
         startDate: new Date(),
         endDate: '',
         note: ''
       }
-    },
-    resetDeleteTemp() {
-      this.deleteTemp = {
-        operationName: '',
-        productName: '',
-        machineName: ''
-      }
+      this.operationOption = []
     },
     resetListQuery() {
       this.listQuery = {
@@ -437,7 +331,8 @@ export default {
         useFlag: undefined,
         // importance: undefined,
         title: undefined,
-        sort: '+id'
+        sort: '+id',
+        operationId: ''
       }
     },
     handleReset() {
@@ -447,7 +342,7 @@ export default {
     // 监听create dialog事件
     handleCreate() {
       this.resetTemp()
-      this.getAuditParameterTypes()
+      this.getErrorTypeTypes()
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -465,7 +360,7 @@ export default {
 
         if (valid) {
           // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          createAuditParameter(this.temp).then(() => {
+          createErrorType(this.temp).then(() => {
             this.refreshList()
             // this.list.unshift(this.temp)
             this.dialogFormVisible = false
@@ -482,15 +377,9 @@ export default {
     // 监听修改 update dialog事件
     handleUpdate(row) {
       this.resetTemp()
-
       this.temp = Object.assign({}, row) // copy obj
       // this.temp.timestamp = new Date(this.temp.timestamp)
-
-      this.getAuditParameterTypes()
-      this.temp.operationId = row.operationId
-      this.temp.productId = row.productId
-      this.temp.machineId = row.machineId
-      console.log(this.temp)
+      this.getErrorTypeTypes()
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -500,7 +389,7 @@ export default {
     // 修改操作
     updateData() {
       // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-      updateAuditParameter(this.temp).then(() => {
+      updateErrorType(this.temp).then(() => {
         this.refreshList()
         // this.list.unshift(this.temp)
         this.dialogFormVisible = false
@@ -519,11 +408,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.deleteTemp.operationName = row.operationName
-        this.deleteTemp.productName = row.productName
-        this.deleteTemp.machineName = row.machineName
-
-        deleteAuditParameter(this.deleteTemp).then(() => {
+        deleteErrorType(row.errTypeNoteId).then(() => {
           this.refreshList()
           this.$message({
             type: 'success',
@@ -537,7 +422,6 @@ export default {
         })
       })
     },
-
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
         if (j === 'timestamp') {
@@ -559,15 +443,8 @@ export default {
 }
 </script>
 
-<style lang="scss">
- .names_algin {
-  text-align-last:justify;
-	text-align:justify;
-	text-justify:distribute-all-lines; // 这行必加，兼容ie浏览器
-  font-size: 48px;
- }
-   .el-dialog .el-form .el-form-item .el-input{
+<style scoped>
+  .el-dialog .el-form .el-form-item .el-input{
     width: 220px;
   }
-
 </style>

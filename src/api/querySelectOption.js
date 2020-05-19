@@ -12,4 +12,28 @@ export function listOptionAuditParameter() {
     method: 'post'
   })
 }
+export function listOptionOperator() {
+  return request({
+    url: '/option/operator',
+    method: 'post'
+  })
+}
+export function listOptionErrorType() {
+  return request({
+    url: '/option/errorType',
+    method: 'post'
+  })
+}
+export function listOptionWorkUnit() {
+  return request({
+    url: '/option/workUnit',
+    method: 'post'
+  })
+}
+export function listOptionProduceLog() {
+  return request({
+    url: '/option/produceLog',
+    method: 'post'
+  })
+}
 

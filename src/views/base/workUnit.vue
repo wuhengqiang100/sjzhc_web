@@ -1,56 +1,21 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input
-        v-model="listQuery.title"
-        placeholder="请输入登陆名"
-        style="width: 200px;"
-        class="filter-item"
-        @keyup.enter.native="handleFilter"
-      />
-      用户：
+      <el-input v-model="listQuery.title" placeholder="请输入机台名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      机长：
       <el-select v-model="listQuery.operatorId" filterable placeholder="请搜索或者选择">
         <el-option v-for="item in operatorOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="handleFilter" />
       </el-select>
-      <el-select
-        v-model="listQuery.useFlag"
-        placeholder="启用状态"
-        clearable
-        class="filter-item"
-        style="width: 130px"
-      >
-        <el-option
-          v-for="item in useFlagOptions"
-          :key="item.key"
-          :label="item.display_name"
-          :value="item.key"
-        />
+      <el-select v-model="listQuery.useFlag" placeholder="状态" clearable class="filter-item" style="width: 130px">
+        <el-option v-for="item in useFlagOptions" :key="item.key" :label="item.display_name" :value="item.key" />
       </el-select>
-      <el-button
-        v-waves
-        class="filter-item"
-        type="primary"
-        icon="el-icon-search"
-        @click="handleFilter"
-      >
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
       </el-button>
-      <el-button
-        class="filter-item"
-        style="margin-left: 10px;"
-        type="primary"
-        icon="el-icon-refresh"
-        @click="handleReset"
-      >
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-refresh" @click="handleReset">
         重置
       </el-button>
-      <el-button
-        class="filter-item"
-        style="margin-left: 10px;"
-        type="primary"
-        icon="el-icon-edit"
-        @click="handleCreate"
-      >
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
         添加
       </el-button>
       <!--     <el-button class="filter-item" style="margin-left: 10px;" type="warning" icon="el-icon-download" @click="handleCreate">
@@ -68,195 +33,129 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column
-        label="登陆id"
-        prop="id"
-        sortable="custom"
-        align="center"
-        :class-name="getSortClass('id')"
-      >
+      <el-table-column label="机台序号" prop="id" sortable="custom" align="center" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.loginId }}</span>
+          <span>{{ row.workUnitId }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="MES机台代码" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.workUnitCodeMes }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="机台编号" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.workUnitCode }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="机台名称" align="center">
+        <template slot-scope="{row}">
+          <span class="link-type" @click="handleUpdate(row)">{{ row.workUnitName }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="机长" align="center">
+        <template slot-scope="{row}">
+          <span v-if="row.operator!=null">{{ row.operator.operatorName }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column
-        label="登陆名"
-        align="center"
-        min-width="120px"
-      >
+      <el-table-column label="启用状态" align="center">
         <template slot-scope="{row}">
-          <span
-            class="link-type"
-            @click="handleUpdate(row)"
-          >{{ row.loginUserName }}</span>
+          <el-tag v-if="row.useFlag" type="success">
+            启用
+          </el-tag>
+          <el-tag v-else type="danger">
+            禁用
+          </el-tag>
         </template>
       </el-table-column>
-      <!--        <el-table-column
-        label="登陆密码"
-        min-width="200px"
-        align="center"
-      >
-        <template slot-scope="{row}">
-          <span>{{ row.loginUserPass }}</span>
-        </template>
-      </el-table-column> -->
-      <el-table-column
-        label="用户名"
-        align="center"
-        min-width="200px"
-      >
-        <template slot-scope="{row}">
-          <span>{{ row.operator.operatorName }}</span>
+      <el-table-column label="启用时间" min-width="130" align="center">
+        <template v-if="row.startDate !== null" slot-scope="{row}">
+          <span>{{ row.startDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="角色" align="center" min-width="200px">
-        <template slot-scope="{row}"> <span>{{ row.roleString }}</span></template>
+      <el-table-column label="停用时间" width="130" align="center">
+        <template v-if="row.endDate !==null" slot-scope="{row}">
+          <span>{{ row.endDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+        </template>
       </el-table-column>
-      <el-table-column
-        label="操作"
-        fixed="right"
-        align="center"
-        min-width="218px"
-        class-name="small-padding fixed-width"
-      >
+      <el-table-column label="说明" min-width="130px" align="center">
         <template slot-scope="{row}">
-          <el-button
-            type="primary"
-            size="mini"
-            @click="handleUpdate(row)"
-          >
+          <span>{{ row.note }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" fixed="right" align="center" min-width="218px" class-name="small-padding fixed-width">
+        <template slot-scope="{row}">
+          <el-button type="primary" size="mini" @click="handleUpdate(row)">
             修改
           </el-button>
-          <el-button
-            size="mini"
-            type="danger"
-            @click="handleDelete(row)"
-          >删除</el-button>
-          <el-button
-            size="mini"
-            type="warning"
-            style="width:70px"
-            @click="handleResetPassword(row)"
-          >重置密码</el-button>
+          <!--           <el-button v-if="row.useFlag" size="mini" type="warning" @click="handleModifyUseFlag(row,false)">禁用</el-button>
+          <el-button v-else size="mini" type="success" @click="handleModifyUseFlag(row,true)">启用</el-button> -->
+          <el-button size="mini" type="danger" @click="handleDelete(row)">删除</el-button>
+
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="listQuery.page"
-      :limit.sync="listQuery.limit"
-      @pagination="getList"
-    />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
-    <el-dialog
-      :title="textMap[dialogStatus]"
-      :visible.sync="dialogFormVisible"
-      width="50%"
-    >
-      <el-form
-        ref="dataForm"
-        :rules="rules"
-        :model="temp"
-        label-position="left"
-        size="mini"
-        label-width="100px"
-        style="width: 650px; margin-left:45px;height:300px"
-      >
-        <el-row>
-          <el-col :span="12">
-            <el-form-item
-              label="用户名称"
-              prop="operatorId"
-            >
-              <el-select
-                v-model="temp.operatorId"
-                filterable
-                placeholder="请搜索或者选择"
-              >
-                <el-option
-                  v-for="item in operatorOption"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
-            </el-form-item>
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="50%">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="125px" style="width: 600px; margin-left:50px;">
 
-            <el-form-item
-              label="登陆名"
-              prop="loginUserName"
-            >
-              <el-input
-                v-model="temp.loginUserName"
-                type="text"
-                placeholder="请输入登陆名"
-              />
-            </el-form-item>
-            <el-form-item
-              label="登陆密码"
-              prop="loginUserPass"
-            >
-              <el-input
-                v-model="temp.loginUserPass"
-                type="text"
-                placeholder="请输入登陆密码"
-              />
-            </el-form-item>
+        <el-form-item label="机台编号" prop="workUnitCode">
+          <el-input v-model="temp.workUnitCode" type="text" placeholder="请输入机台编号" />
+        </el-form-item>
+        <el-form-item label="MES机台代码" prop="workUnitCodeMes">
+          <el-input v-model="temp.workUnitCodeMes" type="text" placeholder="请输入机台名称" />
+        </el-form-item>
+        <el-form-item label="机台名称" prop="workUnitName">
+          <el-input v-model="temp.workUnitName" type="text" placeholder="请输入机台名称" />
+        </el-form-item>
 
-          </el-col>
-          <el-col
-            :span="9"
-            :offset="3"
-          >
-            <el-form-item
-              label="用户角色"
-              prop="roleIds"
-            >
+        <el-form-item label="机长" prop="operatorId">
+          <el-select v-model="temp.operatorId" filterable placeholder="请搜索或者选择">
+            <el-option v-for="item in operatorOption" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
 
-              <el-select v-model="roleIdss" multiple placeholder="请选择角色">
-                <el-option
-                  v-for="item in roleOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
-            </el-form-item>
+        <el-form-item label="启用状态" prop="useFlag">
+          <el-switch v-model="temp.useFlag" active-color="#13ce66" inactive-color="#ff4949" />
+        </el-form-item>
+        <!--  <el-form-item label="启用时间" prop="startDate">
+          <el-date-picker v-model="temp.startDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择一个开始时间" />
+        </el-form-item>
+        <el-form-item label="停用时间" prop="endDate">
+          <el-date-picker v-model="temp.endDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择一个结束时间" />
 
-          </el-col>
-        </el-row>
+        </el-form-item> -->
+
+        <el-form-item label="备注">
+          <el-input v-model="temp.note" style="width:220px;" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入备注" />
+        </el-form-item>
+
       </el-form>
-      <div
-        slot="footer"
-        class="dialog-footer"
-      >
+      <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
           返回
         </el-button>
-        <el-button
-          type="primary"
-          @click="dialogStatus==='create'?createData():updateData()"
-        >
+        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
           确认
         </el-button>
       </div>
     </el-dialog>
+
   </div>
 </template>
 
 <script>
 
-import { fetchList, createLoginUser, updateLoginUser, updateUseFlag, deleteLoginUser, fetchRoleList, fetchUserOwnRole, resetPassword } from '@/api/loginUser'
+import { fetchList, createWorkUnit, updateWorkUnit, updateUseFlag, deleteWorkUnit } from '@/api/workUnit'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-// import { getToken } from '@/utils/auth'
-import { listOptionOperator } from '@/api/querySelectOption'
+import { listOptionWorkUnit } from '@/api/querySelectOption'
 
-const roleOptions = []
+// const operatorOption = []
 
 const useFlagOptions = [
   { key: '0', display_name: '禁用' },
@@ -264,13 +163,13 @@ const useFlagOptions = [
 ]
 
 // arr to obj, such as { CN : "China", US : "USA" }
-const calendarTypeKeyValue = roleOptions.reduce((acc, cur) => {
-  acc[cur.key] = cur.display_name
-  return acc
-}, {})
+// const calendarTypeKeyValue = operatorOption.reduce((acc, cur) => {
+//   acc[cur.key] = cur.display_name
+//   return acc
+// }, {})
 
 export default {
-  name: 'LoginUserTable',
+  name: 'WorkUnitTable',
   components: { Pagination },
   directives: { waves },
   filters: {
@@ -283,7 +182,7 @@ export default {
       return statusMap[status]
     },
     typeFilter(type) {
-      return calendarTypeKeyValue[type]
+      // return calendarTypeKeyValue[type]
     }
   },
   data() {
@@ -301,36 +200,37 @@ export default {
         sort: '+id',
         operatorId: ''
       },
-      importanceOptions: [1, 2, 3],
       operatorOption: [],
-      // checkedRoles: [], // 已选的角色
-      roleOptions: [], // 所有的角色
+      importanceOptions: [1, 2, 3],
       useFlagOptions, // 启用状态
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
       temp: {
-        loginId: undefined,
+        workUnitId: undefined,
+        workUnitCode: '',
+        workUnitCodeMes: '',
+        workUnitName: '',
         operatorId: '',
-        loginUserName: '',
-        loginUserPass: '',
-        roleIds: []
+        useFlag: true,
+        startDate: new Date(),
+        endDate: '',
+        note: ''
       },
-      roleIdss: [],
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: '修改账户',
-        create: '添加账户'
+        update: '修改机台',
+        create: '添加机台'
       },
       dialogPvVisible: false,
       pvData: [],
       rules: {
         // type: [{ required: true, message: 'type is required', trigger: 'change' }],
         // timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        loginName: [{ required: true, message: '请填写登陆名', trigger: 'blur' }],
-        loginPass: [{ required: true, message: '请填写登陆密码', trigger: 'blur' }]
-        // startDate: [{ type: 'date', required: true, message: '请填写开始时间', trigger: 'change' }]
+        workUnitCode: [{ required: true, message: '请填写机台编号', trigger: 'blur' }],
+        workUnitName: [{ required: true, message: '请填写机台名称', trigger: 'blur' }],
+        startDate: [{ type: 'date', required: true, message: '请填写开始时间', trigger: 'change' }]
         // endDate: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }]
 
       },
@@ -340,7 +240,7 @@ export default {
   // 初始化获取数据列表
   created() {
     this.getList()
-    this.getSelectOption()
+    this.getWorkUnitTypes()
   },
   methods: {
     // 有加载圈的加载数据列表
@@ -354,25 +254,6 @@ export default {
         setTimeout(() => {
           this.listLoading = false
         }, 1 * 1000)
-      })
-    },
-    // 获取所有的下拉选择查询条件
-    getSelectOption() {
-      listOptionOperator().then(response => {
-        this.operatorOption = response.operatorOption
-      })
-    },
-    getRoles() {
-      fetchRoleList().then(response => {
-        this.roleOptions = response.roleOptions
-        this.operatorOption = response.operatorOption
-      })
-    },
-    // 获取所有的menus并设置值
-    getRoleOwnMenus(LoginId) {
-      fetchUserOwnRole(LoginId).then(response => {
-        // this.temp.roleIds = response.roleIds
-        this.roleIdss = response.checkedRoles
       })
     },
     // 立即刷新数据列表
@@ -394,18 +275,15 @@ export default {
         }, 1 * 1000)
       })
     },
-    handleResetPassword(row) {
-      resetPassword(row.loginId).then(response => {
-        this.$message({
-          message: '重置' + row.loginUserName + '账户的密码为123456',
-          type: 'success'
-        })
-        this.refreshList()
+    // 获取机台种类类别oprions
+    getWorkUnitTypes() {
+      listOptionWorkUnit().then(response => {
+        this.operatorOption = response.operatorOption
       })
     },
-    // 用户禁用启用操作
+    // 机台禁用启用操作
     handleModifyUseFlag(row, useFlag) {
-      updateUseFlag(row.loginId).then(response => {
+      updateUseFlag(row.workUnitId).then(response => {
         this.$message({
           message: response.message,
           type: 'success'
@@ -440,14 +318,16 @@ export default {
     // 重置temp实体类变量属性
     resetTemp() {
       this.temp = {
-        loginId: undefined,
+        workUnitId: undefined,
+        workUnitCode: '',
+        workUnitCodeMes: '',
+        workUnitName: '',
         operatorId: '',
-        loginUserName: '',
-        loginUserPass: '',
-        roleIds: []
+        useFlag: true,
+        startDate: new Date(),
+        endDate: '',
+        note: ''
       }
-      this.roleOptions = []
-      this.roleIdss = []
       this.operatorOption = []
     },
     resetListQuery() {
@@ -468,8 +348,7 @@ export default {
     // 监听create dialog事件
     handleCreate() {
       this.resetTemp()
-      // 获取所有的角色
-      this.getRoles()
+      this.getWorkUnitTypes()
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -486,10 +365,8 @@ export default {
         }
 
         if (valid) {
-          // this.temp.checkedRole = this.checkedRoles
           // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          this.temp.roleIds = this.roleIdss
-          createLoginUser(this.temp).then(() => {
+          createWorkUnit(this.temp).then(() => {
             this.refreshList()
             // this.list.unshift(this.temp)
             this.dialogFormVisible = false
@@ -506,12 +383,10 @@ export default {
     // 监听修改 update dialog事件
     handleUpdate(row) {
       this.resetTemp()
+
       this.temp = Object.assign({}, row) // copy obj
       // this.temp.timestamp = new Date(this.temp.timestamp)
-      this.getRoles()// 获取角色
-      // 获取已拥有的角色
-      // console.log('tag', this.temp)
-      this.getRoleOwnMenus(this.temp.loginId)//
+      this.getWorkUnitTypes()
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -521,13 +396,8 @@ export default {
     // 修改操作
     updateData() {
       // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-      // this.temp.checkedRole = this.checkedRoles
-      this.temp.roleIds = this.roleIdss
-      console.log(this.temp.roleIds)
-      updateLoginUser(this.temp).then(() => {
+      updateWorkUnit(this.temp).then(() => {
         this.refreshList()
-        this.resetTemp()
-
         // this.list.unshift(this.temp)
         this.dialogFormVisible = false
         this.$notify({
@@ -545,7 +415,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteLoginUser(row.loginId).then(() => {
+        deleteWorkUnit(row.workUnitId).then(() => {
           this.refreshList()
           this.$message({
             type: 'success',
@@ -581,7 +451,7 @@ export default {
 </script>
 
 <style scoped>
-.el-dialog .el-form .el-form-item .el-input {
-  width: 220px;
-}
+  .el-dialog .el-form .el-form-item .el-input{
+    width: 220px;
+  }
 </style>

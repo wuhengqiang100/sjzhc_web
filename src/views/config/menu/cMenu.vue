@@ -76,17 +76,17 @@
           <span>{{ row.functionId }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="权限编码" min-width="100px" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.functionCode }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="权限名称" min-width="100px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.title }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="权限name" min-width="100px" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.name }}</span>
-        </template>
-      </el-table-column>
       <el-table-column
         label="启用状态"
         align="center"

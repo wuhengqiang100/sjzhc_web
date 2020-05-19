@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <!-- <el-input v-model="listQuery.title" placeholder="请输入操作人员名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" /> -->
+      <el-input v-model="listQuery.title" placeholder="请输入系统操作人" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
 
       <div class="filter-item">
         <el-date-picker
@@ -46,14 +46,14 @@
       @sort-change="sortChange"
     >
       <el-table-column
-        label="设备日志id"
+        label="系统日志序号"
         prop="id"
         sortable="custom"
         align="center"
         :class-name="getSortClass('id')"
       >
         <template slot-scope="{row}">
-          <span>{{ row.logMachineId }}</span>
+          <span>{{ row.logSysId }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -61,15 +61,15 @@
         align="center"
       >
         <template slot-scope="{row}">
-          <span>{{ row.operator.operatorName }}</span>
+          <span>{{ row.operatorName }}</span>
         </template>
       </el-table-column>
       <el-table-column
-        label="设备ip"
+        label="日志类型"
         align="center"
       >
         <template slot-scope="{row}">
-          <span>{{ row.machineIp }}</span>
+          <span>{{ row.logType }}</span>
         </template>
       </el-table-column>
 
@@ -79,7 +79,7 @@
         align="center"
       >
         <template slot-scope="{row}">
-          <span>{{ row.logDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span v-if="row.logDate!==null">{{ row.logDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -88,7 +88,7 @@
         align="center"
       >
         <template slot-scope="{row}">
-          <span>{{ row.logInfo }}</span>
+          <span>{{ row.note }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -178,16 +178,16 @@ export default {
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: '修改设备日志',
-        create: '添加设备日志'
+        update: '修改系统日志',
+        create: '添加系统日志'
       },
       dialogPvVisible: false,
       pvData: [],
       rules: {
         // type: [{ required: true, message: 'type is required', trigger: 'change' }],
         // timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        machineCode: [{ required: true, message: '请填写设备日志code', trigger: 'blur' }],
-        machineName: [{ required: true, message: '请填写设备日志name', trigger: 'blur' }],
+        machineCode: [{ required: true, message: '请填写系统日志code', trigger: 'blur' }],
+        machineName: [{ required: true, message: '请填写系统日志name', trigger: 'blur' }],
         startDate: [{ type: 'date', required: true, message: '请填写开始时间', trigger: 'change' }]
         // endDate: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }]
 

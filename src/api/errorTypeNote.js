@@ -2,44 +2,43 @@ import request from '@/utils/request'
 
 export function fetchList(query) {
   return request({
-    url: '/auditParameter/list',
+    url: '/errorType/list',
     method: 'get',
     params: query
     // baseURL: "http://127.0.0.1:8088"
   })
 }
 
-export function updateUseFlag(id) {
+export function createErrorType(data) {
   return request({
-    url: '/auditParameter/updateUseFlag',
+    url: '/errorType/create',
+    method: 'post',
+    data
+    // baseURL: "http://127.0.0.1:8088"
+  })
+}
+
+export function updateErrorType(data) {
+  return request({
+    url: '/errorType/update',
+    method: 'post',
+    data
+    // baseURL: "http://127.0.0.1:8088"
+  })
+}
+export function deleteErrorType(id) {
+  return request({
+    url: '/errorType/delete',
     method: 'post',
     params: { id }
     // baseURL: "http://127.0.0.1:8088"
   })
 }
-
-export function createAuditParameter(data) {
+export function updateUseFlag(id) {
   return request({
-    url: '/auditParameter/create',
+    url: '/errorType/updateUseFlag',
     method: 'post',
-    data
-    // baseURL: "http://127.0.0.1:8088"
-  })
-}
-
-export function updateAuditParameter(data) {
-  return request({
-    url: '/auditParameter/update',
-    method: 'post',
-    data
-    // baseURL: "http://127.0.0.1:8088"
-  })
-}
-export function deleteAuditParameter(data) {
-  return request({
-    url: '/auditParameter/delete',
-    method: 'post',
-    data
+    params: { id }
     // baseURL: "http://127.0.0.1:8088"
   })
 }

@@ -2,44 +2,43 @@ import request from '@/utils/request'
 
 export function fetchList(query) {
   return request({
-    url: '/auditParameter/list',
+    url: '/workUnit/list',
     method: 'get',
     params: query
     // baseURL: "http://127.0.0.1:8088"
   })
 }
 
-export function updateUseFlag(id) {
+export function createWorkUnit(data) {
   return request({
-    url: '/auditParameter/updateUseFlag',
+    url: '/workUnit/create',
+    method: 'post',
+    data
+    // baseURL: "http://127.0.0.1:8088"
+  })
+}
+
+export function updateWorkUnit(data) {
+  return request({
+    url: '/workUnit/update',
+    method: 'post',
+    data
+    // baseURL: "http://127.0.0.1:8088"
+  })
+}
+export function deleteWorkUnit(id) {
+  return request({
+    url: '/workUnit/delete',
     method: 'post',
     params: { id }
     // baseURL: "http://127.0.0.1:8088"
   })
 }
-
-export function createAuditParameter(data) {
+export function updateUseFlag(id) {
   return request({
-    url: '/auditParameter/create',
+    url: '/workUnit/updateUseFlag',
     method: 'post',
-    data
-    // baseURL: "http://127.0.0.1:8088"
-  })
-}
-
-export function updateAuditParameter(data) {
-  return request({
-    url: '/auditParameter/update',
-    method: 'post',
-    data
-    // baseURL: "http://127.0.0.1:8088"
-  })
-}
-export function deleteAuditParameter(data) {
-  return request({
-    url: '/auditParameter/delete',
-    method: 'post',
-    data
+    params: { id }
     // baseURL: "http://127.0.0.1:8088"
   })
 }
