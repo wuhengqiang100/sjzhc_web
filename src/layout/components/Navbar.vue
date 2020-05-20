@@ -62,24 +62,42 @@
             <!-- <span>退出</span> -->
             <span
               style="display:block;"
+              @click="centerDialogVisible = true"
+            >修改密码</span>
+          </el-dropdown-item>
+          <el-dropdown-item divided>
+            <span
+              style="display:block;"
               @click="logout"
             >退出</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
-    <!--     <el-dialog title="提示"
-               :visible.sync="centerDialogVisible"
-               width="30%"
-               center>
-      <span>需要注意的是内容是默认不居中的</span>
-      <span slot="footer"
-            class="dialog-footer">
+    <el-dialog
+      title="重置密码"
+      :visible.sync="centerDialogVisible"
+      width="30%"
+      center
+      :modal="false"
+    >
+      <el-form :model="temp">
+        <el-form-item label="原密码" :label-width="formLabelWidth">
+          <el-input v-model="temp.oldPassword" type="text" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="新密码" :label-width="formLabelWidth">
+          <el-input v-model="temp.newPassword" type="password" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="重置密码" :label-width="formLabelWidth">
+          <el-input v-model="temp.confirmPassword" type="password" autocomplete="off" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible = false">取 消</el-button>
-        <el-button type="primary"
-                   @click="centerDialogVisible = false">确 定</el-button>
-      </span>
-    </el-dialog> -->
+        <el-button type="primary" @click="handResetpassword">确 定</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 
 </template>
@@ -93,6 +111,8 @@ import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import Search from '@/components/HeaderSearch'
 import BigScreen from '@/components/BigScreen'
+import { resetPassword } from '@/api/user'
+import { getToken } from '@/utils/auth'
 
 export default {
   components: {
@@ -109,7 +129,14 @@ export default {
   },
   data() {
     return {
-      centerDialogVisible: false
+      centerDialogVisible: false,
+      temp: {
+        loginId: '',
+        oldassword: '',
+        newPassword: '',
+        confirmPassword: ''
+      },
+      formLabelWidth: '120px'
     }
   },
   computed: {
@@ -128,6 +155,29 @@ export default {
       window.localStorage.clear()
       location.reload()
       // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    },
+    handResetpassword() {
+      console.log(this.temp)
+      this.temp.loginId = getToken()
+      resetPassword(this.temp).then((res) => {
+        // this.list.unshift(this.temp)
+        this.centerDialogVisible = false
+        this.resetTemp()
+        this.$notify({
+          title: 'Success',
+          message: res.message,
+          type: 'success',
+          duration: 2000
+        })
+      })
+    },
+    resetTemp() {
+      this.temp = {
+        loginId: '',
+        oldPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+      }
     }
   }
 }

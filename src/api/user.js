@@ -32,3 +32,12 @@ export function logout() {
     // baseURL: "http://127.0.0.1:8088"
   })
 }
+
+export function resetPassword(data) {
+  return request({
+    url: '/common/resetPassword',
+    method: 'post',
+    data
+    // baseURL: "http://127.0.0.1:8088"
+  })
+}
