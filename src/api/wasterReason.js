@@ -2,33 +2,33 @@ import request from '@/utils/request'
 
 export function fetchList(query) {
   return request({
-    url: '/errorType/list',
+    url: '/wasterReason/list',
     method: 'get',
     params: query
     // baseURL: "http://127.0.0.1:8088"
   })
 }
 
-export function createErrorType(data) {
+export function createWasterReason(data) {
   return request({
-    url: '/errorType/create',
+    url: '/wasterReason/create',
     method: 'post',
     data
     // baseURL: "http://127.0.0.1:8088"
   })
 }
 
-export function updateErrorType(data) {
+export function updateWasterReason(data) {
   return request({
-    url: '/errorType/update',
+    url: '/wasterReason/update',
     method: 'post',
     data
     // baseURL: "http://127.0.0.1:8088"
   })
 }
-export function deleteErrorType(id) {
+export function deleteWasterReason(id) {
   return request({
-    url: '/errorType/delete',
+    url: '/wasterReason/delete',
     method: 'post',
     params: { id }
     // baseURL: "http://127.0.0.1:8088"
@@ -36,7 +36,7 @@ export function deleteErrorType(id) {
 }
 export function updateUseFlag(id) {
   return request({
-    url: '/errorType/updateUseFlag',
+    url: '/wasterReason/updateUseFlag',
     method: 'post',
     params: { id }
     // baseURL: "http://127.0.0.1:8088"

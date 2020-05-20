@@ -18,9 +18,9 @@ export function listOptionOperator() {
     method: 'post'
   })
 }
-export function listOptionErrorType() {
+export function listOptionWasterReason() {
   return request({
-    url: '/option/errorType',
+    url: '/option/wasterReason',
     method: 'post'
   })
 }

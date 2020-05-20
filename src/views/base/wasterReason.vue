@@ -35,7 +35,7 @@
     >
       <el-table-column label="错误类型序号" prop="id" sortable="custom" align="center" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.errTypeNoteId }}</span>
+          <span>{{ row.wasterReasonsId }}</span>
         </template>
       </el-table-column>
       <el-table-column label="工序" align="center">
@@ -45,17 +45,17 @@
       </el-table-column>
       <el-table-column label="错误类型编码" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.errTypeNoteCode }}</span>
+          <span>{{ row.wasterReasonsCode }}</span>
         </template>
       </el-table-column>
       <el-table-column label="错误类型名称" align="center">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleUpdate(row)">{{ row.errTypeNoteName }}</span>
+          <span class="link-type" @click="handleUpdate(row)">{{ row.wasterReasonsName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="???" align="center">
+      <el-table-column label="错误类型索引" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.shortCutAssicName }}</span>
+          <span>{{ row.wasterReasonsIndex }}</span>
         </template>
       </el-table-column>
       <el-table-column label="启用状态" align="center">
@@ -105,15 +105,15 @@
             <el-option v-for="item in operationOption" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-form-item label="错误类型编码" prop="errTypeNoteCode">
-          <el-input v-model="temp.errTypeNoteCode" type="text" placeholder="请输入错误类型编码" />
+        <el-form-item label="错误类型编码" prop="wasterReasonsCode">
+          <el-input v-model="temp.wasterReasonsCode" type="text" placeholder="请输入错误类型编码" />
         </el-form-item>
-        <el-form-item label="错误类型名称" prop="errTypeNoteName">
-          <el-input v-model="temp.errTypeNoteName" type="text" placeholder="请输入错误类型名称" />
+        <el-form-item label="错误类型名称" prop="wasterReasonsName">
+          <el-input v-model="temp.wasterReasonsName" type="text" placeholder="请输入错误类型名称" />
         </el-form-item>
 
-        <el-form-item label="???" prop="shortCutAssicName">
-          <el-input v-model="temp.shortCutAssicName" type="text" placeholder="请输入???" />
+        <el-form-item label="错误类型索引" prop="wasterReasonsIndex">
+          <el-input v-model="temp.wasterReasonsIndex" type="text" placeholder="请输入???" />
         </el-form-item>
 
         <!--         <el-form-item label="错误类型类别" prop="operation">
@@ -150,11 +150,11 @@
 
 <script>
 
-import { fetchList, createErrorType, updateErrorType, updateUseFlag, deleteErrorType } from '@/api/errorTypeNote'
+import { fetchList, createWasterReason, updateWasterReason, updateUseFlag, deleteWasterReason } from '@/api/wasterReason'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import { listOptionErrorType } from '@/api/querySelectOption'
+import { listOptionWasterReason } from '@/api/querySelectOption'
 // const operationOption = []
 
 const useFlagOptions = [
@@ -163,7 +163,7 @@ const useFlagOptions = [
 ]
 
 export default {
-  name: 'ErrorTypeTable',
+  name: 'WasterReasonsTable',
   components: { Pagination },
   directives: { waves },
   filters: {
@@ -201,11 +201,11 @@ export default {
       statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
       temp: {
-        errTypeNoteId: undefined,
-        errTypeNoteCode: '',
-        errTypeNoteName: '',
+        wasterReasonsId: undefined,
+        wasterReasonsCode: '',
+        wasterReasonsName: '',
         operationId: '',
-        shortCutAssicName: '',
+        wasterReasonsIndex: '',
         useFlag: true,
         startDate: new Date(),
         endDate: '',
@@ -222,8 +222,9 @@ export default {
       rules: {
         // type: [{ required: true, message: 'type is required', trigger: 'change' }],
         // timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        errTypeNoteCode: [{ required: true, message: '请填写错误类型编码', trigger: 'blur' }],
-        errTypeNoteName: [{ required: true, message: '请填写错误类型名称', trigger: 'blur' }],
+        wasterReasonsCode: [{ required: true, message: '请填写错误类型编码', trigger: 'blur' }],
+        wasterReasonsName: [{ required: true, message: '请填写错误类型名称', trigger: 'blur' }],
+        wasterReasonsIndex: [{ required: true, message: '请填写错误类型索引', trigger: 'blur' }],
         startDate: [{ type: 'date', required: true, message: '请填写开始时间', trigger: 'change' }]
         // endDate: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }]
 
@@ -234,7 +235,7 @@ export default {
   // 初始化获取数据列表
   created() {
     this.getList()
-    this.getErrorTypeTypes()
+    this.getWasterReasonsTypes()
   },
   methods: {
     // 有加载圈的加载数据列表
@@ -270,14 +271,14 @@ export default {
       })
     },
     // 获取工序类别oprions
-    getErrorTypeTypes() {
-      listOptionErrorType().then(response => {
+    getWasterReasonsTypes() {
+      listOptionWasterReason().then(response => {
         this.operationOption = response.operationOption
       })
     },
     // 错误类型禁用启用操作
     handleModifyUseFlag(row, useFlag) {
-      updateUseFlag(row.errTypeNoteId).then(response => {
+      updateUseFlag(row.wasterReasonsId).then(response => {
         this.$message({
           message: response.message,
           type: 'success'
@@ -312,11 +313,11 @@ export default {
     // 重置temp实体类变量属性
     resetTemp() {
       this.temp = {
-        errTypeNoteId: undefined,
-        errTypeNoteCode: '',
-        errTypeNoteName: '',
+        wasterReasonsId: undefined,
+        wasterReasonsCode: '',
+        wasterReasonsName: '',
         operationId: '',
-        shortCutAssicName: '',
+        wasterReasonsIndex: '',
         useFlag: true,
         startDate: new Date(),
         endDate: '',
@@ -342,7 +343,7 @@ export default {
     // 监听create dialog事件
     handleCreate() {
       this.resetTemp()
-      this.getErrorTypeTypes()
+      this.getWasterReasonsTypes()
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -360,7 +361,7 @@ export default {
 
         if (valid) {
           // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          createErrorType(this.temp).then(() => {
+          createWasterReason(this.temp).then(() => {
             this.refreshList()
             // this.list.unshift(this.temp)
             this.dialogFormVisible = false
@@ -379,7 +380,7 @@ export default {
       this.resetTemp()
       this.temp = Object.assign({}, row) // copy obj
       // this.temp.timestamp = new Date(this.temp.timestamp)
-      this.getErrorTypeTypes()
+      this.getWasterReasonsTypes()
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -389,7 +390,7 @@ export default {
     // 修改操作
     updateData() {
       // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-      updateErrorType(this.temp).then(() => {
+      updateWasterReason(this.temp).then(() => {
         this.refreshList()
         // this.list.unshift(this.temp)
         this.dialogFormVisible = false
@@ -408,7 +409,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteErrorType(row.errTypeNoteId).then(() => {
+        deleteWasterReason(row.wasterReasonsId).then(() => {
           this.refreshList()
           this.$message({
             type: 'success',
