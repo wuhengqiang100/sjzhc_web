@@ -1,29 +1,30 @@
 import request from '@/utils/request'
 
 // 未审核的数据
-export function fetchCanAuditList() {
+export function fetchCanAuditList(data) {
   return request({
     url: '/machine/canAudit/list',
-    method: 'get'
+    method: 'post',
+    data
     // baseURL: "http://127.0.0.1:8088"
   })
 }
 
 // 未审核的数据
-export function fetchAlreadyAuditList() {
+export function fetchAlreadyAuditList(data) {
   return request({
     url: '/machine/alreadyAudit/list',
-    method: 'get'
-    // baseURL: "http://127.0.0.1:8088"
+    method: 'post',
+    data
   })
 }
 
 // 不走核查的数据
-export function fetchNotAuditList() {
+export function fetchNotAuditList(data) {
   return request({
     url: '/machine/notAudit/list',
-    method: 'get'
-    // baseURL: "http://127.0.0.1:8088"
+    method: 'post',
+    data
   })
 }
 

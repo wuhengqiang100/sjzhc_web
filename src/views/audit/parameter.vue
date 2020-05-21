@@ -63,76 +63,25 @@
         </template>
       </el-table-column>
 
-      <!--    <el-table-column v-for="(item,index) in details" :key="index" label="总数" align="center">
-        <template>
+      <el-table-column v-for="(item,index) in details" :key="index" label="总数" align="center">
+        <template :row-key="getDetails">
           <span>{{ item.name }}</span>
         </template>
-      </el-table-column> -->
+      </el-table-column>
       <!-- 自定义列的遍历-->
-      <el-table-column v-for="(item, index) in details" :key="index" :label="item.name">
-        <!-- 数据的遍历  scope.row就代表数据的每一个对象-->
-        <!-- <template slot-scope="scope">
-          <span>{{ scope.row.details[index].value }}</span>
-        </template>  -->
-        <template>
-          <span>{{ item.value }}</span>
-        </template>
-      </el-table-column>
-      <!--
-      <el-table-column
-        class="names_algin"
-        min-width="180px"
-        :label="names"
-        prop="values"
-      /> -->
-      <!--       <el-table-column
-        class="names_algin"
-        min-width="200px"
-        label="valueMap.name"
-        prop="valueMap.value"
-      /> -->
-      <!--   <div v-for="item in row.details" :key="item.name">
-          {{}}
-      </div> -->
-      <!-- <el-table-column
+      <div v-for="item in details" :key="item">
+        <el-table-column :label="item[0].name">
+          <!-- 数据的遍历  scope.row就代表数据的每一个对象-->
+          <div v-for="s in item" :key="s">
+            <template>
+              <span>{{ s.value }}</span>
+            </template>
 
-        v-for="item in row.details"
-        :key="item"
-        slot-scope="{row}"
-      >
-        {{ item.name }}++{{ item.value }}
-      </el-table-column> -->
-      <!-- <el-table-column v-for="(item, index) in row.details" label="测试" align="center">
-        <template v-for="(item, index) in row.details" :key="item" slot-scope="{row}">
-          <span>{{ index }}</span>
-        </template>
-      </el-table-column> -->
-      <!--  <el-table-column label="审核参数序号" prop="id" sortable="custom" align="center" :class-name="getSortClass('id')">
-        <template slot-scope="{row}">
-          <span>{{ row.judgeCheckId }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="审核参数类别" align="center">
-        <template slot-scope="{row}">
-          <span v-if="row.judgeCheckType!=null">{{ row.judgeCheckType.judgeCheckTypeName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="工序" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.operation.operationName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="产品" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.products.productName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="设备" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.machine.machineName }}</span>
-        </template>
-      </el-table-column>
-      -->
+          </div>
+
+        </el-table-column>
+
+      </div>
 
       <el-table-column label="启用状态" align="center">
         <template slot-scope="{row}">
@@ -174,6 +123,15 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
+    <ul>
+      <li v-for="item in details" :key="item">
+        <div v-for="s in item" :key="s">
+          {{ s.name }}++{{ s.value }}
+        </div>
+
+      </li>
+    </ul>
+
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="50%">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="125px" style="width: 800px; margin-left:50px;">
         <el-row>
@@ -209,7 +167,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item v-for="(item,index) in judgeCheckTypeOption" :key="item.value" :label="item.label">
-              <el-input v-model="temp.judgeCheckType[index]" type="text" placeholder="请输入参数值" />
+              <el-input v-model="temp.values[index]" type="text" placeholder="请输入参数值" />
             </el-form-item>
           </el-col>
         </el-row></el-form>
@@ -289,17 +247,11 @@ export default {
       statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
       temp: {
-
         operationName: '',
         productName: '',
         machineName: '',
-        judgeCheckType: [{
-          name: '',
-          value: ''
-        }],
+        values: [],
         useFlag: true,
-        startDate: new Date(),
-        endDate: '',
         note: ''
       },
       deleteTemp: {
@@ -339,13 +291,18 @@ export default {
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
-        this.names = this.list[0].names
-        this.details = this.list[0].details
+        for (let index = 0; index < this.list.length; index++) {
+          this.details[index] = this.list[index].details
+        }
+        console.log(this.details)
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
         }, 1 * 1000)
       })
+    },
+    getDetails(row) {
+      console.log('row', row)
     },
     // 立即刷新数据列表
     refreshList() {
@@ -413,13 +370,11 @@ export default {
     // 重置temp实体类变量属性
     resetTemp() {
       this.temp = {
-        operationId: '',
-        productId: '',
-        machineId: '',
-        judgeCheckType: [],
+        operationName: '',
+        productName: '',
+        machineName: '',
+        values: [],
         useFlag: true,
-        startDate: new Date(),
-        endDate: '',
         note: ''
       }
     },
@@ -458,13 +413,9 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         // date格式化
-        this.temp.startDate = parseTime(this.temp.startDate)
-        if (this.temp.endDate !== '') {
-          this.temp.endDate = parseTime(this.temp.endDate)
-        }
-
         if (valid) {
           // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
+          console.log(this.temp)
           createAuditParameter(this.temp).then(() => {
             this.refreshList()
             // this.list.unshift(this.temp)
