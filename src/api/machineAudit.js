@@ -32,7 +32,7 @@ export function saveCanAudit(data) {
   return request({
     url: '/machine/canAudit/save',
     method: 'post',
-    params: { data }
+    data
     // baseURL: "http://127.0.0.1:8088"
   })
 }
@@ -42,7 +42,7 @@ export function saveAlreadyAudit(data) {
   return request({
     url: '/machine/alreadyAudit/save',
     method: 'post',
-    params: { data }
+    data
     // baseURL: "http://127.0.0.1:8088"
   })
 }
@@ -52,7 +52,7 @@ export function saveNotAudit(data) {
   return request({
     url: '/machine/notAudit/save',
     method: 'post',
-    params: { data }
+    data
     // baseURL: "http://127.0.0.1:8088"
   })
 }
@@ -62,7 +62,7 @@ export function returnNotAudit(data) {
   return request({
     url: '/machine/notAudit/return',
     method: 'post',
-    params: { data }
+    data
     // baseURL: "http://127.0.0.1:8088"
   })
 }

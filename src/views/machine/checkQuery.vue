@@ -9,9 +9,23 @@
         class="filter-item"
         @keyup.enter.native="handleFilter"
       />
+      工序：
+      <el-select
+        v-model="listQuery.operationId"
+        filterable
+        placeholder="请搜索或者选择"
+      >
+        <el-option
+          v-for="item in operationOption"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+          @keyup.enter.native="handleFilter"
+        />
+      </el-select>
       产品：
       <el-select
-        v-model="listQuery.productName"
+        v-model="listQuery.productId"
         filterable
         placeholder="请搜索或者选择"
       >
@@ -24,24 +38,9 @@
         />
       </el-select>
 
-      工序：
-      <el-select
-        v-model="listQuery.operationName"
-        filterable
-        placeholder="请搜索或者选择"
-      >
-        <el-option
-          v-for="item in operationOption"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-          @keyup.enter.native="handleFilter"
-        />
-      </el-select>
-
       设备：
       <el-select
-        v-model="listQuery.machineName"
+        v-model="listQuery.machineId"
         filterable
         placeholder="请搜索或者选择"
       >
@@ -56,7 +55,7 @@
 
       机台：
       <el-select
-        v-model="listQuery.workUnitName"
+        v-model="listQuery.workUnitId"
         filterable
         placeholder="请搜索或者选择"
       >
@@ -64,7 +63,7 @@
           v-for="item in dicWorkUnitOption"
           :key="item.value"
           :label="item.label"
-          :value="item.label"
+          :value="item.value"
           @keyup.enter.native="handleFilter"
         />
       </el-select>
@@ -112,7 +111,7 @@
       @sort-change="sortChange"
     >
       <el-table-column
-        label="生产日志id"
+        label="生产日志序号"
         prop="id"
         sortable="custom"
         align="center"
@@ -131,14 +130,6 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="产品名称"
-        align="center"
-      >
-        <template slot-scope="{row}">
-          <span>{{ row.productName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
         label="工序名称"
         align="center"
       >
@@ -146,6 +137,15 @@
           <span>{{ row.operationName }}</span>
         </template>
       </el-table-column>
+      <el-table-column
+        label="产品名称"
+        align="center"
+      >
+        <template slot-scope="{row}">
+          <span>{{ row.productName }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column
         label="设备名称"
         align="center"
@@ -162,15 +162,45 @@
           <span>{{ row.workUnitName }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="总数" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.infoNumber }}</span>
+        </template>
+      </el-table-column>
       <el-table-column
+        label="检测报错条数"
+        align="center"
+      >
+        <template slot-scope="{row}">
+          <span>{{ row.machineWasterNumber }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="未检条数"
+        align="center"
+      >
+        <template slot-scope="{row}">
+          <span>{{ row.nocheckNumber }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="判费数量"
+        align="center"
+      >
+        <template slot-scope="{row}">
+          <span>{{ row.judgeWasterNumber }}</span>
+        </template>
+      </el-table-column>
+
+      <!-- <el-table-column
         label="信息数量"
         align="center"
       >
         <template slot-scope="{row}">
           <span>{{ row.qainfonum }}</span>
         </template>
-      </el-table-column>
-      <el-table-column
+      </el-table-column> -->
+      <!--  <el-table-column
         label="报错数量"
         align="center"
       >
@@ -185,24 +215,8 @@
         <template slot-scope="{row}">
           <span>{{ row.sminfonum }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
-      <el-table-column
-        label="整万错误数量"
-        align="center"
-      >
-        <template slot-scope="{row}">
-          <span>{{ row.machineWasterNumber }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="整万信息数量"
-        align="center"
-      >
-        <template slot-scope="{row}">
-          <span>{{ row.infoNumber }}</span>
-        </template>
-      </el-table-column>
       <el-table-column
         label="人员名称"
         align="center"
@@ -260,10 +274,11 @@
 <script>
 
 // import { fetchList, fetchPv, createMachine, updateMachine, updateUseFlag, deleteMachine } from '@/api/machine'
-import { fetchCheckQueryList, listOption } from '@/api/verifyLog'
+import { fetchCheckQueryList } from '@/api/verifyLog'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import { listOptionMachineQuery } from '@/api/querySelectOption'
 
 const machineTypeOptions = []
 
@@ -301,8 +316,8 @@ export default {
       list: null,
       total: 0,
       listLoading: true,
-      productOption: [],
       operationOption: [],
+      productOption: [],
       machineOption: [],
       dicWorkUnitOption: [],
       dateValue: '',
@@ -312,10 +327,10 @@ export default {
         // useFlag: undefined,
         // importance: undefined,
         cartNumber: undefined,
-        productName: undefined,
-        operationName: undefined,
-        machineName: undefined,
-        workUnitName: undefined,
+        productId: undefined,
+        operationId: undefined,
+        machineId: undefined,
+        workUnitId: undefined,
         startDate: Date,
         endDate: Date,
         sort: '+id'
@@ -394,7 +409,7 @@ export default {
       })
     },
     getSelectOption() {
-      listOption().then(response => {
+      listOptionMachineQuery().then(response => {
         this.productOption = response.productOption
         this.machineOption = response.machineOption
         this.operationOption = response.operationOption
@@ -438,28 +453,21 @@ export default {
       }
     },
     resetListQuery() {
-      // this.listQuery = {
-      //   page: 1,
-      //   limit: 10,
-      //   // useFlag: undefined,
-      //   // importance: undefined,
-      //   title: undefined,
-      //   sort: '+id'
-      // }
       this.listQuery = {
         page: 1,
         limit: 10,
         // useFlag: undefined,
         // importance: undefined,
         cartNumber: undefined,
-        productName: undefined,
-        operationName: undefined,
-        machineName: undefined,
-        workUnitName: undefined,
+        productId: undefined,
+        operationId: undefined,
+        machineId: undefined,
+        workUnitId: undefined,
         startDate: Date,
         endDate: Date,
         sort: '+id'
       }
+      this.dateValue = ''
     },
     handleFilter() {
       this.listLoading = true

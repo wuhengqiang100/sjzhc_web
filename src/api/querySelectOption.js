@@ -37,3 +37,10 @@ export function listOptionProduceLog() {
   })
 }
 
+export function listOptionMachineQuery() {
+  return request({
+    url: '/option/machineQuery',
+    method: 'post'
+  })
+}
+

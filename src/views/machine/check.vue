@@ -8,12 +8,19 @@
           <el-card class="box-card" style="height:800px;overflow-y: scroll;">
             <el-table ref="multipleCanAudiTable" fit highlight-current-row :data="canAuditTable" tooltip-effect="dark" style="width: 100%" @selection-change="handleCanAuditSelectionChange">
               <el-table-column type="selection" width="40" />
-              <el-table-column prop="name" label="车号" width="80" />
-              <el-table-column prop="name" label="品种" width="80" />
-              <el-table-column prop="name" label="工艺" width="80" />
-              <el-table-column prop="name" label="总数" width="80" />
-              <el-table-column prop="name" label="缺陷数" width="80" />
-              <el-table-column prop="name" label="未检数" width="80" />
+              <el-table-column prop="wipJobs.cartNumber" label="车号" width="80" />
+              <el-table-column prop="product.productName" label="品种" width="80" />
+              <el-table-column prop="operation.operationName" label="工艺" width="80" />
+              <el-table-column prop="infoNumber" label="检测张数" width="80" />
+              <el-table-column prop="machineWasterNumber" label="机检报错条数" width="120" />
+              <el-table-column prop="noCheckNum" label="未检数" width="80" />
+              <el-table-column prop="judgeWasterNumber" label="判费条数" width="80" />
+              <!-- <el-table-column prop="allowJudge" label="状态" width="80" /> -->
+              <el-table-column label="状态" width="80">
+                <template>
+                  <el-tag effect="dark"> 待审核   </el-tag>
+                </template>
+              </el-table-column>
             </el-table>
           </el-card>
           <div style="margin-top: 20px">
@@ -52,13 +59,21 @@
             <el-card class="box-card" style="height:400px;overflow-y: scroll;">
               <el-table ref="multipleAlreadyAuditTable" fit highlight-current-row :data="alreadyAuditTable" tooltip-effect="dark" style="width: 100%" @selection-change="handleAlreadyAuditSelectionChange">
                 <el-table-column type="selection" width="40" />
-                <el-table-column prop="name" label="车号" width="80" />
-                <el-table-column prop="name" label="品种" width="80" />
-                <el-table-column prop="name" label="工艺" width="80" />
-                <el-table-column prop="name" label="总数" width="80" />
-                <el-table-column prop="name" label="缺陷数" width="80" />
-                <el-table-column prop="name" label="未检数" width="80" />
-                <el-table-column prop="name" label="状态" width="80" />
+                <el-table-column prop="wipJobs.cartNumber" label="车号" width="80" />
+                <el-table-column prop="product.productName" label="品种" width="80" />
+                <el-table-column prop="operation.operationName" label="工艺" width="80" />
+                <el-table-column prop="infoNumber" label="检测张数" width="80" />
+                <el-table-column prop="machineWasterNumber" label="机检报错条数" width="120" />
+                <el-table-column prop="noCheckNum" label="未检数" width="80" />
+                <el-table-column prop="judgeWasterNumber" label="判费条数" width="80" />
+                <!-- <el-table-column prop="allowJudge" label="状态" width="80" /> -->
+                <el-table-column label="状态" width="80">
+                  <template slot-scope="scope">
+                    <el-tag v-if="scope.row.allowJudge===1" effect="dark" type="success">已审核</el-tag>
+                    <el-tag v-else effect="dark" type="info">已分活</el-tag>
+
+                  </template>
+                </el-table-column>
               </el-table>
             </el-card>
           </el-row>
@@ -66,13 +81,19 @@
             <el-card class="box-card" style="height:400px;overflow-y: scroll;">
               <el-table ref="multipleNotAudiTable" fit highlight-current-row :data="notAuditTable" tooltip-effect="dark" style="width: 100%" @selection-change="handleReturnNotAuditSelectionChange">
                 <el-table-column type="selection" width="40" />
-                <el-table-column prop="name" label="车号" width="80" />
-                <el-table-column prop="name" label="品种" width="80" />
-                <el-table-column prop="name" label="工艺" width="80" />
-                <el-table-column prop="name" label="总数" width="80" />
-                <el-table-column prop="name" label="缺陷数" width="80" />
-                <el-table-column prop="name" label="未检数" width="80" />
-                <el-table-column prop="name" label="状态" width="80" />
+                <el-table-column prop="wipJobs.cartNumber" label="车号" width="80" />
+                <el-table-column prop="product.productName" label="品种" width="80" />
+                <el-table-column prop="operation.operationName" label="工艺" width="80" />
+                <el-table-column prop="infoNumber" label="检测张数" width="80" />
+                <el-table-column prop="machineWasterNumber" label="机检报错条数" width="120" />
+                <el-table-column prop="noCheckNum" label="未检数" width="80" />
+                <el-table-column prop="judgeWasterNumber" label="判费条数" width="80" />
+                <!-- <el-table-column prop="allowJudge" label="状态" width="80" /> -->
+                <el-table-column label="状态" width="80">
+                  <template>
+                    <el-tag effect="dark" type="danger">全检</el-tag>
+                  </template>
+                </el-table-column>
               </el-table>
             </el-card>
           </el-row>
@@ -159,10 +180,13 @@ export default {
       this.multipleCanAuditTableSelection = val
     },
     handleAudit() {
-      this.multipleCanAuditTableSelection.forEach(function(value, index) {
+      /* this.multipleCanAuditTableSelection.forEach(function(value, index) {
+        console.log(value.inspectmId)
         this.canAuditData.push(value.inspectmId)
-      })
-      console.log(this.canAuditData)
+      }) */
+      for (let index = 0; index < this.multipleCanAuditTableSelection.length; index++) {
+        this.canAuditData[index] = this.multipleCanAuditTableSelection[index].inspectmId
+      }
       saveCanAudit(this.canAuditData).then(response => {
         this.canAuditData = []
         this.multipleCanAuditTableSelection = []
@@ -177,10 +201,9 @@ export default {
       })
     },
     handleNotAudit() {
-      this.multipleCanAuditTableSelection.forEach(function(value, index) {
-        this.canAuditData.push(value.inspectmId)
-      })
-      console.log(this.canAuditData)
+      for (let index = 0; index < this.multipleCanAuditTableSelection.length; index++) {
+        this.canAuditData[index] = this.multipleCanAuditTableSelection[index].inspectmId
+      }
       saveNotAudit(this.canAuditData).then(response => {
         this.canAuditData = []
         this.multipleCanAuditTableSelection = []
@@ -200,10 +223,24 @@ export default {
       console.log(this.multipleAlreadyAuditTableSelection)
     },
     handleReturn() {
-      this.multipleAlreadyAuditTableSelection.forEach(function(value, index) {
-        this.alreadyAuditData.push(value.inspectmId)
-      })
-      console.log(this.alreadyAuditData)
+      let noAllowReturn = 0
+      for (let index = 0; index < this.multipleAlreadyAuditTableSelection.length; index++) {
+        if (this.multipleAlreadyAuditTableSelection[index].disabled) {
+          noAllowReturn += 1
+        }
+
+        this.alreadyAuditData[index] = this.multipleAlreadyAuditTableSelection[index].inspectmId
+      }
+      console.log(noAllowReturn)
+      if (noAllowReturn > 0) {
+        this.$notify({
+          title: '注意',
+          message: '已分活的车次不能回退',
+          type: 'info',
+          duration: 2000
+        })
+        return
+      }
       saveAlreadyAudit(this.alreadyAuditData).then(response => {
         this.alreadyAuditData = []
         this.multipleAlreadyAuditTableSelection = []
@@ -223,11 +260,11 @@ export default {
       this.multipleNotAuditTableSelection = val
       console.log(this.multipleNotAuditTableSelection)
     },
+
     handleReturnAbandon() {
-      this.multipleNotAuditTableSelection.forEach(function(value, index) {
-        this.notAuditData.push(value.inspectmId)
-      })
-      console.log(this.notAuditData)
+      for (let index = 0; index < this.multipleNotAuditTableSelection.length; index++) {
+        this.notAuditData[index] = this.multipleNotAuditTableSelection[index].inspectmId
+      }
       returnNotAudit(this.notAuditData).then(response => {
         this.notAuditData = []
         this.multipleNotAuditTableSelection = []
