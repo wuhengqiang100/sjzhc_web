@@ -12,6 +12,13 @@ export function listOptionAuditParameter() {
     method: 'post'
   })
 }
+export function listOptionAuditParameterByIds(data) {
+  return request({
+    url: '/option/auditParameterByIds',
+    method: 'post',
+    data
+  })
+}
 export function listOptionOperator() {
   return request({
     url: '/option/operator',

@@ -114,7 +114,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="判费类型"
+        label="判废类型"
         align="center"
       >
         <template slot-scope="{row}">

@@ -30,7 +30,7 @@
               <el-table-column prop="infoNumber" label="检测张数" width="80" />
               <el-table-column prop="machineWasterNumber" label="机检数量" width="80" />
               <el-table-column prop="noCheckNum" label="未检数" width="70" />
-              <el-table-column prop="judgeWasterNumber" label="判费数" width="70" />
+              <el-table-column prop="judgeWasterNumber" label="判废数" width="70" />
               <el-table-column prop="lastUpdateTime" label="日期" width="140" />
               <!-- <el-table-column prop="allowJudge" label="状态" width="80" /> -->
               <el-table-column label="状态" width="80">
@@ -103,7 +103,7 @@
                 <el-table-column prop="infoNumber" label="检测张数" width="80" />
                 <el-table-column prop="machineWasterNumber" label="机检数量" width="80" />
                 <el-table-column prop="noCheckNum" label="未检数" width="70" />
-                <el-table-column prop="judgeWasterNumber" label="判费数" width="70" />
+                <el-table-column prop="judgeWasterNumber" label="判废数" width="70" />
                 <el-table-column prop="lastUpdateTime" label="日期" width="140" />
                 <el-table-column label="状态" width="80">
                   <template slot-scope="scope">
@@ -141,7 +141,7 @@
                 <el-table-column prop="infoNumber" label="检测张数" width="80" />
                 <el-table-column prop="machineWasterNumber" label="机检数量" width="80" />
                 <el-table-column prop="noCheckNum" label="未检数" width="70" />
-                <el-table-column prop="judgeWasterNumber" label="判费数" width="70" />
+                <el-table-column prop="judgeWasterNumber" label="判废数" width="70" />
                 <el-table-column prop="lastUpdateTime" label="日期" width="140" />
                 <el-table-column label="状态" width="80">
                   <template>

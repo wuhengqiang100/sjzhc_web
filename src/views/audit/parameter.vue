@@ -62,16 +62,19 @@
           <span>{{ row.machineName }}</span>
         </template>
       </el-table-column>
-
-      <el-table-column v-for="(item,index) in details" :key="index" label="总数" align="center">
-        <template :row-key="getDetails">
-          <span>{{ item.name }}</span>
+      <el-table-column label="审核参数" align="center" min-width="200px">
+        <template slot-scope="{row}">
+          <span>{{ row.values }}</span>
         </template>
       </el-table-column>
+      <!--
+      <el-table-column v-for="(item,index) in details" :key="index" label="item[0].name" align="center">
+        <template slot-scope="{row}">
+          <span>{{ item[0].value }}</span>
+        </template>
+      </el-table-column> -->
       <!-- 自定义列的遍历-->
-      <div v-for="item in details" :key="item">
-        <el-table-column :label="item[0].name">
-          <!-- 数据的遍历  scope.row就代表数据的每一个对象-->
+      <!--  <div v-for="item in details" :key="item">
           <div v-for="s in item" :key="s">
             <template>
               <span>{{ s.value }}</span>
@@ -81,7 +84,7 @@
 
         </el-table-column>
 
-      </div>
+      </div> -->
 
       <el-table-column label="启用状态" align="center">
         <template slot-scope="{row}">
@@ -170,7 +173,13 @@
               <el-input v-model="temp.values[index]" type="text" placeholder="请输入参数值" />
             </el-form-item>
           </el-col>
-        </el-row></el-form>
+          <!--  <el-col :span="12">
+            <el-form-item v-for="(item,index) in judgeCheckTypeOption" :key="item.value" :label="item.label">
+              <el-input v-model="temp.valueData[index]" type="text" placeholder="请输入参数值" />
+            </el-form-item>
+          </el-col> -->
+        </el-row>
+      </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
           返回
@@ -186,7 +195,7 @@
 <script>
 
 import { fetchList, createAuditParameter, updateAuditParameter, updateUseFlag, deleteAuditParameter } from '@/api/auditParameter'
-import { listOptionAuditParameter } from '@/api/querySelectOption'
+import { listOptionAuditParameter, listOptionAuditParameterByIds } from '@/api/querySelectOption'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -226,7 +235,6 @@ export default {
       tableKey: 0,
       list: null,
       details: [],
-      names: '',
       total: 0,
       listLoading: true,
       listQuery: {
@@ -247,17 +255,17 @@ export default {
       statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
       temp: {
-        operationName: '',
-        productName: '',
-        machineName: '',
+        operationId: '',
+        productId: '',
+        machineId: '',
         values: [],
         useFlag: true,
         note: ''
       },
-      deleteTemp: {
-        operationName: '',
-        productName: '',
-        machineName: ''
+      TempUpdataOrDelete: {
+        operationId: '',
+        productId: '',
+        machineId: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -291,10 +299,6 @@ export default {
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
-        for (let index = 0; index < this.list.length; index++) {
-          this.details[index] = this.list[index].details
-        }
-        console.log(this.details)
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
@@ -308,7 +312,6 @@ export default {
     refreshList() {
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
-
         this.total = response.data.total
       })
     },
@@ -332,6 +335,19 @@ export default {
         this.productOption = response.productOption
         this.machineOption = response.machineOption
       })
+    },
+    getAuditParameterTypesByIds(data) {
+      listOptionAuditParameterByIds(data).then(response => {
+        this.judgeCheckTypeOption = response.judgeCheckTypeOption
+        this.operationOption = response.operationOption
+        this.productOption = response.productOption
+        this.machineOption = response.machineOption
+        for (let index = 0; index < this.judgeCheckTypeOption.length; index++) {
+          this.temp.values[index] = this.judgeCheckTypeOption[index].valueData
+        }
+        return true
+      })
+      return true
     },
     // 审核参数禁用启用操作
     handleModifyUseFlag(row, useFlag) {
@@ -370,19 +386,19 @@ export default {
     // 重置temp实体类变量属性
     resetTemp() {
       this.temp = {
-        operationName: '',
-        productName: '',
-        machineName: '',
+        operationId: '',
+        productId: '',
+        machineId: '',
         values: [],
         useFlag: true,
         note: ''
       }
     },
     resetDeleteTemp() {
-      this.deleteTemp = {
-        operationName: '',
-        productName: '',
-        machineName: ''
+      this.TempUpdataOrDelete = {
+        operationId: '',
+        productId: '',
+        machineId: ''
       }
     },
     resetListQuery() {
@@ -414,8 +430,6 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         // date格式化
         if (valid) {
-          // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          console.log(this.temp)
           createAuditParameter(this.temp).then(() => {
             this.refreshList()
             // this.list.unshift(this.temp)
@@ -434,13 +448,18 @@ export default {
     handleUpdate(row) {
       this.resetTemp()
 
-      this.temp = Object.assign({}, row) // copy obj
+      // this.temp = Object.assign({}, row) // copy obj
       // this.temp.timestamp = new Date(this.temp.timestamp)
 
-      this.getAuditParameterTypes()
       this.temp.operationId = row.operationId
       this.temp.productId = row.productId
       this.temp.machineId = row.machineId
+      // 获取参数的值
+      this.TempUpdataOrDelete.operationId = row.operationId
+      this.TempUpdataOrDelete.productId = row.productId
+      this.TempUpdataOrDelete.machineId = row.machineId
+      this.getAuditParameterTypesByIds(this.TempUpdataOrDelete)
+
       console.log(this.temp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
@@ -470,11 +489,11 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.deleteTemp.operationName = row.operationName
-        this.deleteTemp.productName = row.productName
-        this.deleteTemp.machineName = row.machineName
+        this.TempUpdataOrDelete.operationId = row.operationId
+        this.TempUpdataOrDelete.productId = row.productId
+        this.TempUpdataOrDelete.machineId = row.machineId
 
-        deleteAuditParameter(this.deleteTemp).then(() => {
+        deleteAuditParameter(this.TempUpdataOrDelete).then(() => {
           this.refreshList()
           this.$message({
             type: 'success',
