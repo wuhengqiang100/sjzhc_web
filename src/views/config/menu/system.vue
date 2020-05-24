@@ -1,6 +1,5 @@
 <template>
   <div class="app-container">
-    11111111
     <div class="filter-container">
       <el-input
         v-model="listQuery.title"
@@ -77,24 +76,24 @@
           <span>{{ row.functionId }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="权限编码" min-width="100px" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.functionCode }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="权限名称" min-width="100px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.title }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="权限name" min-width="100px" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.name }}</span>
-        </template>
-      </el-table-column>
       <el-table-column
         label="启用状态"
         align="center"
       >
         <template slot-scope="{ row }">
           <el-tag
-            v-if="row.hidden"
+            v-if="row.useFlag"
             type="success"
           >
             启用
@@ -112,7 +111,7 @@
         label="操作"
         fixed="right"
         align="center"
-        min-width="218px"
+        min-width="230px"
         class-name="small-padding fixed-width"
       >
         <template slot-scope="{ row }">
@@ -124,7 +123,7 @@
             修改
           </el-button>
           <el-button
-            v-if="row.hidden"
+            v-if="row.useFlag"
             size="mini"
             type="warning"
             @click="handleModifyUseFlag(row, false)"
@@ -200,10 +199,10 @@
  -->
         <el-form-item
           label="启用状态"
-          prop="hidden"
+          prop="useFlag"
         >
           <el-switch
-            v-model="temp.hidden"
+            v-model="temp.useFlag"
             active-color="#13ce66"
             inactive-color="#ff4949"
           />
@@ -280,7 +279,7 @@ const calendarTypeKeyValue = machineTypeOptions.reduce((acc, cur) => {
 }, {})
 
 export default {
-  name: 'CompanyTable',
+  name: 'SystemTable',
   components: { Pagination },
   directives: { waves },
   filters: {
@@ -323,7 +322,7 @@ export default {
         functionCode: '',
         name: '',
         title: '',
-        hidden: true
+        useFlag: true
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -392,7 +391,7 @@ export default {
     },
     // 操作权限禁用启用操作
     handleModifyUseFlag(row, useFlag) {
-      updateUseFlag(row.functonId).then(response => {
+      updateUseFlag(row.functionId).then(response => {
         this.$message({
           message: response.message,
           type: 'success'
@@ -431,7 +430,7 @@ export default {
         functionCode: '',
         name: '',
         title: '',
-        hidden: true
+        useFlag: true
       }
     },
     resetListQuery() {
@@ -513,7 +512,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          deleteCmenu(row.functonId).then(() => {
+          deleteCmenu(row.functionId).then(() => {
             this.refreshList()
             this.$message({
               type: 'success',
@@ -528,32 +527,7 @@ export default {
           })
         })
     },
-    /*     handleFetchPv(pv) {
-      fetchPv(pv).then(response => {
-        this.pvData = response.data.pvData
-        this.dialogPvVisible = true
-      })
-    }, */
-    handleDownload() {
-      this.downloadLoading = true
-      import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-        const filterVal = [
-          'timestamp',
-          'title',
-          'type',
-          'importance',
-          'status'
-        ]
-        const data = this.formatJson(filterVal, this.list)
-        excel.export_json_to_excel({
-          header: tHeader,
-          data,
-          filename: 'table-list'
-        })
-        this.downloadLoading = false
-      })
-    },
+
     formatJson(filterVal, jsonData) {
       return jsonData.map(v =>
         filterVal.map(j => {
@@ -577,8 +551,3 @@ export default {
 }
 </script>
 
-<style scoped>
-.el-dialog .el-form .el-form-item .el-input {
-  width: 300px;
-}
-</style>

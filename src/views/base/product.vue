@@ -140,7 +140,7 @@
             <el-form-item label="产品编号" prop="productCode">
               <el-input v-model="temp.productCode" type="text" placeholder="请输入产品编码" />
             </el-form-item>
-            <el-form-item label="MES产品编号" prop="productCode">
+            <el-form-item label="MES产品编号" prop="productCodeMes">
               <el-input v-model="temp.productCodeMes" type="text" placeholder="请输入MES产品编号" />
             </el-form-item>
             <el-form-item label="产品名称" prop="productName">
@@ -299,8 +299,8 @@ export default {
       rules: {
         // type: [{ required: true, message: 'type is required', trigger: 'change' }],
         // timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        productCode: [{ required: true, message: '请填写产品code', trigger: 'blur' }],
-        productName: [{ required: true, message: '请填写产品name', trigger: 'blur' }],
+        productCode: [{ required: true, message: '请填写产品编码', trigger: 'blur' }],
+        productName: [{ required: true, message: '请填写产品名称', trigger: 'blur' }],
         rowNumber: [{ required: true, message: '请填写印刷行数', trigger: 'blur' }],
         colNumber: [{ required: true, message: '请填写印刷列数', trigger: 'blur' }],
         convertSheetNumber: [{ required: true, message: '请填写开数', trigger: 'blur' }],
