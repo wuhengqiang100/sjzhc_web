@@ -207,6 +207,8 @@
       >
         <template slot-scope="{row}">
           <span>{{ row.itemFlag }}</span>
+          <el-tag v-if="row.itemFlag===2" effect="dark">判废</el-tag>
+          <el-tag v-else-if="row.itemFlag===3" effect="dark" type="success">审核费</el-tag>
         </template>
       </el-table-column>
 

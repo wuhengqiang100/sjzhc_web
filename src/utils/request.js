@@ -22,7 +22,7 @@ service.interceptors.request.use(
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
       // config.headers['X-Token'] = getToken()
-      config.headers['Authorization'] = getToken()
+      config.headers['token'] = getToken()
     }
     return config
   },
@@ -64,9 +64,9 @@ service.interceptors.response.use(
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
       if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
         // to re-login
-        MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
-          confirmButtonText: 'Re-Login',
-          cancelButtonText: 'Cancel',
+        MessageBox.confirm('您已经登出，您可以取消以停留在此页面，或再次登录', '确认注销', {
+          confirmButtonText: '重新登录',
+          cancelButtonText: '返回',
           type: 'warning'
         }).then(() => {
           store.dispatch('user/resetToken').then(() => {

@@ -106,7 +106,7 @@
 
 <script>
 
-import { fetchMachineList } from '@/api/verifyLog'
+import { fetchSytemList } from '@/api/verifyLog'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -207,7 +207,7 @@ export default {
         this.listQuery.startDate = parseTime(this.dateValue[0])
         this.listQuery.endDate = parseTime(this.dateValue[1])
       }
-      fetchMachineList(this.listQuery).then(response => {
+      fetchSytemList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
 
@@ -230,7 +230,7 @@ export default {
         this.listQuery.startDate = parseTime(this.dateValue[0])
         this.listQuery.endDate = parseTime(this.dateValue[1])
       }
-      fetchMachineList(this.listQuery).then(response => {
+      fetchSytemList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
       })
@@ -282,7 +282,7 @@ export default {
         this.listQuery.startDate = parseTime(this.dateValue[0])
         this.listQuery.endDate = parseTime(this.dateValue[1])
       }
-      fetchMachineList(this.listQuery).then(response => {
+      fetchSytemList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
 
