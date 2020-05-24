@@ -226,6 +226,14 @@
         </template>
       </el-table-column>
       <el-table-column
+        label="说明"
+        align="center"
+      >
+        <template slot-scope="{row}">
+          <span>{{ row.note }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
         label="开始时间"
         align="center"
       >

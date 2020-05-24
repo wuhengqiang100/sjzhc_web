@@ -140,17 +140,24 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="工序" prop="operationId">
-              <el-select v-model="temp.operationId" filterable placeholder="请搜索或者选择">
+              <el-select v-if="dialogStatus==='update'" v-model="temp.operationId" filterable placeholder="请搜索或者选择" disabled>
+                <el-option v-for="item in operationOption" :key="item.value" :label="item.label" :value="item.value" />
+                <el-option v-for="item in operationOption" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
+              <el-select v-else v-model="temp.operationId" filterable placeholder="请搜索或者选择">
                 <el-option v-for="item in operationOption" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
             <el-form-item label="产品" prop="productId">
-              <el-select v-model="temp.productId" filterable placeholder="请搜索或者选择">
+              <el-select v-if="dialogStatus==='update'" v-model="temp.productId" filterable placeholder="请搜索或者选择" disabled>
+                <el-option v-for="item in productOption" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
+              <el-select v-else v-model="temp.productId" filterable placeholder="请搜索或者选择">
                 <el-option v-for="item in productOption" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
             <el-form-item label="设备" prop="machineId">
-              <el-select v-model="temp.machineId" filterable placeholder="请搜索或者选择">
+              <el-select v-model="temp.machineId" filterable placeholder="请搜索或者选择" clearable>
                 <el-option v-for="item in machineOption" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
@@ -170,7 +177,8 @@
           </el-col>
           <el-col :span="12">
             <el-form-item v-for="(item,index) in judgeCheckTypeOption" :key="item.value" :label="item.label">
-              <el-input v-model="temp.values[index]" type="text" placeholder="请输入参数值" />
+              <!-- <el-input v-model="temp.values[index]" type="text" placeholder="请输入参数值" /> -->
+              <el-input-number v-model="temp.values[index]" :min="0" :max="20000" controls-position="right" style="width:240px" />
             </el-form-item>
           </el-col>
           <!--  <el-col :span="12">
@@ -258,7 +266,7 @@ export default {
         operationId: '',
         productId: '',
         machineId: '',
-        values: [],
+        values: [0, 0, 0],
         useFlag: true,
         note: ''
       },
@@ -278,9 +286,8 @@ export default {
       rules: {
         // type: [{ required: true, message: 'type is required', trigger: 'change' }],
         // timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        judgeCheckCode: [{ required: true, message: '请填写审核参数编号', trigger: 'blur' }],
-        judgeCheckName: [{ required: true, message: '请填写审核参数name', trigger: 'blur' }],
-        startDate: [{ type: 'date', required: true, message: '请填写开始时间', trigger: 'change' }]
+        operationId: [{ required: true, message: '请选择工序', trigger: 'blur' }],
+        productId: [{ required: true, message: '请选择产品', trigger: 'blur' }]
         // endDate: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }]
 
       },
@@ -389,7 +396,7 @@ export default {
         operationId: '',
         productId: '',
         machineId: '',
-        values: [],
+        values: [0, 0, 0],
         useFlag: true,
         note: ''
       }
@@ -451,15 +458,21 @@ export default {
       // this.temp = Object.assign({}, row) // copy obj
       // this.temp.timestamp = new Date(this.temp.timestamp)
 
-      this.temp.operationId = row.operationId
-      this.temp.productId = row.productId
-      this.temp.machineId = row.machineId
       // 获取参数的值
       this.TempUpdataOrDelete.operationId = row.operationId
       this.TempUpdataOrDelete.productId = row.productId
       this.TempUpdataOrDelete.machineId = row.machineId
+
       this.getAuditParameterTypesByIds(this.TempUpdataOrDelete)
 
+      this.temp.operationId = row.operationId
+      this.temp.productId = row.productId
+      if (row.machineId !== '') {
+        this.temp.machineId = row.machineId
+      }
+      // this.temp.values = row.values
+      // this.temp.useFlag = row.useFlag
+      // this.temp.note = row.note
       console.log(this.temp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true

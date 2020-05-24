@@ -133,7 +133,7 @@
         align="center"
       >
         <template slot-scope="{row}">
-          <span>{{ row.operation.operationName }}</span>
+          <span v-if="row.operation!==null">{{ row.operation.operationName }}</span>
         </template>
       </el-table-column>
       <el-table-column

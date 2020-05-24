@@ -51,3 +51,24 @@ export function listOptionMachineQuery() {
   })
 }
 
+export function listOptionReportMain() {
+  return request({
+    url: '/option/reportMain',
+    method: 'post'
+  })
+}
+
+export function listOptionReportNck() {
+  return request({
+    url: '/option/reportNck',
+    method: 'post'
+  })
+}
+
+export function listOptionReportQa() {
+  return request({
+    url: '/option/reportQa',
+    method: 'post'
+  })
+}
+
