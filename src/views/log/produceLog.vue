@@ -173,7 +173,7 @@
       </el-table-column>
       <el-table-column
         label="结束时间"
-        width="112"
+        width="200"
         align="center"
       >
         <template
@@ -206,9 +206,9 @@
         align="center"
       >
         <template slot-scope="{row}">
-          <span>{{ row.itemFlag }}</span>
-          <el-tag v-if="row.itemFlag===2" effect="dark">判废</el-tag>
-          <el-tag v-else-if="row.itemFlag===3" effect="dark" type="success">审核费</el-tag>
+          <!-- <span>{{ row.itemFlag }}</span> -->
+          <el-tag v-if="row.itemFlag===0" effect="dark">未完成</el-tag>
+          <el-tag v-else-if="row.itemFlag===1" effect="dark" type="success">完成</el-tag>
         </template>
       </el-table-column>
 
@@ -413,6 +413,11 @@ export default {
       if (this.dateValue !== '') {
         this.listQuery.startDate = parseTime(this.dateValue[0])
         this.listQuery.endDate = parseTime(this.dateValue[1])
+      } else {
+        this.$message({
+          message: '请选择时间',
+          type: 'success'
+        })
       }
       fetchProduceList(this.listQuery).then(response => {
         this.list = response.data.items

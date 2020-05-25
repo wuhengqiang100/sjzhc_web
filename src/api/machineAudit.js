@@ -59,7 +59,7 @@ export function saveNotAudit(data) {
 }
 
 // 回退全检数据
-export function returnNotAudit(data) {
+/* export function returnNotAudit(data) {
   return request({
     url: '/machine/notAudit/return',
     method: 'post',
@@ -67,4 +67,4 @@ export function returnNotAudit(data) {
     // baseURL: "http://127.0.0.1:8088"
   })
 }
-
+ */

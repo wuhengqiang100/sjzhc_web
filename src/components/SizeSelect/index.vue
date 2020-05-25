@@ -41,9 +41,9 @@ export default {
       return this.$store.getters.size
     }
   },
-  /*   created: function() {
-      this.handleSetSize('mini')
-    }, */
+  created: function() {
+    this.handleSetSize('mini')
+  },
   mounted: function() {
 
   },

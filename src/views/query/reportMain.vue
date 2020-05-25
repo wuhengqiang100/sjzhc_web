@@ -95,7 +95,7 @@
       </el-table-column>
       <el-table-column label="印码号控核查标志" align="center">
         <template slot-scope="{row}">
-          <el-tag v-if="row.ymhkCheckFlag===-2" effect="dark">没有</el-tag>
+          <el-tag v-if="row.ymhkCheckFlag===-2" effect="dark">没有数据</el-tag>
           <el-tag v-else-if="row.ymhkCheckFlag===-1" effect="dark" type="success">数据未处理完成</el-tag>
           <el-tag v-else-if="row.ymhkCheckFlag===0" effect="dark" type="info">未生成数据</el-tag>
           <el-tag v-else-if="row.ymhkCheckFlag===1" effect="dark" type="danger">已生成数据</el-tag>
@@ -104,7 +104,7 @@
       </el-table-column>
       <el-table-column label="印码票面核查标志" align="center">
         <template slot-scope="{row}">
-          <el-tag v-if="row.ympmCheckFlag===-2" effect="dark">没有</el-tag>
+          <el-tag v-if="row.ympmCheckFlag===-2" effect="dark">没有数据</el-tag>
           <el-tag v-else-if="row.ympmCheckFlag===-1" effect="dark" type="success">数据未处理完成</el-tag>
           <el-tag v-else-if="row.ympmCheckFlag===0" effect="dark" type="info">未生成数据</el-tag>
           <el-tag v-else-if="row.ympmCheckFlag===1" effect="dark" type="danger">已生成数据</el-tag>
@@ -114,7 +114,7 @@
       </el-table-column>
       <el-table-column label="印码涂布核查标志" align="center">
         <template slot-scope="{row}">
-          <el-tag v-if="row.ymtbCheckFlag===-2" effect="dark">没有</el-tag>
+          <el-tag v-if="row.ymtbCheckFlag===-2" effect="dark">没有数据</el-tag>
           <el-tag v-else-if="row.ymtbCheckFlag===-1" effect="dark" type="success">数据未处理完成</el-tag>
           <el-tag v-else-if="row.ymtbCheckFlag===0" effect="dark" type="info">未生成数据</el-tag>
           <el-tag v-else-if="row.ymtbCheckFlag===1" effect="dark" type="danger">已生成数据</el-tag>
@@ -124,7 +124,7 @@
       </el-table-column>
       <el-table-column label="丝印核查标志" align="center">
         <template slot-scope="{row}">
-          <el-tag v-if="row.syCheckFlag===-2" effect="dark">没有</el-tag>
+          <el-tag v-if="row.syCheckFlag===-2" effect="dark">没有数据</el-tag>
           <el-tag v-else-if="row.syCheckFlag===-1" effect="dark" type="success">数据未处理完成</el-tag>
           <el-tag v-else-if="row.syCheckFlag===0" effect="dark" type="info">未生成数据</el-tag>
           <el-tag v-else-if="row.syCheckFlag===1" effect="dark" type="danger">已生成数据</el-tag>
