@@ -235,7 +235,8 @@ export default {
       total: 0,
       listLoading: true,
       productOption: [],
-      dateValue: '',
+      dateValue: [],
+      defaultValue: [new Date() - 2, new Date()],
       listQuery: {
         page: 1,
         limit: 10,
@@ -260,6 +261,12 @@ export default {
     this.getSelectOption()// 获取查询的条件options
     this.getList()
   },
+  mounted: function() {
+    var myDate = new Date()
+    myDate.setDate(myDate.getDate() - 2)
+    this.dateValue = [myDate, new Date()]
+    // this.timeNow = myDate.toLocaleDateString()
+  },
   methods: {
     // 有加载圈的加载数据列表
     getList() {
@@ -279,6 +286,9 @@ export default {
       })
     },
     resetListQuery() {
+      var myDate = new Date()
+      myDate.setDate(myDate.getDate() - 2)
+      this.dateValue = [myDate, new Date()]
       this.listQuery = {
         page: 1,
         limit: 10,
@@ -291,7 +301,6 @@ export default {
         endDate: Date,
         sort: '+id'
       }
-      this.dateValue = ''
     },
     getSelectOption() {
       listOptionReportMain().then(response => {
@@ -300,6 +309,10 @@ export default {
     },
     // 立即刷新数据列表
     refreshList() {
+      if (this.dateValue !== '') {
+        this.listQuery.startDate = parseTime(this.dateValue[0])
+        this.listQuery.endDate = parseTime(this.dateValue[1])
+      }
       fetchReportMainList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total

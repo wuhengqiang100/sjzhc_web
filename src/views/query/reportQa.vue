@@ -1,6 +1,14 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
+      生产序号：
+      <el-input
+        v-model="listQuery.jobId"
+        placeholder="请输入生产序号"
+        style="width: 120px;"
+        class="filter-item"
+        @keyup.enter.native="handleFilter"
+      />
       大张号：
       <el-input
         v-model="listQuery.sheetNum"
@@ -132,7 +140,8 @@
       <el-table-column label="图像" align="center">
         <template slot-scope="{row}">
           <!-- <span>{{ row.imageBlob }}</span> -->
-          <image>{{ row.imageBlob }}</image>
+          <!-- <image :src=" row.file " /> -->
+          <img :src="row.filePath" style="width:50%;height:50%" @click="handleUpdate(row)">
         </template>
       </el-table-column>
       <el-table-column label="错误原因" align="center">
@@ -154,8 +163,20 @@
       :limit.sync="listQuery.limit"
       @pagination="getList"
     />
-
+    <el-dialog
+      title="缺陷原图"
+      :visible.sync="centerDialogVisible"
+      width="20%"
+      center
+    >
+      <img :src="filePath" @click="centerDialogVisible = false">
+      <!--  <span slot="footer" class="dialog-footer">
+        <el-button @click="centerDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+      </span> -->
+    </el-dialog>
   </div>
+
 </template>
 
 <script>
@@ -202,15 +223,18 @@ export default {
       tableKey: 0,
       list: null,
       total: 0,
-      listLoading: true,
+      listLoading: false,
       productOption: [],
       operationOption: [],
       dateValue: '',
+      centerDialogVisible: false,
+      filePath: '',
       listQuery: {
         page: 1,
         limit: 10,
         // useFlag: undefined,
         // importance: undefined,
+        jobId: undefined,
         sheetNum: undefined,
         codeNum: undefined,
         productId: undefined,
@@ -229,7 +253,7 @@ export default {
   // 初始化获取数据列表
   created() {
     this.getSelectOption()// 获取查询的条件options
-    this.getList()
+    // this.getList()
   },
   methods: {
     // 有加载圈的加载数据列表
@@ -249,12 +273,19 @@ export default {
         }, 1 * 1000)
       })
     },
+    handleUpdate(row) {
+      this.filePath = ''
+      this.temp = Object.assign({}, row) // copy obj
+      this.filePath = row.filePath
+      this.centerDialogVisible = true
+    },
     resetListQuery() {
       this.listQuery = {
         page: 1,
         limit: 10,
         // useFlag: undefined,
         // importance: undefined,
+        jobId: undefined,
         sheetNum: undefined,
         codeNum: undefined,
         productId: undefined,

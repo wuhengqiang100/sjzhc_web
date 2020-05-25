@@ -54,7 +54,7 @@
           <div style="margin-top: 20px">
             <!-- <el-button @click="toggleCanAuditSelection([canAuditTable[1], canAuditTable[2]])">切换第二、第三行的选中状态</el-button>
             <el-button @click="toggleCanAuditSelection()">取消选择</el-button> -->
-            手动刷新
+            <!-- 手动刷新 -->
             <el-button @click="refresh">刷新数据</el-button>
 
             自动刷新
@@ -142,7 +142,7 @@
                 <el-table-column prop="judgeWasterNumber" sortable label="判废" width="60" />
                 <el-table-column prop="note" label="说明" width="80" />
                 <!-- <el-table-column prop="lastUpdateTime" sortable label="日期" width="120" /> -->
-                <el-table-column prop="lastUpdateTime" sortable label="审核日期" width="120" />
+                <el-table-column prop="checkDate" sortable label="审核日期" width="120" />
                 <el-table-column label="状态" width="70">
                   <template slot-scope="scope">
                     <el-tag v-if="scope.row.allowJudge===1" effect="dark" type="success">已审核</el-tag>
@@ -329,6 +329,15 @@ export default {
 
     // 审核
     handleAudit() {
+      if (this.switchWalue) {
+        this.$notify({
+          title: 'Success',
+          message: '审核前请关闭自动刷新',
+          type: 'info',
+          duration: 2000
+        })
+        return false
+      }
       for (let index = 0; index < this.multipleCanAuditTableSelection.length; index++) {
         this.canAuditData[index] = this.multipleCanAuditTableSelection[index].inspectmId
         console.log('inspectid', this.multipleCanAuditTableSelection[index].inspectmId)
@@ -349,6 +358,15 @@ export default {
     },
     // 审核全检
     handleNotAudit() {
+      if (this.switchWalue) {
+        this.$notify({
+          title: 'Success',
+          message: '审核前请关闭自动刷新',
+          type: 'info',
+          duration: 2000
+        })
+        return false
+      }
       for (let index = 0; index < this.multipleCanAuditTableSelection.length; index++) {
         this.canAuditData[index] = this.multipleCanAuditTableSelection[index].inspectmId
       }
@@ -372,6 +390,15 @@ export default {
       this.multipleAlreadyAuditTableSelection = val
     },
     handleReturn() {
+      if (this.switchWalue) {
+        this.$notify({
+          title: 'Success',
+          message: '审核前请关闭自动刷新',
+          type: 'info',
+          duration: 2000
+        })
+        return false
+      }
       let noAllowReturn = 0
       for (let index = 0; index < this.multipleAlreadyAuditTableSelection.length; index++) {
         if (this.multipleAlreadyAuditTableSelection[index].disabled) {
@@ -410,8 +437,8 @@ export default {
     },
     handleAlreadyReset() {
       this.resetListQuery()
+      this.dateValue2 = ''
       this.getAlreadyAuditTable()
-      this.dateValue2 = null
     }, // 回退全检
     /*     handleReturnNotAuditSelectionChange(val) {
       this.multipleNotAuditTableSelection = val

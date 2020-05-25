@@ -1,6 +1,14 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
+      生产序号：
+      <el-input
+        v-model="listQuery.jobId"
+        placeholder="请输入生产序号"
+        style="width: 120px;"
+        class="filter-item"
+        @keyup.enter.native="handleFilter"
+      />
       大张号：
       <el-input
         v-model="listQuery.sheetNum"
@@ -176,7 +184,7 @@ export default {
       tableKey: 0,
       list: null,
       total: 0,
-      listLoading: true,
+      listLoading: false,
       productOption: [],
       operationOption: [],
       dateValue: '',
@@ -185,6 +193,7 @@ export default {
         limit: 10,
         // useFlag: undefined,
         // importance: undefined,
+        jobId: undefined,
         sheetNum: undefined,
         codeNum: undefined,
         productId: undefined,
@@ -203,7 +212,7 @@ export default {
   // 初始化获取数据列表
   created() {
     this.getSelectOption()// 获取查询的条件options
-    this.getList()
+    // this.getList()
   },
   methods: {
     // 有加载圈的加载数据列表
@@ -229,6 +238,7 @@ export default {
         limit: 10,
         // useFlag: undefined,
         // importance: undefined,
+        jobId: undefined,
         sheetNum: undefined,
         codeNum: undefined,
         productId: undefined,

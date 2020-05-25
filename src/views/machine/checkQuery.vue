@@ -192,31 +192,6 @@
         </template>
       </el-table-column>
 
-      <!-- <el-table-column
-        label="信息数量"
-        align="center"
-      >
-        <template slot-scope="{row}">
-          <span>{{ row.qainfonum }}</span>
-        </template>
-      </el-table-column> -->
-      <!--  <el-table-column
-        label="报错数量"
-        align="center"
-      >
-        <template slot-scope="{row}">
-          <span>{{ row.qawasternum }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="识码数量"
-        align="center"
-      >
-        <template slot-scope="{row}">
-          <span>{{ row.sminfonum }}</span>
-        </template>
-      </el-table-column> -->
-
       <el-table-column
         label="人员名称"
         align="center"
@@ -231,6 +206,25 @@
       >
         <template slot-scope="{row}">
           <span>{{ row.note }}</span>
+        </template>
+      </el-table-column>
+      <!-- //自动审核标志: 0 未设定 1 自动审核 2 人工审核 -->
+      <el-table-column label="审核标志" width="70">
+        <template slot-scope="{row}">
+          <el-tag v-if="row.autoCheckFlag===0" effect="dark" type="success">未设定</el-tag>
+          <el-tag v-else-if="row.autoCheckFlag===1" effect="dark" type="info">自动审核</el-tag>
+          <el-tag v-else-if="row.autoCheckFlag===2" effect="dark" type="warning">人工审核</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="审核时间"
+        align="center"
+      >
+        <template
+          v-if="row.checkDate !==null"
+          slot-scope="{row}"
+        >
+          <span>{{ row.checkDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
       <el-table-column
