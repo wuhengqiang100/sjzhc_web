@@ -34,15 +34,16 @@
             </div>
             <el-table ref="multipleCanAudiTable" stripe fit highlight-current-row :data="canAuditTable" tooltip-effect="dark" style="width: 100%" @selection-change="handleCanAuditSelectionChange">
               <el-table-column type="selection" width="25" />
-              <el-table-column prop="wipJobs.cartNumber" sortable label="车号" width="60" />
+              <el-table-column prop="wipJobs.cartNumber" sortable label="车号" width="55" />
               <el-table-column prop="product.productName" sortable label="品种" width="60" />
               <el-table-column prop="operation.operationName" sortable label="工艺" width="60" />
-              <el-table-column prop="infoNumber" sortable label="总数" width="60" />
+              <el-table-column prop="machine.machineName" sortable label="设备" width="80" />
+              <el-table-column prop="infoNumber" sortable label="总数" width="55" />
               <el-table-column prop="machineWasterNumber" sortable label="机检数" width="70" />
-              <el-table-column prop="noCheckNum" sortable label="未检" width="60" />
+              <el-table-column prop="noCheckNum" sortable label="未检" width="55" />
               <el-table-column prop="judgeWasterNumber" sortable label="判废" width="60" />
               <el-table-column prop="note" label="说明" min-width="80" />
-              <!-- <el-table-column prop="lastUpdateTime" sortable label="日期" width="120" /> -->
+              <el-table-column prop="lastUpdateTime" sortable label="生产日期" width="120" />
               <!-- <el-table-column prop="lastUpdateTime" sortable label="日期" width="120" /> -->
               <!--    <el-table-column label="状态" width="80">
                 <template>
@@ -104,44 +105,57 @@
                     @change="getAlreadyAuditTable"
                   />
                 </span> -->
-                <span style="float: right; padding: 3px 0">
-                  <el-date-picker
-                    v-model="dateValue2"
-                    type="datetimerange"
-                    align="right"
-                    start-placeholder="开始日期"
-                    end-placeholder="结束日期"
-                    :default-time="['00:00:01', '23:59:59']"
-                    value-format="yyyy-MM-dd HH:mm:ss"
-                    style="width:280px"
-                    @change="getAlreadyAuditTable"
-                  />
-                  <el-input v-model="listQuery.cartNumber" placeholder="请输入车号" style="width: 100px;" class="filter-item" @keyup.enter.native="getAlreadyAuditTable" />
-                  <el-select v-model="listQuery.allowJudge" clearable placeholder="选择状态" style="width: 100px;">
-                    <el-option label="未分活" value="1" />
-                    <el-option label="已分活" value="2" />
-                    <el-option label="全检" value="-1" />
-                  </el-select>
-                  <el-button v-waves size="mini" class="filter-item" type="primary" icon="el-icon-search" @click="getAlreadyAuditTable">
-                    搜索
-                  </el-button>
-                  <el-button size="mini" class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-refresh" @click="handleAlreadyReset">
-                    重置
-                  </el-button>
+                <span style="float: right; padding: 3px 0;width:auto">
+                  <el-row :gutter="20">
+                    <el-col :span="10">
+                      <el-date-picker
+                        v-model="dateValue2"
+                        type="datetimerange"
+                        align="right"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        :default-time="['00:00:01', '23:59:59']"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        style="width:280px"
+                        @change="getAlreadyAuditTable"
+                      />
+                    </el-col>
+                    <el-col :span="4">
+                      <el-input v-model="listQuery.cartNumber" placeholder="请输入车号" style="width: 100px;" class="filter-item" @keyup.enter.native="getAlreadyAuditTable" />
+
+                    </el-col>
+                    <el-col :span="4">
+                      <el-select v-model="listQuery.allowJudge" clearable placeholder="选择状态" style="width: 100px;">
+                        <el-option label="未分活" value="1" />
+                        <el-option label="已分活" value="2" />
+                        <el-option label="全检" value="-1" />
+                      </el-select>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-button v-waves size="mini" class="filter-item" type="primary" icon="el-icon-search" @click="getAlreadyAuditTable">
+                        搜索
+                      </el-button>
+                      <el-button size="mini" class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-refresh" @click="handleAlreadyReset">
+                        重置
+                      </el-button>
+                    </el-col>
+                  </el-row>
+
                 </span>
               </div>
 
               <el-table ref="multipleAlreadyAuditTable" stripe fit highlight-current-row :data="alreadyAuditTable" tooltip-effect="dark" style="width: 100%" @selection-change="handleAlreadyAuditSelectionChange">
                 <el-table-column type="selection" width="25" />
-                <el-table-column prop="wipJobs.cartNumber" sortable label="车号" width="60" />
+                <el-table-column prop="wipJobs.cartNumber" sortable label="车号" width="55" />
                 <el-table-column prop="product.productName" sortable label="品种" width="60" />
                 <el-table-column prop="operation.operationName" sortable label="工艺" width="60" />
+                <el-table-column prop="machine.machineName" sortable label="设备" width="80" />
                 <el-table-column prop="infoNumber" sortable label="总数" width="60" />
                 <el-table-column prop="machineWasterNumber" sortable label="机检数" width="70" />
                 <el-table-column prop="noCheckNum" sortable label="未检" width="60" />
                 <el-table-column prop="judgeWasterNumber" sortable label="判废" width="60" />
                 <el-table-column prop="note" label="说明" width="80" />
-                <!-- <el-table-column prop="lastUpdateTime" sortable label="日期" width="120" /> -->
+                <el-table-column prop="lastUpdateTime" sortable label="生产日期" width="120" />
                 <el-table-column prop="checkDate" sortable label="审核日期" width="120" />
                 <el-table-column label="状态" width="70">
                   <template slot-scope="scope">
@@ -282,6 +296,8 @@ export default {
     refresh() {
       this.getCanAuditTable()
       this.getAlreadyAuditTable()
+      this.multipleCanAuditTableSelection = []
+      this.multipleAlreadyAuditTableSelection = []
       // this.getNotAuditTable()
     },
 
@@ -324,19 +340,31 @@ export default {
 
     // 可以审核
     handleCanAuditSelectionChange(val) {
+      this.multipleCanAuditTableSelection = []
       this.multipleCanAuditTableSelection = val
+      if (this.switchWalue) {
+        this.multipleCanAuditTableSelection = []
+        this.$notify({
+          title: '提示',
+          message: '审核前请关闭自动刷新',
+          type: 'info',
+          duration: 2000
+        })
+        return
+      }
     },
 
     // 审核
     handleAudit() {
       if (this.switchWalue) {
+        this.multipleCanAuditTableSelection = []
         this.$notify({
-          title: 'Success',
+          title: '提示',
           message: '审核前请关闭自动刷新',
           type: 'info',
           duration: 2000
         })
-        return false
+        return
       }
       for (let index = 0; index < this.multipleCanAuditTableSelection.length; index++) {
         this.canAuditData[index] = this.multipleCanAuditTableSelection[index].inspectmId
@@ -359,13 +387,14 @@ export default {
     // 审核全检
     handleNotAudit() {
       if (this.switchWalue) {
+        this.multipleCanAuditTableSelection = []
         this.$notify({
-          title: 'Success',
+          title: '提示',
           message: '审核前请关闭自动刷新',
           type: 'info',
           duration: 2000
         })
-        return false
+        return
       }
       for (let index = 0; index < this.multipleCanAuditTableSelection.length; index++) {
         this.canAuditData[index] = this.multipleCanAuditTableSelection[index].inspectmId
@@ -375,7 +404,6 @@ export default {
         this.canAuditData = []
         this.multipleCanAuditTableSelection = []
         this.resetTemp()
-
         this.refresh()
         this.$notify({
           title: 'Success',
@@ -387,17 +415,18 @@ export default {
     },
     // 审核回退
     handleAlreadyAuditSelectionChange(val) {
+      this.multipleAlreadyAuditTableSelection = []
       this.multipleAlreadyAuditTableSelection = val
-    },
-    handleReturn() {
+
       if (this.switchWalue) {
+        this.multipleCanAuditTableSelection = []
         this.$notify({
-          title: 'Success',
+          title: '提示',
           message: '审核前请关闭自动刷新',
           type: 'info',
           duration: 2000
         })
-        return false
+        return
       }
       let noAllowReturn = 0
       for (let index = 0; index < this.multipleAlreadyAuditTableSelection.length; index++) {
@@ -408,28 +437,65 @@ export default {
         this.alreadyAuditData[index] = this.multipleAlreadyAuditTableSelection[index].inspectmId
       }
       if (noAllowReturn > 0) {
+        this.multipleAlreadyAuditTableSelection = []
         this.$notify({
           title: '注意',
           message: '已分活的车次不能回退',
           type: 'info',
           duration: 2000
         })
+
         return
       }
+    },
+    handleReturn() {
       this.temp.data = this.alreadyAuditData
-      saveAlreadyAudit(this.temp).then(response => {
-        this.alreadyAuditData = []
-        this.multipleAlreadyAuditTableSelection = []
-        this.resetTemp()
-
-        this.refresh()
+      if (this.switchWalue) {
+        this.multipleCanAuditTableSelection = []
         this.$notify({
-          title: 'Success',
-          message: response.message,
-          type: 'success',
+          title: '提示',
+          message: '审核前请关闭自动刷新',
+          type: 'info',
           duration: 2000
         })
-      })
+        return
+      }
+      let noAllowReturn = 0
+      for (let index = 0; index < this.multipleAlreadyAuditTableSelection.length; index++) {
+        if (this.multipleAlreadyAuditTableSelection[index].disabled) {
+          noAllowReturn += 1
+        }
+
+        this.alreadyAuditData[index] = this.multipleAlreadyAuditTableSelection[index].inspectmId
+      }
+
+      if (noAllowReturn > 0) {
+        this.multipleAlreadyAuditTableSelection = []
+
+        this.$notify({
+          title: '注意',
+          message: '已分活的车次不能回退',
+          type: 'info',
+          duration: 2000
+        })
+      }
+      if (noAllowReturn === 0) {
+        saveAlreadyAudit(this.temp).then(response => {
+          this.alreadyAuditData = []
+          this.multipleAlreadyAuditTableSelection = []
+          this.resetTemp()
+
+          this.refresh()
+          this.$notify({
+            title: 'Success',
+            message: response.message,
+            type: 'success',
+            duration: 2000
+          })
+        })
+      } else {
+        this.refresh()
+      }
     },
     handleCanAuditReset() {
       this.resetListQuery()

@@ -59,7 +59,7 @@
       </el-table-column>
       <el-table-column label="设备" align="center" min-width="140px">
         <template slot-scope="{row}">
-          <span>{{ row.machineName }}</span>
+          <span class="link-type" @click="handleUpdate(row)">{{ row.machineName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="审核参数" align="center" min-width="200px">
@@ -124,7 +124,7 @@
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" :page-sizes="pageSizes" @pagination="getList" />
 
     <ul>
       <li v-for="item in details" :key="item">
@@ -245,9 +245,10 @@ export default {
       details: [],
       total: 0,
       listLoading: true,
+      pageSizes:	[1000, 2000, 3000, 40000, 5000],
       listQuery: {
         page: 1,
-        limit: 10,
+        limit: 1000,
         useFlag: undefined,
         // importance: undefined,
         title: undefined,
@@ -411,7 +412,7 @@ export default {
     resetListQuery() {
       this.listQuery = {
         page: 1,
-        limit: 10,
+        limit: 1000,
         useFlag: undefined,
         // importance: undefined,
         title: undefined,
