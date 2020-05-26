@@ -206,11 +206,11 @@
         <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="getListQa">
           搜索
         </el-button>
-        <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-refresh" @click="handleReset">
+        <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-refresh" @click="handleResetQa">
           重置
         </el-button>
       </div>
-      <el-table :key="tableKey" v-loading="listLoadingQa" :data="listQa" border fit highlight-current-row style="width: 100%;height:700px;overflow-y: scroll;" @sort-change="sortChange">
+      <el-table :key="tableKey" v-loading="listLoadingQa" :data="listQa" border fit highlight-current-row style="width: 100%;height:650px;overflow-y: scroll;" @sort-change="sortChange">
         <el-table-column label="生产序号">
           <template slot-scope="{row}">
             <span>{{ row.jobId }}</span>
@@ -276,7 +276,11 @@
           <template slot-scope="{row}">
             <!-- <span>{{ row.imageBlob }}</span> -->
             <!-- <image :src=" row.file " /> -->
-            <img :src="row.filePath" style="width:50%;height:50%" @click="handleLookAt(row)">
+            <!-- <img :src="'data:image/jpeg;base64,'+row.imageBlob" style="width:50%;height:50%" @click="handleLookAt(row)"> -->
+            <el-popover placement="right" trigger="hover">
+              <img :src="'data:image/jpeg;base64,'+row.imageBlob">
+              <el-button slot="reference"><img :src="'data:image/jpeg;base64,'+row.imageBlob" style="width:50%;height:50%"></el-button>
+            </el-popover>
           </template>
         </el-table-column>
         <el-table-column label="错误原因" align="center">
@@ -313,11 +317,11 @@
         <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="getListNck">
           搜索
         </el-button>
-        <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-refresh" @click="handleReset">
+        <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-refresh" @click="handleResetNck">
           重置
         </el-button>
       </div>
-      <el-table :key="tableKey" v-loading="listLoadingNck" :data="listNck" border fit highlight-current-row style="width: 100%;height:700px;overflow-y: scroll;" @sort-change="sortChange">
+      <el-table :key="tableKey" v-loading="listLoadingNck" :data="listNck" border fit highlight-current-row style="width: 100%;height:650px;overflow-y: scroll;" @sort-change="sortChange">
         <el-table-column label="生产序号">
           <template slot-scope="{row}">
             <span>{{ row.jobId }}</span>
@@ -511,10 +515,11 @@ export default {
     },
     handleQa(row) {
       this.filePath = ''
-
+      this.resetListQueryQa()
       this.listQueryQa.jobId = row.jobId
       this.dialogQaVisible = true
-      this.filePath = row.filePath
+      // this.filePath = row.filePath
+      this.filePath = 'data:image/jpeg;base64,' + row.imageBlob
       this.getListQa()
     },
     getListQa() {
@@ -528,15 +533,46 @@ export default {
           this.listLoadingQa = false
         }, 1 * 1000)
       })
-      // this.resetListQueryQa()
     },
+    handleResetQa() {
+      this.listQueryQa = {
+        page: 1,
+        limit: 10,
+        sheetNum: undefined,
+        codeNum: undefined,
+        productId: undefined,
+        operationId: undefined,
+        startDate: Date,
+        endDate: Date,
+        sort: '+id'
+      }
+      this.getListQa()
+    },
+
+    handleResetNck() {
+      this.listQueryNck = {
+        page: 1,
+        limit: 10,
+        sheetNum: undefined,
+        codeNum: undefined,
+        productId: undefined,
+        operationId: undefined,
+        startDate: Date,
+        endDate: Date,
+        sort: '+id'
+      }
+      this.getListNck()
+    },
+
     handleLookAt(row) {
       this.filePath = ''
       this.temp = Object.assign({}, row) // copy obj
-      this.filePath = row.filePath
+
+      this.filePath = 'data:image/jpeg;base64,' + row.imageBlob
       this.centerDialogVisible = true
     },
     handleNck(row) {
+      this.resetListQueryNck()
       this.listQueryNck.jobId = row.jobId
       this.dialogNckVisible = true
       this.getListNck()
@@ -672,5 +708,18 @@ export default {
 }
 </script>
 <style lang="less">
-
+.pagination-container {
+    margin-top: 10px;
+}
+.el-dialog__body {
+    padding: 20px 20px 10px 20px;
+    color: #606266;
+    font-size: 14px;
+    word-break: break-all;
+}
+.el-button--mini {
+    padding: 0px 0px;
+    font-size: 12px;
+    border-radius: 3px;
+}
 </style>
