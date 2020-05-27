@@ -190,7 +190,7 @@ export default {
       dateValue: '',
       listQuery: {
         page: 1,
-        limit: 10,
+        limit: 20,
         // useFlag: undefined,
         // importance: undefined,
         jobId: undefined,
@@ -235,7 +235,7 @@ export default {
     resetListQuery() {
       this.listQuery = {
         page: 1,
-        limit: 10,
+        limit: 20,
         // useFlag: undefined,
         // importance: undefined,
         jobId: undefined,
@@ -279,6 +279,7 @@ export default {
     },
 
     handleFilter() {
+      this.listQuery.page = 1
       this.listLoading = true
       if (this.dateValue !== '') {
         this.listQuery.startDate = parseTime(this.dateValue[0])

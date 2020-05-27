@@ -57,34 +57,34 @@
       </el-button>
     </div>
 
-    <el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%;" @sort-change="sortChange">
-      <el-table-column label="生产序号" prop="id" sortable="custom" align="center" :class-name="getSortClass('id')">
+    <el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%;">
+      <el-table-column label="生产序号" prop="id" sortable align="center" width="100">
         <template slot-scope="{row}">
           <span>{{ row.jobId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="生产车号" align="center">
+      <el-table-column label="生产车号" align="center" width="70">
         <template slot-scope="{row}">
           <span>{{ row.cartNumber }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="产品名称" align="center">
+      <el-table-column label="产品名称" align="center" width="70">
         <template slot-scope="{row}">
           <span>{{ row.productName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="生产数量" align="center">
+      <el-table-column label="生产数量" align="center" width="70">
         <template slot-scope="{row}">
           <span>{{ row.prodQuantity }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="冠号" align="center">
+      <el-table-column label="冠号" align="center" width="70">
         <template slot-scope="{row}">
           <span>{{ row.head }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="完成标志" align="center">
+      <el-table-column label="完成标志" align="center" min-width="100">
         <template slot-scope="{row}">
           <el-tag v-if="row.finishedFlag===0 || row.finishedFlag===1 " effect="dark">生产中</el-tag>
           <el-tag v-else-if="row.finishedFlag===2" effect="dark" type="success">已生成数量</el-tag>
@@ -93,16 +93,16 @@
           <el-tag v-else-if="row.finishedFlag===5" effect="dark" type="warning">ocr稽核完成</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="印码号控核查标志" align="center">
+      <el-table-column label="印码号控核查标志" align="center" min-width="100">
         <template slot-scope="{row}">
-          <el-tag v-if="row.ymhkCheckFlag===-2" effect="dark">没有数据</el-tag>
+          <el-tag v-if="row.ymhkCheckFlag===-2" effect="dark" width="80">没有数据</el-tag>
           <el-tag v-else-if="row.ymhkCheckFlag===-1" effect="dark" type="success">数据未处理完成</el-tag>
           <el-tag v-else-if="row.ymhkCheckFlag===0" effect="dark" type="info">未生成数据</el-tag>
           <el-tag v-else-if="row.ymhkCheckFlag===1" effect="dark" type="danger">已生成数据</el-tag>
           <el-tag v-else-if="row.ymhkCheckFlag===2" effect="dark" type="warning">已打印</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="印码票面核查标志" align="center">
+      <el-table-column label="印码票面核查标志" align="center" min-width="100">
         <template slot-scope="{row}">
           <el-tag v-if="row.ympmCheckFlag===-2" effect="dark">没有数据</el-tag>
           <el-tag v-else-if="row.ympmCheckFlag===-1" effect="dark" type="success">数据未处理完成</el-tag>
@@ -112,7 +112,7 @@
 
         </template>
       </el-table-column>
-      <el-table-column label="印码涂布核查标志" align="center">
+      <el-table-column label="印码涂布核查标志" align="center" min-width="100">
         <template slot-scope="{row}">
           <el-tag v-if="row.ymtbCheckFlag===-2" effect="dark">没有数据</el-tag>
           <el-tag v-else-if="row.ymtbCheckFlag===-1" effect="dark" type="success">数据未处理完成</el-tag>
@@ -122,7 +122,7 @@
 
         </template>
       </el-table-column>
-      <el-table-column label="丝印核查标志" align="center">
+      <el-table-column label="丝印核查标志" align="center" min-width="100">
         <template slot-scope="{row}">
           <el-tag v-if="row.syCheckFlag===-2" effect="dark">没有数据</el-tag>
           <el-tag v-else-if="row.syCheckFlag===-1" effect="dark" type="success">数据未处理完成</el-tag>
@@ -132,51 +132,51 @@
 
         </template>
       </el-table-column>
-      <el-table-column label="未检数" align="center">
+      <el-table-column label="未检数" align="center" width="70">
         <template slot-scope="{row}">
           <span>{{ row.WJ }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="号控未检" align="center">
+      <el-table-column label="号控未检" align="center" width="70">
         <template slot-scope="{row}">
           <span>{{ row.hkwj }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="票面未检" align="center">
+      <el-table-column label="票面未检" align="center" width="70">
         <template slot-scope="{row}">
           <span>{{ row.pmwj }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="褶子" align="center">
+      <el-table-column label="褶子" align="center" width="70">
         <template slot-scope="{row}">
           <span>{{ row.tbzzwj }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="涂布未检" align="center">
+      <el-table-column label="涂布未检" align="center" width="70">
         <template slot-scope="{row}">
           <span>{{ row.tbwj }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="总剔废数" align="center">
+      <el-table-column label="总剔废数" align="center" width="70">
         <template slot-scope="{row}">
           <span>{{ row.ztfs }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="总拆包数" align="center">
+      <el-table-column label="总拆包数" align="center" width="70">
         <template slot-scope="{row}">
           <span>{{ row.zcbs }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="开始时间" align="center">
+      <el-table-column label="开始时间" align="center" width="120">
         <template v-if="row.startDate !==null" slot-scope="{row}">
           <span>{{ row.startDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" fixed="right" align="center" min-width="218px" class-name="small-padding fixed-width">
+      <el-table-column label="操作" fixed="right" align="center" min-width="120px" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleQa(row)"> 缺陷 </el-button>
           <el-button size="mini" type="danger" @click="handleNck(row)">未检</el-button>
@@ -187,7 +187,7 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
     <!-- 缺陷详细信息-->
-    <el-dialog title="缺陷详细信息" :visible.sync="dialogQaVisible" width="90%" top="5vh">
+    <el-dialog title="缺陷详细信息" :visible.sync="dialogQaVisible" width="80%" top="5vh">
       <div class="filter-container">
         <!-- 生产序号：
         <el-input v-model="listQueryQa.jobId" placeholder="请输入生产序号" style="width: 120px;" class="filter-item" @keyup.enter.native="getListQa" /> -->
@@ -210,65 +210,58 @@
           重置
         </el-button>
       </div>
-      <el-table :key="tableKey" v-loading="listLoadingQa" :data="listQa" border fit highlight-current-row style="width: 100%;height:650px;overflow-y: scroll;" @sort-change="sortChange">
-        <el-table-column label="生产序号">
+      <el-table :key="tableKey" v-loading="listLoadingQa" :data="listQa" border fit highlight-current-row style="width: 100%;height:650px;overflow-y: scroll;" @sort-change="sortQaChange">
+        <el-table-column label="生产序号" prop="jobId" width="100">
           <template slot-scope="{row}">
             <span>{{ row.jobId }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="工序" align="center">
+        <el-table-column label="工序" align="center" width="70">
           <template slot-scope="{row}">
             <span>{{ row.operationName }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="产品" align="center">
+        <el-table-column label="产品" align="center" width="70">
           <template slot-scope="{row}">
             <span>{{ row.productName }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="大张号" align="center">
+        <el-table-column label="大张号" align="center" width="70">
           <template slot-scope="{row}">
             <span>{{ row.sheetNum }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="印码号" align="center">
+        <el-table-column label="印码号" align="center" prop="codeNum" sortable="custom" width="100">
           <template slot-scope="{row}">
             <span>{{ row.codeNum }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="千位" align="center">
+        <el-table-column label="千位" align="center" prop="thousandIndex" sortable="custom" width="70">
           <template slot-scope="{row}">
             <span>{{ row.thousandIndex }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="百位" align="center">
+        <el-table-column label="百位" align="center" prop="hundredIndex" sortable="custom" width="70">
           <template slot-scope="{row}">
             <span>{{ row.hundredIndex }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="开位" align="center">
+        <el-table-column label="开位" align="center" prop="convertNum" sortable="custom" width="70">
           <template slot-scope="{row}">
             <span>{{ row.convertNum }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="路数" align="center">
+        <el-table-column label="路数" align="center" prop="routeNum" sortable="custom" width="70">
           <template slot-scope="{row}">
             <span>{{ row.routeNum }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="判费类型" align="center">
+        <el-table-column label="判费类型" align="center" width="70">
           <template slot-scope="{row}">
             <el-tag v-if="row.itemFlag===2" effect="dark">判废</el-tag>
             <el-tag v-else-if="row.itemFlag===3" effect="dark" type="success">审核费</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="未检原因" align="center">
-          <template slot-scope="{row}">
-            <el-tag v-if="row.errFlag===1" effect="dark">普通未检</el-tag>
-            <el-tag v-else-if="row.errFlag===2" effect="dark" type="success">机检大张废</el-tag>
-            <el-tag v-else-if="row.errFlag===9" effect="dark" type="info">判费大张废</el-tag>
           </template>
         </el-table-column>
 
@@ -283,12 +276,20 @@
             </el-popover>
           </template>
         </el-table-column>
-        <el-table-column label="错误原因" align="center">
+        <el-table-column label="未检原因" align="center" width="70">
+          <template slot-scope="{row}">
+            <el-tag v-if="row.errFlag===1" effect="dark">普通未检</el-tag>
+            <el-tag v-else-if="row.errFlag===2" effect="dark" type="success">机检大张废</el-tag>
+            <el-tag v-else-if="row.errFlag===9" effect="dark" type="info">判费大张废</el-tag>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="错误原因" align="center" min-width="120">
           <template slot-scope="{row}">
             <span>{{ row.errorNote }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="判废大张废标志" align="center">
+        <el-table-column label="判废大张废标志" align="center" width="100">
           <template slot-scope="{row}">
             <span>{{ row.sheetWasterFlag }}</span>
           </template>
@@ -321,7 +322,7 @@
           重置
         </el-button>
       </div>
-      <el-table :key="tableKey" v-loading="listLoadingNck" :data="listNck" border fit highlight-current-row style="width: 100%;height:650px;overflow-y: scroll;" @sort-change="sortChange">
+      <el-table :key="tableKey" v-loading="listLoadingNck" :data="listNck" border fit highlight-current-row style="width: 100%;height:650px;overflow-y: scroll;" @sort-change="sortNckChange">
         <el-table-column label="生产序号">
           <template slot-scope="{row}">
             <span>{{ row.jobId }}</span>
@@ -338,29 +339,23 @@
           </template>
         </el-table-column>
 
-        <!--    <el-table-column label="未检id" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.nckId }}</span>
-        </template>
-      </el-table-column> -->
-
         <el-table-column label="大张号" align="center">
           <template slot-scope="{row}">
             <span>{{ row.sheetNum }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="印码号" align="center">
+        <el-table-column label="印码号" align="center" sortable="custom">
           <template slot-scope="{row}">
             <span>{{ row.codeNum }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="千位" align="center">
+        <el-table-column label="千位" align="center" sortable="custom">
           <template slot-scope="{row}">
             <span>{{ row.thousandIndex }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="百位" align="center">
+        <el-table-column label="百位" align="center" sortable="custom">
           <template slot-scope="{row}">
             <span>{{ row.hundredIndex }}</span>
           </template>
@@ -441,7 +436,7 @@ export default {
       defaultValue: [new Date() - 2, new Date()],
       listQuery: {
         page: 1,
-        limit: 10,
+        limit: 20,
         // useFlag: undefined,
         // importance: undefined,
         cartNumber: undefined,
@@ -453,7 +448,7 @@ export default {
       },
       listQueryQa: {
         page: 1,
-        limit: 10,
+        limit: 20,
         jobId: undefined,
         sheetNum: undefined,
         codeNum: undefined,
@@ -461,11 +456,11 @@ export default {
         operationId: undefined,
         startDate: Date,
         endDate: Date,
-        sort: '+id'
+        sort: ''
       },
       listQueryNck: {
         page: 1,
-        limit: 10,
+        limit: 20,
         jobId: undefined,
         sheetNum: undefined,
         codeNum: undefined,
@@ -473,7 +468,7 @@ export default {
         operationId: undefined,
         startDate: Date,
         endDate: Date,
-        sort: '+id'
+        sort: ''
       },
       useFlagOptions, // 启用状态
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
@@ -523,6 +518,7 @@ export default {
       this.getListQa()
     },
     getListQa() {
+      this.listQueryQa.page = 1
       this.listLoadingQa = true
       fetchReportQaList(this.listQueryQa).then(response => {
         this.listQa = response.data.items
@@ -537,14 +533,14 @@ export default {
     handleResetQa() {
       this.listQueryQa = {
         page: 1,
-        limit: 10,
+        limit: 20,
         sheetNum: undefined,
         codeNum: undefined,
         productId: undefined,
         operationId: undefined,
         startDate: Date,
         endDate: Date,
-        sort: '+id'
+        sort: ''
       }
       this.getListQa()
     },
@@ -552,14 +548,14 @@ export default {
     handleResetNck() {
       this.listQueryNck = {
         page: 1,
-        limit: 10,
+        limit: 20,
         sheetNum: undefined,
         codeNum: undefined,
         productId: undefined,
         operationId: undefined,
         startDate: Date,
         endDate: Date,
-        sort: '+id'
+        sort: ''
       }
       this.getListNck()
     },
@@ -578,6 +574,7 @@ export default {
       this.getListNck()
     },
     getListNck() {
+      this.listQueryNck.page = 1
       this.listLoadingNck = true
       fetchReportNckList(this.listQueryNck).then(response => {
         this.listNck = response.data.items
@@ -591,7 +588,7 @@ export default {
     resetListQueryQa() {
       this.listQueryQa = {
         page: 1,
-        limit: 10,
+        limit: 20,
         jobId: undefined,
         sheetNum: undefined,
         codeNum: undefined,
@@ -599,12 +596,12 @@ export default {
         operationId: undefined,
         startDate: Date,
         endDate: Date,
-        sort: '+id'
+        sort: ''
       }
     }, resetListQueryNck() {
       this.listQueryNck = {
         page: 1,
-        limit: 10,
+        limit: 20,
         jobId: undefined,
         sheetNum: undefined,
         codeNum: undefined,
@@ -612,7 +609,7 @@ export default {
         operationId: undefined,
         startDate: Date,
         endDate: Date,
-        sort: '+id'
+        sort: ''
       }
     },
 
@@ -622,7 +619,7 @@ export default {
       this.dateValue = [myDate, new Date()]
       this.listQuery = {
         page: 1,
-        limit: 10,
+        limit: 20,
         // useFlag: undefined,
         // importance: undefined,
         cartNumber: undefined,
@@ -650,6 +647,99 @@ export default {
         this.total = response.data.total
       })
     },
+    // 缺陷数据排序操作
+    sortQaChange(data) {
+      const { prop, order } = data
+      if (prop === 'codeNum') { // 印码排序
+        this.sortQaByCodeNum(order)
+      } else if (prop === 'thousandIndex') { // 千位排序
+        this.sortQaByThousandIndex(order)
+      } else if (prop === 'hundredIndex') { // 百位排序
+        this.sortQaByHundredIndex(order)
+      } else if (prop === 'convertNum') { // 开位排序
+        this.sortQaByConvertNum(order)
+      } else if (prop === 'routeNum') { // 路数排序
+        this.sortQaByRouteNum(order)
+      }
+    },
+    // 印码排序操作
+    sortQaByCodeNum(order) {
+      if (order === 'ascending') {
+        this.listQueryQa.sort = '+codeNum'
+      } else {
+        this.listQueryQa.sort = '-codeNum'
+      }
+      this.getListQa()
+    }, // 千位排序操作
+    sortQaByThousandIndex(order) {
+      if (order === 'ascending') {
+        this.listQueryQa.sort = '+thousandIndex'
+      } else {
+        this.listQueryQa.sort = '-thousandIndex'
+      }
+      this.getListQa()
+    }, // 百位排序操作
+    sortQaByHundredIndex(order) {
+      if (order === 'ascending') {
+        this.listQueryQa.sort = '+hundredIndex'
+      } else {
+        this.listQueryQa.sort = '-hundredIndex'
+      }
+      this.getListQa()
+    }, // 开位排序操作
+    sortQaByConvertNum(order) {
+      if (order === 'ascending') {
+        this.listQueryQa.sort = '+convertNum'
+      } else {
+        this.listQueryQa.sort = '-convertNum'
+      }
+      this.getListQa()
+    }, // 路位排序操作
+    sortQaByRouteNum(order) {
+      if (order === 'ascending') {
+        this.listQueryQa.sort = '+routeNum'
+      } else {
+        this.listQueryQa.sort = '-routeNum'
+      }
+      this.getListQa()
+    },
+
+    // 未检数据排序操作
+    sortNckChange(data) {
+      const { prop, order } = data
+      if (prop === 'codeNum') { // 印码排序
+        this.sortNckByCodeNum(order)
+      } else if (prop === 'thousandIndex') { // 千位排序
+        this.sortNckByThousandIndex(order)
+      } else if (prop === 'hundredIndex') { // 百位排序
+        this.sortNckByHundredIndex(order)
+      }
+    },
+    // 印码排序操作
+    sortNckByCodeNum(order) {
+      if (order === 'ascending') {
+        this.listQueryNck.sort = '+codeNum'
+      } else {
+        this.listQueryNck.sort = '-codeNum'
+      }
+      this.getListNck()
+    }, // 千位排序操作
+    sortNckByThousandIndex(order) {
+      if (order === 'ascending') {
+        this.listQueryNck.sort = '+thousandIndex'
+      } else {
+        this.listQueryNck.sort = '-thousandIndex'
+      }
+      this.getListNck()
+    }, // 百位排序操作
+    sortNckByHundredIndex(order) {
+      if (order === 'ascending') {
+        this.listQueryNck.sort = '+hundredIndex'
+      } else {
+        this.listQueryNck.sort = '-hundredIndex'
+      }
+      this.getListNck()
+    },
     sortChange(data) {
       const { prop, order } = data
       if (prop === 'id') {
@@ -667,6 +757,7 @@ export default {
     },
 
     handleFilter() {
+      this.listQuery.page = 1
       this.listLoading = true
       if (this.dateValue !== '') {
         this.listQuery.startDate = parseTime(this.dateValue[0])
@@ -717,9 +808,9 @@ export default {
     font-size: 14px;
     word-break: break-all;
 }
-.el-button--mini {
-    padding: 0px 0px;
-    font-size: 12px;
-    border-radius: 3px;
-}
+// .imageB .el-button--mini {
+//     padding: 0px 0px;
+//     font-size: 12px;
+//     border-radius: 3px;
+// }
 </style>

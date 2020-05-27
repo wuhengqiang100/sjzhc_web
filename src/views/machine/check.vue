@@ -2,10 +2,9 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <!-- <div style="text-align: justify;width:100%;  justify-content: space-between" /> -->
       <el-row>
         <el-col :span="10">
-          <el-card class="box-card" style="min-height:850px;max-height:1000px;overflow-y: scroll;">
+          <el-card class="box-card" style="height:800px;max-height:850px;overflow-y: scroll;">
             <div slot="header" class="clearfix">
               <span><el-tag effect="dark">待审核车次</el-tag></span>
               <span style="float: right; padding: 3px 0">
@@ -18,23 +17,14 @@
                 </el-button>
               </span>
 
-              <!--  <span>
-                <el-date-picker
-                  v-model="dateValue1"
-                  style="float: right; padding: 3px 0"
-                  type="datetimerange"
-                  align="right"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
-                  :default-time="['00:00:01', '23:59:59']"
-                  value-format="yyyy-MM-dd HH:mm:ss"
-                  @change="getCanAuditTable"
-                />
-              </span> -->
             </div>
-            <el-table ref="multipleCanAudiTable" stripe fit highlight-current-row :data="canAuditTable" tooltip-effect="dark" style="width: 100%" @selection-change="handleCanAuditSelectionChange">
-              <el-table-column type="selection" width="25" />
-              <el-table-column prop="wipJobs.cartNumber" sortable label="车号" width="55" />
+            <el-table ref="multipleCanAudiTable" :key="tableKeyCan" stripe fit highlight-current-row :data="canAuditTable" tooltip-effect="dark" style="width: 100%" @selection-change="handleCanAuditSelectionChange">
+              <el-table-column prop="inspectmId" type="selection" width="25" />
+              <el-table-column prop="wipJobs.cartNumber" sortable label="车号" width="55" class="link-type">
+                <template slot-scope="{row}">
+                  <span class="link-type" @click="handleEditNoteCan(row)">{{ row.wipJobs.cartNumber }}</span>
+                </template>
+              </el-table-column>
               <el-table-column prop="product.productName" sortable label="品种" width="60" />
               <el-table-column prop="operation.operationName" sortable label="工艺" width="60" />
               <el-table-column prop="machine.machineName" sortable label="设备" width="80" />
@@ -42,20 +32,17 @@
               <el-table-column prop="machineWasterNumber" sortable label="机检数" width="70" />
               <el-table-column prop="noCheckNum" sortable label="未检" width="55" />
               <el-table-column prop="judgeWasterNumber" sortable label="判废" width="60" />
-              <el-table-column prop="note" label="说明" min-width="80" />
-              <el-table-column prop="lastUpdateTime" sortable label="生产日期" width="120" />
-              <!-- <el-table-column prop="lastUpdateTime" sortable label="日期" width="120" /> -->
-              <!--    <el-table-column label="状态" width="80">
-                <template>
-                  <el-tag effect="dark"> 待审核   </el-tag>
+              <el-table-column prop="note" label="说明" min-width="80">
+                <template slot-scope="{row}">
+                  <span class="link-type" @click="handleEditNoteCan(row)">{{ row.note }}</span>
                 </template>
-              </el-table-column> -->
+              </el-table-column>
+              <el-table-column prop="lastUpdateTime" sortable label="数据更新日期" width="120" />
+
             </el-table>
           </el-card>
           <div style="margin-top: 20px">
-            <!-- <el-button @click="toggleCanAuditSelection([canAuditTable[1], canAuditTable[2]])">切换第二、第三行的选中状态</el-button>
-            <el-button @click="toggleCanAuditSelection()">取消选择</el-button> -->
-            <!-- 手动刷新 -->
+
             <el-button @click="refresh">刷新数据</el-button>
 
             自动刷新
@@ -80,31 +67,14 @@
               <el-button type="success" icon="el-icon-arrow-left" @click="handleReturn()">回退</el-button>
             </el-row>
 
-            <!--     <el-row style="margin-top:10px;margin-left:2px">
-              <el-button type="danger" icon="el-icon-arrow-left" @click="handleReturnAbandon()">回退</el-button>
-            </el-row> -->
-
           </div>
 
         </el-col>
         <el-col :span="13">
           <el-row>
-            <el-card class="box-card" style="min-height:850px;max-height:1000px;overflow-y: scroll;">
+            <el-card class="box-card" style="height:800px;max-height:850px;overflow-y: scroll;">
               <div slot="header" class="clearfix">
                 <span><el-tag effect="dark" type="success">已审核车次</el-tag></span>
-                <!--  <span>
-                  <el-date-picker
-                    v-model="dateValue2"
-                    style="float: right; padding: 3px 0"
-                    type="datetimerange"
-                    align="right"
-                    start-placeholder="开始日期"
-                    end-placeholder="结束日期"
-                    :default-time="['00:00:01', '23:59:59']"
-                    value-format="yyyy-MM-dd HH:mm:ss"
-                    @change="getAlreadyAuditTable"
-                  />
-                </span> -->
                 <span style="float: right; padding: 3px 0;width:auto">
                   <el-row :gutter="20">
                     <el-col :span="10">
@@ -144,9 +114,13 @@
                 </span>
               </div>
 
-              <el-table ref="multipleAlreadyAuditTable" stripe fit highlight-current-row :data="alreadyAuditTable" tooltip-effect="dark" style="width: 100%" @selection-change="handleAlreadyAuditSelectionChange">
-                <el-table-column type="selection" width="25" />
-                <el-table-column prop="wipJobs.cartNumber" sortable label="车号" width="55" />
+              <el-table ref="multipleAlreadyAuditTable" :key="tableKeyCan" stripe fit highlight-current-row :data="alreadyAuditTable" tooltip-effect="dark" style="width: 100%" @selection-change="handleAlreadyAuditSelectionChange">
+                <el-table-column prop="inspectmId" type="selection" width="25" />
+                <el-table-column prop="wipJobs.cartNumber" sortable label="车号" width="55" class="link-type">
+                  <template slot-scope="{row}">
+                    <span class="link-type" @click="handleEditNoteAlready(row)">{{ row.wipJobs.cartNumber }}</span>
+                  </template>
+                </el-table-column>
                 <el-table-column prop="product.productName" sortable label="品种" width="60" />
                 <el-table-column prop="operation.operationName" sortable label="工艺" width="60" />
                 <el-table-column prop="machine.machineName" sortable label="设备" width="80" />
@@ -154,8 +128,12 @@
                 <el-table-column prop="machineWasterNumber" sortable label="机检数" width="70" />
                 <el-table-column prop="noCheckNum" sortable label="未检" width="60" />
                 <el-table-column prop="judgeWasterNumber" sortable label="判废" width="60" />
-                <el-table-column prop="note" label="说明" width="80" />
-                <el-table-column prop="lastUpdateTime" sortable label="生产日期" width="120" />
+                <el-table-column prop="note" label="说明" min-width="80">
+                  <template slot-scope="{row}">
+                    <span class="link-type" @click="handleEditNoteAlready(row)">{{ row.note }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="lastUpdateTime" sortable label="数据更新日期" width="120" />
                 <el-table-column prop="checkDate" sortable label="审核日期" width="120" />
                 <el-table-column label="状态" width="70">
                   <template slot-scope="scope">
@@ -210,12 +188,34 @@
       </el-row>
 
     </div>
+    <el-dialog title="未审核备注" :visible.sync="dialogNoteCanVisible" width="20%">
+      <el-input v-model="tempNoteCan.note" style="width:250px;" :autosize="{ minRows: 3, maxRows: 6}" type="textarea" placeholder="请输入备注" />
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogNoteCanVisible = false">
+          返回
+        </el-button>
+        <el-button type="primary" @click="editNoteCan()">
+          确认
+        </el-button>
+      </div>
+    </el-dialog>
+    <el-dialog title="已审核备注" :visible.sync="dialogNoteAlreadyVisible" width="20%">
+      <el-input v-model="tempNoteAlready.note" style="width:250px;" :autosize="{ minRows: 3, maxRows: 6}" type="textarea" placeholder="请输入备注" />
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogNoteAlreadyVisible = false">
+          返回
+        </el-button>
+        <el-button type="primary" @click="editNoteAlready()">
+          确认
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 
-import { fetchCanAuditList, fetchAlreadyAuditList, saveCanAudit, saveAlreadyAudit, saveNotAudit } from '@/api/machineAudit'
+import { fetchCanAuditList, fetchAlreadyAuditList, saveCanAudit, saveAlreadyAudit, saveNotAudit, saveEditNoteCan, saveEditNoteAlready } from '@/api/machineAudit'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -256,6 +256,14 @@ export default {
         data: [],
         note: ''
       },
+      tempNoteCan: {
+        data: '',
+        note: ''
+      }, tempNoteAlready: {
+        data: '',
+        note: ''
+      },
+
       options: [{
         value: '1',
         label: '未分活'
@@ -265,7 +273,9 @@ export default {
       }, {
         value: '-1',
         label: '未检'
-      }]
+      }],
+      dialogNoteCanVisible: false,
+      dialogNoteAlreadyVisible: false
     }
   },
   created() {
@@ -293,6 +303,17 @@ export default {
         note: ''
       }
     },
+    resetTempNoteCan() {
+      this.tempNoteCan = {
+        data: '',
+        note: ''
+      }
+    }, resetTempNoteAlready() {
+      this.tempNoteAlready = {
+        data: '',
+        note: ''
+      }
+    },
     refresh() {
       this.getCanAuditTable()
       this.getAlreadyAuditTable()
@@ -301,6 +322,52 @@ export default {
       // this.getNotAuditTable()
     },
 
+    handleEditNoteCan(row) {
+      // this.tempNote = Object.assign({}, row) // copy obj
+      // this.temp.timestamp = new Date(this.temp.timestamp)
+      // this.dialogStatus = 'update'a
+      this.resetTempNoteCan()
+      this.tempNoteCan.data = row.inspectmId
+      this.tempNoteCan.note = row.note
+      this.dialogNoteCanVisible = true
+    },
+    handleEditNoteAlready(row) {
+      // this.tempNote = Object.assign({}, row) // copy obj
+      // this.temp.timestamp = new Date(this.temp.timestamp)
+      // this.dialogStatus = 'update'a
+      this.resetTempNoteAlready()
+      this.tempNoteAlready.data = row.inspectmId
+      this.tempNoteAlready.note = row.note
+      this.dialogNoteAlreadyVisible = true
+    },
+
+    // 未审核修改备注
+    editNoteCan() {
+      saveEditNoteCan(this.tempNoteCan).then(response => {
+        this.resetTempNoteCan()
+        this.getCanAuditTable()
+        this.dialogNoteCanVisible = false
+        this.$notify({
+          title: 'Success',
+          message: response.message,
+          type: 'success',
+          duration: 2000
+        })
+      })
+    }, // 已审核 修改备注
+    editNoteAlready() {
+      saveEditNoteAlready(this.tempNoteAlready).then(response => {
+        this.resetTempNoteAlready()
+        this.getAlreadyAuditTable()
+        this.dialogNoteAlreadyVisible = false
+        this.$notify({
+          title: 'Success',
+          message: response.message,
+          type: 'success',
+          duration: 2000
+        })
+      })
+    },
     // 获取可以审核的数据
     getCanAuditTable() {
       if (this.dateValue1 !== '') {
@@ -356,6 +423,16 @@ export default {
 
     // 审核
     handleAudit() {
+      if (this.multipleCanAuditTableSelection.length === 0) {
+        this.$notify({
+          title: '提示',
+          message: '请从未审核状态中选择审核的车次',
+          type: 'info',
+          duration: 2000
+        })
+        this.getAlreadyAuditTable()
+        return
+      }
       if (this.switchWalue) {
         this.multipleCanAuditTableSelection = []
         this.$notify({
@@ -386,6 +463,16 @@ export default {
     },
     // 审核全检
     handleNotAudit() {
+      if (this.multipleCanAuditTableSelection.length === 0) {
+        this.$notify({
+          title: '提示',
+          message: '请从未审核状态中选择全检的车次',
+          type: 'info',
+          duration: 2000
+        })
+        this.getAlreadyAuditTable()
+        return
+      }
       if (this.switchWalue) {
         this.multipleCanAuditTableSelection = []
         this.$notify({
@@ -444,11 +531,23 @@ export default {
           type: 'info',
           duration: 2000
         })
-
-        return
+        this.multipleAlreadyAuditTableSelection = []
+        this.alreadyAuditData = []
+        this.getAlreadyAuditTable()
+        return true
       }
+      return true
     },
     handleReturn() {
+      if (this.alreadyAuditData.length === 0) {
+        this.$notify({
+          title: '提示',
+          message: '请选择可以回退的车次',
+          type: 'info',
+          duration: 2000
+        })
+        return
+      }
       this.temp.data = this.alreadyAuditData
       if (this.switchWalue) {
         this.multipleCanAuditTableSelection = []

@@ -244,6 +244,7 @@ export default {
     },
     handleFilter() {
       this.listQuery.page = 1
+      this.listQuery.page = 1
       this.getList()
     },
     handleModifyStatus(row, status) {

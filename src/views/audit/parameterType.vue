@@ -167,7 +167,7 @@ export default {
       listLoading: true,
       listQuery: {
         page: 1,
-        limit: 10,
+        limit: 20,
         useFlag: undefined,
         // importance: undefined,
         title: undefined,
@@ -240,6 +240,7 @@ export default {
       })
     },
     handleFilter() {
+      this.listQuery.page = 1
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
@@ -300,7 +301,7 @@ export default {
     resetListQuery() {
       this.listQuery = {
         page: 1,
-        limit: 10,
+        limit: 20,
         useFlag: undefined,
         // importance: undefined,
         title: undefined,

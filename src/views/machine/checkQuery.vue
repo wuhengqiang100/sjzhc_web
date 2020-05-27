@@ -317,7 +317,7 @@ export default {
       tableKey: 0,
       list: null,
       total: 0,
-      listLoading: true,
+      listLoading: false,
       operationOption: [],
       productOption: [],
       machineOption: [],
@@ -325,7 +325,7 @@ export default {
       dateValue: '',
       listQuery: {
         page: 1,
-        limit: 10,
+        limit: 20,
         // useFlag: undefined,
         // importance: undefined,
         cartNumber: undefined,
@@ -390,7 +390,13 @@ export default {
   // 初始化获取数据列表
   created() {
     this.getSelectOption()// 获取查询的条件options
-    this.getList()
+    // this.getList()
+  },
+  mounted: function() {
+    var myDate = new Date()
+    myDate.setDate(myDate.getDate() - 2)
+    this.dateValue = [myDate, new Date()]
+    // this.timeNow = myDate.toLocaleDateString()
   },
   methods: {
     // 有加载圈的加载数据列表
@@ -457,7 +463,7 @@ export default {
     resetListQuery() {
       this.listQuery = {
         page: 1,
-        limit: 10,
+        limit: 20,
         // useFlag: undefined,
         // importance: undefined,
         cartNumber: undefined,
@@ -472,6 +478,7 @@ export default {
       this.dateValue = ''
     },
     handleFilter() {
+      this.listQuery.page = 1
       this.listLoading = true
       if (this.dateValue !== '') {
         this.listQuery.startDate = parseTime(this.dateValue[0])

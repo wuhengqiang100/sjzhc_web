@@ -278,7 +278,7 @@ export default {
       dicWorkUnitOption: [],
       listQuery: {
         page: 1,
-        limit: 10,
+        limit: 20,
         useFlag: undefined,
         title: undefined,
         sort: '+id',
@@ -466,7 +466,7 @@ export default {
     resetAdd() {
       this.resetFileData()
       this.dialogAddFile = false
-      this.getList()
+      this.refreshList()
     },
     getList() {
       this.listLoading = true
@@ -495,6 +495,7 @@ export default {
       })
     },
     handleFilter() {
+      this.listQuery.page = 1
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
@@ -560,7 +561,7 @@ export default {
     resetListQuery() {
       this.listQuery = {
         page: 1,
-        limit: 10,
+        limit: 20,
         useFlag: undefined,
         title: undefined,
         sort: '+id',

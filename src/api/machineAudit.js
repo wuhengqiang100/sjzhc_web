@@ -57,6 +57,24 @@ export function saveNotAudit(data) {
     // baseURL: "http://127.0.0.1:8088"
   })
 }
+// 全检数据
+export function saveEditNoteCan(data) {
+  return request({
+    url: '/machine/saveNoteCan',
+    method: 'post',
+    data
+    // baseURL: "http://127.0.0.1:8088"
+  })
+}
+// 全检数据
+export function saveEditNoteAlready(data) {
+  return request({
+    url: '/machine/saveNoteAlready',
+    method: 'post',
+    data
+    // baseURL: "http://127.0.0.1:8088"
+  })
+}
 
 // 回退全检数据
 /* export function returnNotAudit(data) {
