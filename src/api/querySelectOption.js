@@ -31,6 +31,12 @@ export function listOptionWasterReason() {
     method: 'post'
   })
 }
+export function listOptionProduct() {
+  return request({
+    url: '/option/product',
+    method: 'post'
+  })
+}
 export function listOptionWorkUnit() {
   return request({
     url: '/option/workUnit',

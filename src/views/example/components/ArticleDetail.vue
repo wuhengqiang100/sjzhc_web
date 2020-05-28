@@ -29,7 +29,7 @@
               <el-row>
                 <el-col :span="8">
                   <el-form-item label-width="60px" label="Author:" class="postInfo-container-item">
-                    <el-select v-model="postForm.author" :remote-method="getRemoteUserList" filterable default-first-option remote placeholder="Search user">
+                    <el-select v-model="postForm.author" clearable :remote-method="getRemoteUserList" filterable default-first-option remote placeholder="Search user">
                       <el-option v-for="(item,index) in userListOptions" :key="item+index" :label="item" :value="item" />
                     </el-select>
                   </el-form-item>
@@ -59,7 +59,7 @@
         </el-row>
 
         <el-form-item style="margin-bottom: 40px;" label-width="70px" label="Summary:">
-          <el-input v-model="postForm.content_short" :rows="1" type="textarea" class="article-textarea" autosize placeholder="Please enter the content" />
+          <el-input v-model="postForm.content_short" clearable :rows="1" type="textarea" class="article-textarea" autosize placeholder="Please enter the content" />
           <span v-show="contentShortLength" class="word-counter">{{ contentShortLength }}words</span>
         </el-form-item>
 

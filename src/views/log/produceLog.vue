@@ -4,6 +4,7 @@
       车号：
       <el-input
         v-model="listQuery.title"
+        clearable
         placeholder="请输入车号"
         style="width: 120px;"
         class="filter-item"
@@ -12,8 +13,11 @@
       工序：
       <el-select
         v-model="listQuery.operationId"
+        clearable
         filterable
         placeholder="请搜索或者选择"
+        class="filter-item"
+        style="width: 130px"
       >
         <el-option
           v-for="item in operationOption"
@@ -26,8 +30,11 @@
       产品：
       <el-select
         v-model="listQuery.productId"
+        clearable
         filterable
         placeholder="请搜索或者选择"
+        class="filter-item"
+        style="width: 130px"
       >
         <el-option
           v-for="item in productOption"
@@ -40,8 +47,11 @@
       操作人：
       <el-select
         v-model="listQuery.operatorId"
+        clearable
         filterable
         placeholder="请搜索或者选择"
+        class="filter-item"
+        style="width: 130px"
       >
         <el-option
           v-for="item in operatorOption"
@@ -55,6 +65,7 @@
       <div class="filter-item">
         <el-date-picker
           v-model="dateValue"
+          :clearable="false"
           type="datetimerange"
           align="right"
           start-placeholder="开始日期"
@@ -269,7 +280,7 @@ export default {
       tableKey: 0,
       list: null,
       total: 0,
-      listLoading: true,
+      listLoading: false,
       dateValue: '',
       productOption: [],
       operationOption: [],
@@ -325,7 +336,7 @@ export default {
   created() {
     this.getSelectOption()// 获取查询的条件options
 
-    this.getList()
+    // this.getList()
   },
   methods: {
     // 有加载圈的加载数据列表
@@ -353,6 +364,7 @@ export default {
     },
     // 立即刷新数据列表
     refreshList() {
+      this.listQuery.page = 1
       if (this.dateValue !== '') {
         this.listQuery.startDate = parseTime(this.dateValue[0])
         this.listQuery.endDate = parseTime(this.dateValue[1])
@@ -403,36 +415,37 @@ export default {
         operationName: undefined,
         machineName: undefined,
         workUnitName: undefined,
-        sort: '+id',
-        startDate: Date,
-        endDate: Date
+        sort: '+id'
       }
     },
     handleFilter() {
       this.listQuery.page = 1
-      this.listLoading = true
+
       if (this.dateValue !== '') {
+        this.listLoading = true
         this.listQuery.startDate = parseTime(this.dateValue[0])
         this.listQuery.endDate = parseTime(this.dateValue[1])
+        fetchProduceList(this.listQuery).then(response => {
+          this.list = response.data.items
+          this.total = response.data.total
+          this.listLoading = false
+          // Just to simulate the time of the request
+          setTimeout(() => {
+            this.listLoading = false
+          }, 1 * 1000)
+        })
       } else {
         this.$message({
           message: '请选择时间',
           type: 'success'
         })
+        return false
       }
-      fetchProduceList(this.listQuery).then(response => {
-        this.list = response.data.items
-        this.total = response.data.total
-
-        // Just to simulate the time of the request
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1 * 1000)
-      })
     },
     handleReset() {
       this.resetListQuery()
-      this.getList()
+      // this.getList()
+      this.handleFilter()
     },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {

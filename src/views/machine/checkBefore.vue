@@ -132,10 +132,10 @@
         style="width: 300px; margin-left:2px;"
       >
         <el-form-item label="参数一">
-          <el-input-number v-model="tempCanshu.num1" :precision="2" :step="0.1" :max="10" />
+          <el-input v-model="tempCanshu.num1" clearable-number :precision="2" :step="0.1" :max="10" />
         </el-form-item>
         <el-form-item label="参数二">
-          <el-input-number v-model="tempCanshu.num2" :precision="2" :step="0.1" :max="10" />
+          <el-input v-model="tempCanshu.num2" clearable-number :precision="2" :step="0.1" :max="10" />
         </el-form-item>
 
       </el-form>

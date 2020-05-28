@@ -19,7 +19,7 @@
           Link<i class="el-icon-caret-bottom el-icon--right" />
         </el-button>
         <el-dropdown-menu slot="dropdown" class="no-padding no-border" style="width:300px">
-          <el-input v-model="url" placeholder="Please enter the content">
+          <el-input v-model="url" clearable placeholder="Please enter the content">
             <template slot="prepend">
               Url
             </template>

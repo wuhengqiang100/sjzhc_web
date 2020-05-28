@@ -2,9 +2,10 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <!-- <el-input v-model="listQuery.title" placeholder="请输入菜单日志名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" /> -->
+      <!-- <el-input clearable v-model="listQuery.title" placeholder="请输入菜单日志名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" /> -->
       <el-input
         v-model="listQuery.title"
+        clearable
         placeholder="请输入菜单名称"
         style="width: 200px;"
         class="filter-item"
@@ -168,46 +169,46 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="菜单名称" prop="title">
-              <el-input v-model="temp.title" type="text" placeholder="请输入菜单名称" />
+              <el-input v-model="temp.title" clearable type="text" placeholder="请输入菜单名称" />
             </el-form-item>
             <el-form-item label="模块名称" prop="name">
-              <el-input v-model="temp.name" type="text" placeholder="请输入模块名称" />
+              <el-input v-model="temp.name" clearable type="text" placeholder="请输入模块名称" />
             </el-form-item>
             <el-form-item label="路由地址" prop="path">
-              <el-input v-model="temp.path" type="text" placeholder="请输入路由地址" />
+              <el-input v-model="temp.path" clearable type="text" placeholder="请输入路由地址" />
             </el-form-item>
             <el-form-item label="请求组件" prop="icon">
-              <el-input v-model="temp.icon" type="text" placeholder="请输入菜单图标" />
+              <el-input v-model="temp.icon" clearable type="text" placeholder="请输入菜单图标" />
             </el-form-item>
             <el-form-item label="菜单图标" prop="component">
-              <el-input v-model="temp.component" type="text" placeholder="请输入请求组件" />
+              <el-input v-model="temp.component" clearable type="text" placeholder="请输入请求组件" />
             </el-form-item>
             <el-form-item label="重定向" prop="redirect">
-              <el-input v-model="temp.redirect" type="text" placeholder="请输入重定向地址" />
+              <el-input v-model="temp.redirect" clearable type="text" placeholder="请输入重定向地址" />
             </el-form-item>
 
           </el-col>
           <el-col :span="12">
             <el-form-item label="父菜单" prop="parentId">
-              <el-input v-model="temp.parentId" type="text" placeholder="请输入父菜单" />
+              <el-input v-model="temp.parentId" clearable type="text" placeholder="请输入父菜单" />
             </el-form-item>
             <el-form-item label="子菜单" prop="childrenIds">
-              <el-input v-model="temp.childrenIds" type="text" placeholder="请输入子菜单" />
+              <el-input v-model="temp.childrenIds" clearable type="text" placeholder="请输入子菜单" />
             </el-form-item>
             <el-form-item label="缓存" prop="noCache">
-              <el-input v-model="temp.noCache" type="text" placeholder="请输入缓存" />
+              <el-input v-model="temp.noCache" clearable type="text" placeholder="请输入缓存" />
             </el-form-item>
             <el-form-item label="排序" prop="sort">
-              <el-input v-model="temp.sort" type="text" placeholder="请输入排序" />
+              <el-input v-model="temp.sort" clearable type="text" placeholder="请输入排序" />
             </el-form-item>
             <el-form-item label="显示状态" prop="hidden">
-              <el-input v-model="temp.hidden" type="text" placeholder="请输入显示状态" />
+              <el-input v-model="temp.hidden" clearable type="text" placeholder="请输入显示状态" />
             </el-form-item>
             <el-form-item label="根路由显示" prop="alwaysShow">
-              <el-input v-model="temp.alwaysShow" type="text" placeholder="请输入根路由显示" />
+              <el-input v-model="temp.alwaysShow" clearable type="text" placeholder="请输入根路由显示" />
             </el-form-item>
             <el-form-item label="面包屑显示" prop="breadcrumb">
-              <el-input v-model="temp.breadcrumb" type="text" placeholder="请输入面包屑显示" />
+              <el-input v-model="temp.breadcrumb" clearable type="text" placeholder="请输入面包屑显示" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -374,6 +375,7 @@ export default {
     }, */
     // 立即刷新数据列表
     refreshList() {
+      this.listQuery.page = 1
       if (this.dateValue !== '') {
         this.listQuery.startDate = parseTime(this.dateValue[0])
         this.listQuery.endDate = parseTime(this.dateValue[1])

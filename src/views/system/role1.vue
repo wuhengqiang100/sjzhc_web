@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="请输入角色名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.title" clearable placeholder="请输入角色名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
 
-      <el-select v-model="listQuery.useFlag" placeholder="状态" clearable class="filter-item" style="width: 130px">
+      <el-select v-model="listQuery.useFlag" clearable placeholder="状态" class="filter-item" style="width: 130px">
         <el-option v-for="item in useFlagOptions" :key="item.key" :label="item.display_name" :value="item.key" />
       </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -94,18 +94,18 @@
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="125px" style="width: 600px; margin-left:50px;">
 
         <el-form-item label="角色code" prop="roleCode">
-          <el-input v-model="temp.roleCode" type="text" placeholder="请输入角色code" />
+          <el-input v-model="temp.roleCode" clearable type="text" placeholder="请输入角色code" />
         </el-form-item>
         <el-form-item label="角色名称" prop="roleName">
-          <el-input v-model="temp.roleName" type="text" placeholder="请输入角色名称" />
+          <el-input v-model="temp.roleName" clearable type="text" placeholder="请输入角色名称" />
         </el-form-item>
         <!-- <el-form-item label="角色种类" prop="roleTypeId">
-          <el-select v-model="temp.roleTypeId" filterable placeholder="请搜索或者选择">
+          <el-select clearable  v-model="temp.roleTypeId" filterable placeholder="请搜索或者选择">
             <el-option v-for="item in roleTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item> -->
         <!--         <el-form-item label="角色类别" prop="roleType">
-          <el-input v-model="temp.roleTypeId" type="text" placeholder="请输入角色类别" />
+          <el-input clearable v-model="temp.roleTypeId" type="text" placeholder="请输入角色类别" />
         </el-form-item> -->
         <el-form-item label="启用状态" prop="useFlag">
           <el-switch v-model="temp.useFlag" active-color="#13ce66" inactive-color="#ff4949" />
@@ -119,7 +119,7 @@
         </el-form-item>
 
         <el-form-item label="备注">
-          <el-input v-model="temp.note" style="width:220px;" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入备注" />
+          <el-input v-model="temp.note" clearable style="width:220px;" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入备注" />
         </el-form-item>
 
       </el-form>
@@ -242,6 +242,7 @@ export default {
     },
     // 立即刷新数据列表
     refreshList() {
+      this.listQuery.page = 1
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total

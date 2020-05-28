@@ -1,12 +1,12 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="请输入错误类型名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.title" clearable placeholder="请输入错误类型名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       工序：
-      <el-select v-model="listQuery.operationId" filterable placeholder="请搜索或者选择">
+      <el-select v-model="listQuery.operationId" clearable placeholder="请搜索或者选择" class="filter-item" style="width: 130px">
         <el-option v-for="item in operationOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="handleFilter" />
       </el-select>
-      <el-select v-model="listQuery.useFlag" placeholder="状态" clearable class="filter-item" style="width: 130px">
+      <el-select v-model="listQuery.useFlag" clearable placeholder="状态" class="filter-item" style="width: 130px">
         <el-option v-for="item in useFlagOptions" :key="item.key" :label="item.display_name" :value="item.key" />
       </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -101,23 +101,25 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="50%">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="125px" style="width: 600px; margin-left:50px;">
         <el-form-item label="工序" prop="operationId">
-          <el-select v-model="temp.operationId" filterable placeholder="请搜索或者选择">
+          <el-select v-model="temp.operationId" clearable filterable placeholder="请搜索或者选择">
             <el-option v-for="item in operationOption" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
         <el-form-item label="错误类型编码" prop="wasterReasonsCode">
-          <el-input v-model="temp.wasterReasonsCode" type="text" placeholder="请输入错误类型编码" />
+          <el-input v-model="temp.wasterReasonsCode" clearable type="text" placeholder="请输入错误类型编码" />
         </el-form-item>
         <el-form-item label="错误类型名称" prop="wasterReasonsName">
-          <el-input v-model="temp.wasterReasonsName" type="text" placeholder="请输入错误类型名称" />
+          <el-input v-model="temp.wasterReasonsName" clearable type="text" placeholder="请输入错误类型名称" />
         </el-form-item>
 
         <el-form-item label="错误类型索引" prop="wasterReasonsIndex">
-          <el-input v-model="temp.wasterReasonsIndex" type="text" placeholder="请输入???" />
+          <!-- <el-input clearable v-model="temp.wasterReasonsIndex" type="text" placeholder="请输入错误类型索引" /> -->
+          <el-input v-model="temp.wasterReasonsIndex" clearable-number :min="0" :max="1000" controls-position="right" style="width:220px" />
+
         </el-form-item>
 
         <!--         <el-form-item label="错误类型类别" prop="operation">
-          <el-input v-model="temp.operationId" type="text" placeholder="请输入错误类型类别" />
+          <el-input clearable v-model="temp.operationId" type="text" placeholder="请输入错误类型类别" />
         </el-form-item> -->
         <el-form-item label="启用状态" prop="useFlag">
           <el-switch v-model="temp.useFlag" active-color="#13ce66" inactive-color="#ff4949" />
@@ -131,7 +133,7 @@
         </el-form-item> -->
 
         <el-form-item label="备注">
-          <el-input v-model="temp.note" style="width:220px;" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入备注" />
+          <el-input v-model="temp.note" clearable style="width:220px;" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入备注" />
         </el-form-item>
 
       </el-form>
@@ -253,6 +255,7 @@ export default {
     },
     // 立即刷新数据列表
     refreshList() {
+      this.listQuery.page = 1
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total

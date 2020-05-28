@@ -1,25 +1,25 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <!-- <el-input v-model="listQuery.title" placeholder="请输入审核参数名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" /> -->
+      <!-- <el-input clearable v-model="listQuery.title" placeholder="请输入审核参数名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" /> -->
 
       工序：
-      <el-select v-model="listQuery.operationId" filterable placeholder="请搜索或者选择">
+      <el-select v-model="listQuery.operationId" clearable filterable placeholder="请搜索或者选择" class="filter-item" style="width: 130px">
         <el-option v-for="item in operationOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="handleFilter" />
       </el-select>
       产品：
-      <el-select v-model="listQuery.productId" filterable placeholder="请搜索或者选择">
+      <el-select v-model="listQuery.productId" clearable filterable placeholder="请搜索或者选择" class="filter-item" style="width: 130px">
         <el-option v-for="item in productOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="handleFilter" />
       </el-select>
       设备：
-      <el-select v-model="listQuery.machineId" filterable placeholder="请搜索或者选择">
+      <el-select v-model="listQuery.machineId" clearable filterable placeholder="请搜索或者选择" class="filter-item" style="width: 130px">
         <el-option v-for="item in machineOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="handleFilter" />
       </el-select>
       参数类别：
-      <el-select v-model="listQuery.judgeCheckTypeId" filterable placeholder="请搜索或者选择">
+      <el-select v-model="listQuery.judgeCheckTypeId" clearable filterable placeholder="请搜索或者选择" class="filter-item" style="width: 130px">
         <el-option v-for="item in judgeCheckTypeOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="handleFilter" />
       </el-select>
-      <el-select v-model="listQuery.useFlag" placeholder="状态" clearable class="filter-item" style="width: 130px">
+      <el-select v-model="listQuery.useFlag" clearable filterable placeholder="状态" class="filter-item" style="width: 130px">
         <el-option v-for="item in useFlagOptions" :key="item.key" :label="item.display_name" :value="item.key" />
       </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -140,24 +140,24 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="工序" prop="operationId">
-              <el-select v-if="dialogStatus==='update'" v-model="temp.operationId" filterable placeholder="请搜索或者选择" disabled>
+              <el-select v-if="dialogStatus==='update'" v-model="temp.operationId" clearable filterable placeholder="请搜索或者选择" disabled>
                 <el-option v-for="item in operationOption" :key="item.value" :label="item.label" :value="item.value" />
                 <el-option v-for="item in operationOption" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
-              <el-select v-else v-model="temp.operationId" filterable placeholder="请搜索或者选择">
+              <el-select v-else v-model="temp.operationId" clearable filterable placeholder="请搜索或者选择">
                 <el-option v-for="item in operationOption" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
             <el-form-item label="产品" prop="productId">
-              <el-select v-if="dialogStatus==='update'" v-model="temp.productId" filterable placeholder="请搜索或者选择" disabled>
+              <el-select v-if="dialogStatus==='update'" v-model="temp.productId" clearable filterable placeholder="请搜索或者选择" disabled>
                 <el-option v-for="item in productOption" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
-              <el-select v-else v-model="temp.productId" filterable placeholder="请搜索或者选择">
+              <el-select v-else v-model="temp.productId" clearable filterable placeholder="请搜索或者选择">
                 <el-option v-for="item in productOption" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
             <el-form-item label="设备" prop="machineId">
-              <el-select v-model="temp.machineId" filterable placeholder="请搜索或者选择" clearable>
+              <el-select v-model="temp.machineId" clearable filterable placeholder="请搜索或者选择">
                 <el-option v-for="item in machineOption" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
@@ -166,24 +166,24 @@
             </el-form-item>
 
             <el-form-item label="备注">
-              <el-input v-model="temp.note" style="width:220px;" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入备注" />
+              <el-input v-model="temp.note" clearable style="width:220px;" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入备注" />
             </el-form-item>
 
             <!-- <el-form-item label="审核参数种类" prop="judgeCheckTypeId">
-              <el-select v-model="temp.judgeCheckTypeId" filterable placeholder="请搜索或者选择">
+              <el-select clearable  v-model="temp.judgeCheckTypeId" filterable placeholder="请搜索或者选择">
                 <el-option v-for="item in judgeCheckTypeOption" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item> -->
           </el-col>
           <el-col :span="12">
             <el-form-item v-for="(item,index) in judgeCheckTypeOption" :key="item.value" :label="item.label">
-              <!-- <el-input v-model="temp.values[index]" type="text" placeholder="请输入参数值" /> -->
-              <el-input-number v-model="temp.values[index]" :min="0" :max="20000" controls-position="right" style="width:240px" />
+              <!-- <el-input clearable v-model="temp.values[index]" type="text" placeholder="请输入参数值" /> -->
+              <el-input v-model="temp.values[index]" clearable-number :min="0" :max="20000" controls-position="right" style="width:240px" />
             </el-form-item>
           </el-col>
           <!--  <el-col :span="12">
             <el-form-item v-for="(item,index) in judgeCheckTypeOption" :key="item.value" :label="item.label">
-              <el-input v-model="temp.valueData[index]" type="text" placeholder="请输入参数值" />
+              <el-input clearable v-model="temp.valueData[index]" type="text" placeholder="请输入参数值" />
             </el-form-item>
           </el-col> -->
         </el-row>
@@ -318,6 +318,7 @@ export default {
     },
     // 立即刷新数据列表
     refreshList() {
+      this.listQuery.page = 1
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total

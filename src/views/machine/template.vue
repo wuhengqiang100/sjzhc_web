@@ -3,13 +3,14 @@
     <div class="filter-container">
       <el-input
         v-model="listQuery.title"
+        clearable
         placeholder="请输入设备名称"
         style="width: 200px;"
         class="filter-item"
         @keyup.enter.native="handleFilter"
       />
       <!--
-      <el-select v-model="listQuery.useFlag" placeholder="状态" clearable class="filter-item" style="width: 130px">
+      <el-select clearable  v-model="listQuery.useFlag" placeholder="状态" clearable class="filter-item" style="width: 130px">
         <el-option v-for="item in useFlagOptions" :key="item.key" :label="item.display_name" :value="item.key" />
       </el-select>-->
       <el-button
@@ -120,21 +121,22 @@
         style="width: 600px; margin-left:50px;"
       >
         <el-form-item label="设备code" prop="machineCode">
-          <el-input v-model="temp.machineCode" type="text" placeholder="请输入设备code" />
+          <el-input v-model="temp.machineCode" clearable type="text" placeholder="请输入设备code" />
         </el-form-item>
         <el-form-item label="设备name" prop="machineName">
-          <el-input v-model="temp.machineName" type="text" placeholder="请输入设备name" />
+          <el-input v-model="temp.machineName" clearable type="text" placeholder="请输入设备name" />
         </el-form-item>
         <el-form-item label="模板image目录" prop="imageModelPath">
           <el-input
             v-model="temp.imageModelPath"
+            clearable
             :autosize="{ minRows: 2, maxRows: 5}"
             type="textarea"
             placeholder="请输入模板image目录"
           />
         </el-form-item>
         <el-form-item label="模板image数量" prop="imageModelNum">
-          <el-input-number v-model="temp.imageModelNum" :min="0" label="描述文字" />
+          <el-input v-model="temp.imageModelNum" clearable-number :min="0" label="描述文字" />
         </el-form-item>
 
         <el-form-item label="启用状态" prop="useFlag">
@@ -160,6 +162,7 @@
         <el-form-item label="备注">
           <el-input
             v-model="temp.note"
+            clearable
             style="width:220px;"
             :autosize="{ minRows: 2, maxRows: 5}"
             type="textarea"
@@ -184,9 +187,9 @@
     >
       <!-- <el-form-item label="设备名称"> -->
       设备名称:
-      <el-input v-model="addFileName" disabled="true" type="text" style="width:200px" />
+      <el-input v-model="addFileName" clearable disabled="true" type="text" style="width:200px" />
       <!-- </el-form-item> -->
-      <!-- 附件名称：<el-input v-model="addFileName" autocomplete="off" size="small" style="width: 250x;" /> -->
+      <!-- 附件名称：<el-input clearable v-model="addFileName" autocomplete="off" size="small" style="width: 250x;" /> -->
       <div class="add-file-right" style="height:70px;margin-left:100px;margin-top:15px;">
         <div class="add-file-right-img" style="margin-left:70px;">上传文件：</div>
         <input
@@ -473,6 +476,7 @@ export default {
     }, */
     // 立即刷新数据列表
     refreshList() {
+      this.listQuery.page = 1
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total

@@ -8,7 +8,7 @@
             <div slot="header" class="clearfix">
               <span><el-tag effect="dark">待审核车次</el-tag></span>
               <span style="float: right; padding: 3px 0">
-                <el-input v-model="listQuery.cartNumber" placeholder="请输入车号" style="width: 200px;" class="filter-item" @keyup.enter.native="getCanAuditTable" />
+                <el-input v-model="listQuery.cartNumber" clearable placeholder="请输入车号" style="width: 200px;" class="filter-item" @keyup.enter.native="getCanAuditTable" />
                 <el-button v-waves size="mini" class="filter-item" type="primary" icon="el-icon-search" @click="getCanAuditTable">
                   搜索
                 </el-button>
@@ -31,13 +31,18 @@
               <el-table-column prop="infoNumber" sortable label="总数" width="55" />
               <el-table-column prop="machineWasterNumber" sortable label="机检数" width="70" />
               <el-table-column prop="noCheckNum" sortable label="未检" width="55" />
-              <el-table-column prop="judgeWasterNumber" sortable label="判废" width="60" />
+              <el-table-column prop="judgeWasterNumber" sortable label="判废" width="60">
+                <template slot-scope="{row}">
+                  <span v-if="row.judgeWasterNumber===null">未上传完成</span>
+                  <span v--else>{{ row.judgeWasterNumber }}</span>
+                </template>
+              </el-table-column>
               <el-table-column prop="note" label="说明" min-width="80">
                 <template slot-scope="{row}">
                   <span class="link-type" @click="handleEditNoteCan(row)">{{ row.note }}</span>
                 </template>
               </el-table-column>
-              <el-table-column prop="lastUpdateTime" sortable label="数据更新日期" width="120" />
+              <el-table-column prop="wipProdLogs.startDate" sortable label="生产时间" width="120" />
 
             </el-table>
           </el-card>
@@ -55,7 +60,7 @@
         <el-col :span="1" style="display:flex">
           <div style="margin-top:200px;" class="button-class">
             <el-row style="margin-top:60px">
-              <el-input v-model="temp.note" type="textarea" :rows="2" placeholder="请输入说明" />
+              <el-input v-model="temp.note" clearable type="textarea" :rows="2" placeholder="请输入说明" />
             </el-row>
             <el-row style="margin-top:10px;margin-left:5px">
               <el-button type="primary" @click="handleAudit()">审核<i class="el-icon-arrow-right el-icon--right" /></el-button>
@@ -91,7 +96,7 @@
                       />
                     </el-col>
                     <el-col :span="4">
-                      <el-input v-model="listQuery.cartNumber" placeholder="请输入车号" style="width: 100px;" class="filter-item" @keyup.enter.native="getAlreadyAuditTable" />
+                      <el-input v-model="listQuery.cartNumber" clearable placeholder="请输入车号" style="width: 100px;" class="filter-item" @keyup.enter.native="getAlreadyAuditTable" />
 
                     </el-col>
                     <el-col :span="4">
@@ -133,7 +138,9 @@
                     <span class="link-type" @click="handleEditNoteAlready(row)">{{ row.note }}</span>
                   </template>
                 </el-table-column>
-                <el-table-column prop="lastUpdateTime" sortable label="数据更新日期" width="120" />
+
+                <el-table-column prop="wipProdLogs.startDate" sortable label="生产时间" width="120" />
+
                 <el-table-column prop="checkDate" sortable label="审核日期" width="120" />
                 <el-table-column label="状态" width="70">
                   <template slot-scope="scope">
@@ -189,7 +196,7 @@
 
     </div>
     <el-dialog title="未审核备注" :visible.sync="dialogNoteCanVisible" width="20%">
-      <el-input v-model="tempNoteCan.note" style="width:250px;" :autosize="{ minRows: 3, maxRows: 6}" type="textarea" placeholder="请输入备注" />
+      <el-input v-model="tempNoteCan.note" clearable style="width:250px;" :autosize="{ minRows: 3, maxRows: 6}" type="textarea" placeholder="请输入备注" />
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogNoteCanVisible = false">
           返回
@@ -200,7 +207,7 @@
       </div>
     </el-dialog>
     <el-dialog title="已审核备注" :visible.sync="dialogNoteAlreadyVisible" width="20%">
-      <el-input v-model="tempNoteAlready.note" style="width:250px;" :autosize="{ minRows: 3, maxRows: 6}" type="textarea" placeholder="请输入备注" />
+      <el-input v-model="tempNoteAlready.note" clearable style="width:250px;" :autosize="{ minRows: 3, maxRows: 6}" type="textarea" placeholder="请输入备注" />
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogNoteAlreadyVisible = false">
           返回

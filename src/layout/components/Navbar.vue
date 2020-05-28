@@ -83,13 +83,13 @@
     >
       <el-form :model="temp">
         <el-form-item label="原密码" :label-width="formLabelWidth">
-          <el-input v-model="temp.oldPassword" type="text" autocomplete="off" />
+          <el-input v-model="temp.oldPassword" clearable type="text" autocomplete="off" />
         </el-form-item>
         <el-form-item label="新密码" :label-width="formLabelWidth">
-          <el-input v-model="temp.newPassword" type="password" autocomplete="off" />
+          <el-input v-model="temp.newPassword" clearable type="password" autocomplete="off" />
         </el-form-item>
         <el-form-item label="重置密码" :label-width="formLabelWidth">
-          <el-input v-model="temp.confirmPassword" type="password" autocomplete="off" />
+          <el-input v-model="temp.confirmPassword" clearable type="password" autocomplete="off" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

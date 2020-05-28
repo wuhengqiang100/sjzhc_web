@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="请输入人员名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.title" clearable placeholder="请输入人员名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
 
-      <!-- <el-select v-model="listQuery.useFlag" placeholder="状态" clearable class="filter-item" style="width: 130px">
+      <!-- <el-select clearable  v-model="listQuery.useFlag" placeholder="状态" clearable class="filter-item" style="width: 130px">
         <el-option v-for="item in useFlagOptions" :key="item.key" :label="item.display_name" :value="item.key" />
       </el-select> -->
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -80,10 +80,10 @@
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="100px" style="width: 500px; margin-left:50px;">
 
         <el-form-item label="人员code" prop="operatorCode">
-          <el-input v-model="temp.operatorCode" type="text" placeholder="请输入人员code" />
+          <el-input v-model="temp.operatorCode" clearable type="text" placeholder="请输入人员code" />
         </el-form-item>
         <el-form-item label="人员name" prop="operatorName">
-          <el-input v-model="temp.operatorName" type="text" placeholder="请输入人员name" />
+          <el-input v-model="temp.operatorName" clearable type="text" placeholder="请输入人员name" />
         </el-form-item>
 
         <!-- <el-form-item label="启用时间" prop="startDate">
@@ -95,7 +95,7 @@
         </el-form-item> -->
 
         <el-form-item label="备注">
-          <el-input v-model="temp.note" style="width:220px;" :autosize="{ minRows: 2, maxRows: 5}" type="textarea" placeholder="请输入备注" />
+          <el-input v-model="temp.note" clearable style="width:220px;" :autosize="{ minRows: 2, maxRows: 5}" type="textarea" placeholder="请输入备注" />
         </el-form-item>
 
       </el-form>
@@ -231,6 +231,7 @@ export default {
     }, */
     // 立即刷新数据列表
     refreshList() {
+      this.listQuery.page = 1
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total

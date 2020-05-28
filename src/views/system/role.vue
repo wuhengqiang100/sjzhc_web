@@ -3,6 +3,7 @@
     <div class="filter-container">
       <el-input
         v-model="listQuery.title"
+        clearable
         placeholder="请输入角色名称"
         style="width: 200px;"
         class="filter-item"
@@ -11,8 +12,8 @@
 
       <el-select
         v-model="listQuery.useFlag"
-        placeholder="状态"
         clearable
+        placeholder="状态"
         class="filter-item"
         style="width: 130px"
       >
@@ -174,6 +175,7 @@
             >
               <el-input
                 v-model="temp.roleName"
+                clearable
                 type="text"
                 placeholder="请输入角色名称"
               />
@@ -184,6 +186,7 @@
             >
               <el-input
                 v-model="temp.roleCode"
+                clearable
                 type="text"
                 placeholder="请输入角色code"
               />
@@ -202,6 +205,7 @@
             <el-form-item label="备注">
               <el-input
                 v-model="temp.note"
+                clearable
                 style="width:220px;"
                 :autosize="{ minRows: 2, maxRows: 5}"
                 type="textarea"
@@ -418,6 +422,7 @@ export default {
  */
     // 立即刷新数据列表
     refreshList() {
+      this.listQuery.page = 1
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total

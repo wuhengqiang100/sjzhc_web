@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <!-- <el-input v-model="listQuery.title" placeholder="请输入操作日志名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" /> -->
+      <!-- <el-input clearable v-model="listQuery.title" placeholder="请输入操作日志名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" /> -->
 
       <div class="filter-item">
         <el-date-picker
@@ -275,6 +275,7 @@ export default {
     }, */
     // 立即刷新数据列表
     refreshList() {
+      this.listQuery.page = 1
       if (this.dateValue !== '') {
         this.listQuery.startDate = parseTime(this.dateValue[0])
         this.listQuery.endDate = parseTime(this.dateValue[1])

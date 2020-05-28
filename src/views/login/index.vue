@@ -34,6 +34,7 @@
             <el-input
               ref="username"
               v-model="loginForm.username"
+              clearable
               placeholder="请输入用户名"
               name="username"
               type="text"
@@ -56,6 +57,7 @@
                 :key="passwordType"
                 ref="password"
                 v-model="loginForm.password"
+                clearable
                 :type="passwordType"
                 placeholder="请输入密码"
                 name="password"
@@ -86,7 +88,7 @@
             <span class="svg-container">
               <svg-icon icon-class="user" />
             </span>
-            <el-input
+            <el-input clearable
               ref="userId"
               v-model="userId"
               placeholder="userId"

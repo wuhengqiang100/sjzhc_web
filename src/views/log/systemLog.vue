@@ -1,11 +1,12 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="请输入系统操作人" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.title" clearable placeholder="请输入系统操作人" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
 
       <div class="filter-item">
         <el-date-picker
           v-model="dateValue"
+          :clearable="false"
           type="datetimerange"
           align="right"
           start-placeholder="开始日期"
@@ -146,7 +147,7 @@ export default {
       tableKey: 0,
       list: null,
       total: 0,
-      listLoading: true,
+      listLoading: false,
       dateValue: '',
 
       listQuery: {
@@ -197,7 +198,7 @@ export default {
   },
   // 初始化获取数据列表
   created() {
-    this.getList()
+    // this.getList()
   },
   methods: {
     // 有加载圈的加载数据列表
@@ -226,6 +227,7 @@ export default {
     }, */
     // 立即刷新数据列表
     refreshList() {
+      this.listQuery.page = 1
       if (this.dateValue !== '') {
         this.listQuery.startDate = parseTime(this.dateValue[0])
         this.listQuery.endDate = parseTime(this.dateValue[1])
@@ -271,9 +273,7 @@ export default {
         // useFlag: undefined,
         // importance: undefined,
         title: undefined,
-        sort: '+id',
-        startDate: Date,
-        endDate: Date
+        sort: '+id'
       }
     },
     handleFilter() {

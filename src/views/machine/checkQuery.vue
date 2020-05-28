@@ -4,6 +4,7 @@
       车号：
       <el-input
         v-model="listQuery.cartNumber"
+        clearable
         placeholder="请输入车号"
         style="width: 120px;"
         class="filter-item"
@@ -12,22 +13,30 @@
       工序：
       <el-select
         v-model="listQuery.operationId"
+        clearable
         filterable
         placeholder="请搜索或者选择"
+        class="filter-item"
+        style="width: 130px"
       >
         <el-option
           v-for="item in operationOption"
           :key="item.value"
           :label="item.label"
           :value="item.value"
+          class="filter-item"
+          style="width: 130px"
           @keyup.enter.native="handleFilter"
         />
       </el-select>
       产品：
       <el-select
         v-model="listQuery.productId"
+        clearable
         filterable
         placeholder="请搜索或者选择"
+        class="filter-item"
+        style="width: 130px"
       >
         <el-option
           v-for="item in productOption"
@@ -41,8 +50,11 @@
       设备：
       <el-select
         v-model="listQuery.machineId"
+        clearable
         filterable
         placeholder="请搜索或者选择"
+        class="filter-item"
+        style="width: 130px"
       >
         <el-option
           v-for="item in machineOption"
@@ -56,8 +68,11 @@
       机台：
       <el-select
         v-model="listQuery.workUnitId"
+        clearable
         filterable
         placeholder="请搜索或者选择"
+        class="filter-item"
+        style="width: 130px"
       >
         <el-option
           v-for="item in dicWorkUnitOption"
@@ -73,6 +88,7 @@
           v-model="dateValue"
           type="datetimerange"
           align="right"
+          :clearable="false"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           :default-time="['00:00:01', '23:59:59']"
@@ -116,6 +132,7 @@
         sortable="custom"
         align="center"
         :class-name="getSortClass('id')"
+        width="110"
       >
         <template slot-scope="{row}">
           <span>{{ row.logId }}</span>
@@ -124,6 +141,7 @@
       <el-table-column
         label="生产车号"
         align="center"
+        width="80"
       >
         <template slot-scope="{row}">
           <span>{{ row.cartNumber }}</span>
@@ -132,6 +150,7 @@
       <el-table-column
         label="工序名称"
         align="center"
+        width="80"
       >
         <template slot-scope="{row}">
           <span>{{ row.operationName }}</span>
@@ -140,6 +159,7 @@
       <el-table-column
         label="产品名称"
         align="center"
+        width="80"
       >
         <template slot-scope="{row}">
           <span>{{ row.productName }}</span>
@@ -149,6 +169,7 @@
       <el-table-column
         label="设备名称"
         align="center"
+        width="125"
       >
         <template slot-scope="{row}">
           <span>{{ row.machineName }}</span>
@@ -157,12 +178,13 @@
       <el-table-column
         label="机台名称"
         align="center"
+        width="80"
       >
         <template slot-scope="{row}">
           <span>{{ row.workUnitName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="总数" align="center">
+      <el-table-column label="总数" align="center" width="80">
         <template slot-scope="{row}">
           <span>{{ row.infoNumber }}</span>
         </template>
@@ -170,6 +192,7 @@
       <el-table-column
         label="检测报错条数"
         align="center"
+        width="80"
       >
         <template slot-scope="{row}">
           <span>{{ row.machineWasterNumber }}</span>
@@ -178,6 +201,7 @@
       <el-table-column
         label="未检条数"
         align="center"
+        width="80"
       >
         <template slot-scope="{row}">
           <span>{{ row.nocheckNumber }}</span>
@@ -186,6 +210,7 @@
       <el-table-column
         label="判费数量"
         align="center"
+        width="80"
       >
         <template slot-scope="{row}">
           <span>{{ row.judgeWasterNumber }}</span>
@@ -195,6 +220,7 @@
       <el-table-column
         label="人员名称"
         align="center"
+        width="80"
       >
         <template slot-scope="{row}">
           <span>{{ row.operatorName }}</span>
@@ -203,13 +229,14 @@
       <el-table-column
         label="说明"
         align="center"
+        width="100"
       >
         <template slot-scope="{row}">
           <span>{{ row.note }}</span>
         </template>
       </el-table-column>
       <!-- //自动审核标志: 0 未设定 1 自动审核 2 人工审核 -->
-      <el-table-column label="审核标志" width="70">
+      <el-table-column label="审核标志" min-width="100">
         <template slot-scope="{row}">
           <el-tag v-if="row.autoCheckFlag===0" effect="dark" type="success">未设定</el-tag>
           <el-tag v-else-if="row.autoCheckFlag===1" effect="dark" type="info">自动审核</el-tag>
@@ -219,6 +246,7 @@
       <el-table-column
         label="审核时间"
         align="center"
+        min-width="130"
       >
         <template
           v-if="row.checkDate !==null"
@@ -230,6 +258,7 @@
       <el-table-column
         label="开始时间"
         align="center"
+        min-width="130"
       >
         <template
           v-if="row.startDate !==null"
@@ -241,6 +270,7 @@
       <el-table-column
         label="结束时间"
         align="center"
+        min-width="130"
       >
         <template
           v-if="row.endDate !==null"
@@ -426,6 +456,7 @@ export default {
     },
     // 立即刷新数据列表
     refreshList() {
+      this.listQuery.page = 1
       fetchCheckQueryList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
@@ -471,8 +502,8 @@ export default {
         operationId: undefined,
         machineId: undefined,
         workUnitId: undefined,
-        startDate: Date,
-        endDate: Date,
+        // startDate: Date,
+        // endDate: Date,
         sort: '+id'
       }
       this.dateValue = ''

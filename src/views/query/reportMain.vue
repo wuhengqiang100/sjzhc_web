@@ -4,6 +4,7 @@
       车号：
       <el-input
         v-model="listQuery.cartNumber"
+        clearable
         placeholder="请输入车号"
         style="width: 120px;"
         class="filter-item"
@@ -13,8 +14,11 @@
       产品：
       <el-select
         v-model="listQuery.productId"
+        clearable
         filterable
         placeholder="请搜索或者选择"
+        class="filter-item"
+        style="width: 130px"
       >
         <el-option
           v-for="item in productOption"
@@ -30,6 +34,7 @@
           v-model="dateValue"
           type="datetimerange"
           align="right"
+          :clearable="false"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           :default-time="['00:00:01', '23:59:59']"
@@ -84,7 +89,7 @@
           <span>{{ row.head }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="完成标志" align="center" min-width="100">
+      <el-table-column label="完成标志" align="center" width="110">
         <template slot-scope="{row}">
           <el-tag v-if="row.finishedFlag===0 || row.finishedFlag===1 " effect="dark">生产中</el-tag>
           <el-tag v-else-if="row.finishedFlag===2" effect="dark" type="success">已生成数量</el-tag>
@@ -93,7 +98,7 @@
           <el-tag v-else-if="row.finishedFlag===5" effect="dark" type="warning">ocr稽核完成</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="印码号控核查标志" align="center" min-width="100">
+      <el-table-column label="印码号控核查标志" align="center" width="110">
         <template slot-scope="{row}">
           <el-tag v-if="row.ymhkCheckFlag===-2" effect="dark" width="80">没有数据</el-tag>
           <el-tag v-else-if="row.ymhkCheckFlag===-1" effect="dark" type="success">数据未处理完成</el-tag>
@@ -102,7 +107,7 @@
           <el-tag v-else-if="row.ymhkCheckFlag===2" effect="dark" type="warning">已打印</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="印码票面核查标志" align="center" min-width="100">
+      <el-table-column label="印码票面核查标志" align="center" width="110">
         <template slot-scope="{row}">
           <el-tag v-if="row.ympmCheckFlag===-2" effect="dark">没有数据</el-tag>
           <el-tag v-else-if="row.ympmCheckFlag===-1" effect="dark" type="success">数据未处理完成</el-tag>
@@ -112,7 +117,7 @@
 
         </template>
       </el-table-column>
-      <el-table-column label="印码涂布核查标志" align="center" min-width="100">
+      <el-table-column label="印码涂布核查标志" align="center" width="110">
         <template slot-scope="{row}">
           <el-tag v-if="row.ymtbCheckFlag===-2" effect="dark">没有数据</el-tag>
           <el-tag v-else-if="row.ymtbCheckFlag===-1" effect="dark" type="success">数据未处理完成</el-tag>
@@ -122,7 +127,7 @@
 
         </template>
       </el-table-column>
-      <el-table-column label="丝印核查标志" align="center" min-width="100">
+      <el-table-column label="丝印核查标志" align="center" width="110">
         <template slot-scope="{row}">
           <el-tag v-if="row.syCheckFlag===-2" effect="dark">没有数据</el-tag>
           <el-tag v-else-if="row.syCheckFlag===-1" effect="dark" type="success">数据未处理完成</el-tag>
@@ -132,7 +137,7 @@
 
         </template>
       </el-table-column>
-      <el-table-column label="未检数" align="center" width="70">
+      <el-table-column label="未检数" align="center" width="60">
         <template slot-scope="{row}">
           <span>{{ row.WJ }}</span>
         </template>
@@ -150,7 +155,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="褶子" align="center" width="70">
+      <el-table-column label="褶子" align="center" width="60">
         <template slot-scope="{row}">
           <span>{{ row.tbzzwj }}</span>
         </template>
@@ -176,7 +181,7 @@
           <span>{{ row.startDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" fixed="right" align="center" min-width="120px" class-name="small-padding fixed-width">
+      <el-table-column label="操作" fixed="right" align="center" min-width="150px" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleQa(row)"> 缺陷 </el-button>
           <el-button size="mini" type="danger" @click="handleNck(row)">未检</el-button>
@@ -190,25 +195,25 @@
     <el-dialog title="缺陷详细信息" :visible.sync="dialogQaVisible" width="80%" top="5vh">
       <div class="filter-container">
         <!-- 生产序号：
-        <el-input v-model="listQueryQa.jobId" placeholder="请输入生产序号" style="width: 120px;" class="filter-item" @keyup.enter.native="getListQa" /> -->
+        <el-input clearable v-model="listQueryQa.jobId" placeholder="请输入生产序号" style="width: 120px;" class="filter-item" @keyup.enter.native="getListQa" /> -->
         大张号：
-        <el-input v-model="listQueryQa.sheetNum" placeholder="请输入大张号" style="width: 120px;" class="filter-item" @keyup.enter.native="getListQa" />
+        <el-input v-model="listQueryQa.sheetNum" clearable placeholder="请输入大张号" style="width: 120px;" class="filter-item" @keyup.enter.native="getListQa" />
         印码号：
-        <el-input v-model="listQueryQa.codeNum" placeholder="请输入印码" style="width: 120px;" class="filter-item" @keyup.enter.native="getListQa" />
+        <el-input v-model="listQueryQa.codeNum" clearable placeholder="请输入印码" style="width: 120px;" class="filter-item" @keyup.enter.native="getListQa" />
         工序：
-        <el-select v-model="listQueryQa.operationId" filterable placeholder="请搜索或者选择">
+        <el-select v-model="listQueryQa.operationId" clearable filterable placeholder="请搜索或者选择" style="width: 130px;" class="filter-item">
           <el-option v-for="item in operationOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="getListQa" />
         </el-select>
         产品：
-        <el-select v-model="listQueryQa.productId" filterable placeholder="请搜索或者选择">
+        <el-select v-model="listQueryQa.productId" clearable filterable placeholder="请搜索或者选择" style="width: 130px;" class="filter-item">
           <el-option v-for="item in productOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="getListQa" />
         </el-select>
         <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="getListQa">
           搜索
         </el-button>
-        <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-refresh" @click="handleResetQa">
+        <!--  <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-refresh" @click="handleResetQa">
           重置
-        </el-button>
+        </el-button> -->
       </div>
       <el-table :key="tableKey" v-loading="listLoadingQa" :data="listQa" border fit highlight-current-row style="width: 100%;height:650px;overflow-y: scroll;" @sort-change="sortQaChange">
         <el-table-column label="生产序号" prop="jobId" width="100">
@@ -301,26 +306,26 @@
     <el-dialog title="未检详细信息" :visible.sync="dialogNckVisible" width="90%" top="5vh">
       <div class="filter-container">
         <!-- 生产序号：
-        <el-input v-model="listQueryNck.jobId" placeholder="请输入生产序号" style="width: 120px;" class="filter-item" @keyup.enter.native="getListNck" /> -->
+        <el-input clearable v-model="listQueryNck.jobId" placeholder="请输入生产序号" style="width: 120px;" class="filter-item" @keyup.enter.native="getListNck" /> -->
         大张号：
-        <el-input v-model="listQueryNck.sheetNum" style="width: 120px;" class="filter-item" @keyup.enter.native="getListNck" />
+        <el-input v-model="listQueryNck.sheetNum" clearable style="width: 120px;" class="filter-item" @keyup.enter.native="getListNck" />
         印码号：
-        <el-input v-model="listQueryNck.codeNum" placeholder="请输入印码" style="width: 120px;" class="filter-item" @keyup.enter.native="getListNck" />
+        <el-input v-model="listQueryNck.codeNum" clearable placeholder="请输入印码" style="width: 120px;" class="filter-item" @keyup.enter.native="getListNck" />
         工序：
-        <el-select v-model="listQueryNck.operationId" filterable placeholder="请搜索或者选择">
+        <el-select v-model="listQueryNck.operationId" clearable filterable placeholder="请搜索或者选择" style="width: 130px;" class="filter-item">
           <el-option v-for="item in operationOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="getListNck" />
         </el-select>
         产品：
-        <el-select v-model="listQueryNck.productId" filterable placeholder="请搜索或者选择">
+        <el-select v-model="listQueryNck.productId" clearable filterable placeholder="请搜索或者选择" style="width: 130px;" class="filter-item">
           <el-option v-for="item in productOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="getListNck" />
         </el-select>
 
         <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="getListNck">
           搜索
         </el-button>
-        <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-refresh" @click="handleResetNck">
+        <!-- <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-refresh" @click="handleResetNck">
           重置
-        </el-button>
+        </el-button> -->
       </div>
       <el-table :key="tableKey" v-loading="listLoadingNck" :data="listNck" border fit highlight-current-row style="width: 100%;height:650px;overflow-y: scroll;" @sort-change="sortNckChange">
         <el-table-column label="生产序号">
@@ -518,7 +523,7 @@ export default {
       this.getListQa()
     },
     getListQa() {
-      this.listQueryQa.page = 1
+      // this.listQueryQa.page = 1
       this.listLoadingQa = true
       fetchReportQaList(this.listQueryQa).then(response => {
         this.listQa = response.data.items
@@ -574,7 +579,7 @@ export default {
       this.getListNck()
     },
     getListNck() {
-      this.listQueryNck.page = 1
+      // this.listQueryNck.page = 1
       this.listLoadingNck = true
       fetchReportNckList(this.listQueryNck).then(response => {
         this.listNck = response.data.items
@@ -598,11 +603,39 @@ export default {
         endDate: Date,
         sort: ''
       }
-    }, resetListQueryNck() {
+    }, resetListQueryQaReset() {
+      this.listQueryQa = {
+        page: 1,
+        limit: 20,
+        // jobId: undefined,
+        sheetNum: undefined,
+        codeNum: undefined,
+        productId: undefined,
+        operationId: undefined,
+        startDate: Date,
+        endDate: Date,
+        sort: ''
+      }
+    },
+    resetListQueryNck() {
       this.listQueryNck = {
         page: 1,
         limit: 20,
-        jobId: undefined,
+        // jobId: undefined,
+        sheetNum: undefined,
+        codeNum: undefined,
+        productId: undefined,
+        operationId: undefined,
+        startDate: Date,
+        endDate: Date,
+        sort: ''
+      }
+    },
+    resetListQueryNckReset() {
+      this.listQueryNck = {
+        page: 1,
+        limit: 20,
+        // jobId: undefined,
         sheetNum: undefined,
         codeNum: undefined,
         productId: undefined,
@@ -638,6 +671,7 @@ export default {
     },
     // 立即刷新数据列表
     refreshList() {
+      this.listQuery.page = 1
       if (this.dateValue !== '') {
         this.listQuery.startDate = parseTime(this.dateValue[0])
         this.listQuery.endDate = parseTime(this.dateValue[1])

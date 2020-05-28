@@ -3,19 +3,27 @@
     <div class="filter-container">
       <el-input
         v-model="listQuery.title"
+        clearable
         placeholder="请输入登陆名"
         style="width: 200px;"
         class="filter-item"
         @keyup.enter.native="handleFilter"
       />
       用户：
-      <el-select v-model="listQuery.operatorId" filterable placeholder="请搜索或者选择">
+      <el-select
+        v-model="listQuery.operatorId"
+        clearable
+        filterable
+        placeholder="请搜索或者选择"
+        class="filter-item"
+        style="width: 130px"
+      >
         <el-option v-for="item in operatorOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="handleFilter" />
       </el-select>
       <el-select
         v-model="listQuery.useFlag"
-        placeholder="启用状态"
         clearable
+        placeholder="启用状态"
         class="filter-item"
         style="width: 130px"
       >
@@ -173,6 +181,7 @@
             >
               <el-select
                 v-model="temp.operatorId"
+                clearable
                 filterable
                 placeholder="请搜索或者选择"
               >
@@ -191,6 +200,7 @@
             >
               <el-input
                 v-model="temp.loginUserName"
+                clearable
                 type="text"
                 placeholder="请输入登陆名"
               />
@@ -201,6 +211,7 @@
             >
               <el-input
                 v-model="temp.loginUserPass"
+                clearable
                 type="text"
                 placeholder="请输入登陆密码"
               />
@@ -216,7 +227,7 @@
               prop="roleIds"
             >
 
-              <el-select v-model="roleIdss" multiple placeholder="请选择角色">
+              <el-select v-model="roleIdss" clearable multiple placeholder="请选择角色">
                 <el-option
                   v-for="item in roleOptions"
                   :key="item.value"
@@ -377,6 +388,7 @@ export default {
     },
     // 立即刷新数据列表
     refreshList() {
+      this.listQuery.page = 1
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total

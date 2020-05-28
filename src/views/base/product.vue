@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="请输入产品名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.title" clearable placeholder="请输入产品名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
 
-      <el-select v-model="listQuery.useFlag" placeholder="状态" clearable class="filter-item" style="width: 130px">
+      <el-select v-model="listQuery.useFlag" clearable placeholder="状态" class="filter-item" style="width: 130px">
         <el-option v-for="item in useFlagOptions" :key="item.key" :label="item.display_name" :value="item.key" />
       </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -30,12 +30,12 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="产品id" prop="id" sortable="custom" align="center" :class-name="getSortClass('id')">
+      <el-table-column label="产品序号" prop="id" sortable="custom" align="center" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.productId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="产品code" align="center">
+      <el-table-column label="工序编号" align="center">
         <template slot-scope="{row}">
           <span>{{ row.productCode }}</span>
         </template>
@@ -48,7 +48,7 @@
       </el-table-column>
       <el-table-column label="前缀字母序号" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.cartnumFirstId }}</span>
+          <span>{{ row.cartNumFirst.numCode }}</span>
         </template>
       </el-table-column>
 
@@ -138,36 +138,52 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="产品编号" prop="productCode">
-              <el-input v-model="temp.productCode" type="text" placeholder="请输入产品编码" />
+              <el-input v-model="temp.productCode" clearable type="text" placeholder="请输入产品编码" />
             </el-form-item>
-            <el-form-item label="MES产品编号" prop="productCodeMes">
-              <el-input v-model="temp.productCodeMes" type="text" placeholder="请输入MES产品编号" />
-            </el-form-item>
+            <!-- <el-form-item label="MES产品编号" prop="productCodeMes">
+              <el-input clearable v-model="temp.productCodeMes" type="text" placeholder="请输入MES产品编号" />
+            </el-form-item> -->
             <el-form-item label="产品名称" prop="productName">
-              <el-input v-model="temp.productName" type="text" placeholder="请输入产品名称" />
+              <el-input v-model="temp.productName" clearable type="text" placeholder="请输入产品名称" />
             </el-form-item>
+            <!-- <el-form-item label="前缀字母序号" prop="cartnumFirstId">
+              <el-input clearable v-model="temp.cartnumFirstId" type="text" placeholder="请输入前缀字母序号" />
+            </el-form-item> -->
             <el-form-item label="前缀字母序号" prop="cartnumFirstId">
-              <el-input v-model="temp.cartnumFirstId" type="text" placeholder="请输入前缀字母序号" />
+              <el-select v-model="temp.cartnumFirstId" clearable filterable placeholder="请搜索或者选择">
+                <el-option v-for="item in cartNumFirstOption" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
             </el-form-item>
             <!--     <el-form-item label="前缀字母启用日期" prop="cartnumFirstDate">
               <el-date-picker v-model="temp.cartnumFirstDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择前缀字母启用日期" />
             </el-form-item> -->
             <el-form-item label="前缀字母启用次数" prop="cartnumFirstCount">
-              <el-input v-model="temp.cartnumFirstCount" type="text" placeholder="请输入前缀字母启用次数" />
+              <!-- <el-input clearable v-model="temp.cartnumFirstCount" type="text" placeholder="请输入前缀字母启用次数" /> -->
+              <el-input v-model="temp.cartnumFirstCount" clearable-number :min="0" :max="10000" controls-position="right" style="width:220px" />
+
             </el-form-item>
+
             <el-form-item label="印刷行数" prop="rowNumber">
-              <el-input v-model="temp.rowNumber" type="text" placeholder="请输入印刷行数" />
+              <!-- <el-input clearable v-model="temp.rowNumber" type="text" placeholder="请输入印刷行数" /> -->
+              <el-input v-model="temp.rowNumber" clearable-number :min="0" :max="100" controls-position="right" style="width:220px" />
+
             </el-form-item>
             <el-form-item label="印刷列数" prop="colNumber">
-              <el-input v-model="temp.colNumber" type="text" placeholder="请输入印刷列数" />
+              <!-- <el-input clearable v-model="temp.colNumber" type="text" placeholder="请输入印刷列数" /> -->
+              <el-input v-model="temp.colNumber" clearable-number :min="0" :max="100" controls-position="right" style="width:220px" />
+
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="开数" prop="convertSheetNumber">
-              <el-input v-model="temp.convertSheetNumber" type="text" placeholder="请输入开数" />
+              <!-- <el-input clearable v-model="temp.convertSheetNumber" type="text" placeholder="请输入开数" /> -->
+              <el-input v-model="temp.convertSheetNumber" clearable-number :min="0" :max="100" controls-position="right" style="width:220px" />
+
             </el-form-item>
             <el-form-item label="大张废数量" prop="sheetWasterNum">
-              <el-input v-model="temp.sheetWasterNum" type="text" placeholder="请输入大张废数量" />
+              <!-- <el-input clearable v-model="temp.sheetWasterNum" type="text" placeholder="请输入大张废数量" /> -->
+              <el-input v-model="temp.sheetWasterNum" clearable-number :min="0" :max="100" controls-position="right" style="width:220px" />
+
             </el-form-item>
             <el-form-item label="启用状态" prop="useFlag">
               <el-switch v-model="temp.useFlag" active-color="#13ce66" inactive-color="#ff4949" />
@@ -179,13 +195,13 @@
               <el-date-picker v-model="temp.endDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择一个结束时间" />
             </el-form-item> -->
             <el-form-item label="防重号系统的名称" prop="qaCodeName">
-              <el-input v-model="temp.qaCodeName" type="text" placeholder="请输入防重号系统的名称" />
+              <el-input v-model="temp.qaCodeName" clearable type="text" placeholder="请输入防重号系统的名称" />
             </el-form-item>
             <el-form-item label="机检系统本地产品名称" prop="localProductName">
-              <el-input v-model="temp.localProductName" type="text" placeholder="请输入机检系统本地产品名称" />
+              <el-input v-model="temp.localProductName" clearable type="text" placeholder="请输入机检系统本地产品名称" />
             </el-form-item>
             <el-form-item label="备注">
-              <el-input v-model="temp.note" style="width:220px;" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入备注" />
+              <el-input v-model="temp.note" clearable style="width:220px;" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入备注" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -219,6 +235,7 @@ import { fetchList, fetchPv, createProduct, updateProduct, updateUseFlag, delete
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import { listOptionProduct } from '@/api/querySelectOption'
 
 const productTypeOptions = []
 
@@ -256,6 +273,8 @@ export default {
       list: null,
       total: 0,
       listLoading: true,
+      cartNumFirstOption: [],
+
       listQuery: {
         page: 1,
         limit: 20,
@@ -305,6 +324,8 @@ export default {
         colNumber: [{ required: true, message: '请填写印刷列数', trigger: 'blur' }],
         convertSheetNumber: [{ required: true, message: '请填写开数', trigger: 'blur' }],
         sheetWasterNum: [{ required: true, message: '请填写大张废数量', trigger: 'blur' }],
+        qaCodeName: [{ required: true, message: '请填写防重号系统的产品名称', trigger: 'blur' }],
+        localProductName: [{ required: true, message: '请填写防机检系统本地产品名称', trigger: 'blur' }],
         startDate: [{ type: 'date', required: true, message: '请填写开始时间', trigger: 'change' }]
         // endDate: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }]
 
@@ -315,6 +336,7 @@ export default {
   // 初始化获取数据列表
   created() {
     this.getList()
+    this.getProductOptions()
   },
   methods: {
     // 有加载圈的加载数据列表
@@ -330,15 +352,15 @@ export default {
         }, 1 * 1000)
       })
     },
-    /*     getMachineTypes() {
-      fetchMachineTypeList().then(response => {
-        console.log('tag', response.data)
-        this.productTypeOptions = response.data
-        console.log('tag', this.productTypeOptions)
+    // 获取前缀字母序号operions
+    getProductOptions() {
+      listOptionProduct().then(response => {
+        this.cartNumFirstOption = response.cartNumFirstOption
       })
-    }, */
+    },
     // 立即刷新数据列表
     refreshList() {
+      this.listQuery.page = 1
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total

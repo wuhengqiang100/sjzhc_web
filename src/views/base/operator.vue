@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="请输入人员名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.title" clearable placeholder="请输入人员名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
 
-      <el-select v-model="listQuery.useFlag" placeholder="状态" clearable class="filter-item" style="width: 130px">
+      <el-select v-model="listQuery.useFlag" clearable placeholder="状态" class="filter-item" style="width: 130px">
         <el-option v-for="item in useFlagOptions" :key="item.key" :label="item.display_name" :value="item.key" />
       </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -30,12 +30,12 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="人员id" prop="id" sortable="custom" align="center" :class-name="getSortClass('id')">
+      <el-table-column label="人员序号" prop="id" sortable="custom" align="center" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.operatorId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="人员code" align="center">
+      <el-table-column label="人员编号" align="center">
         <template slot-scope="{row}">
           <span>{{ row.operatorCode }}</span>
         </template>
@@ -51,12 +51,12 @@
           <el-tag v-else type="danger">  禁用 </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="启用时间" width="112" align="center">
+      <el-table-column label="启用时间" width="120" align="center">
         <template v-if="row.startDate !== null" slot-scope="{row}">
           <span>{{ row.startDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="停用时间" width="112" align="center">
+      <el-table-column label="停用时间" width="120" align="center">
         <template v-if="row.endDate !==null" slot-scope="{row}">
           <span>{{ row.endDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
@@ -84,11 +84,11 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="40%">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="100px" style="width: 500px; margin-left:50px;">
 
-        <el-form-item label="人员code" prop="operatorCode">
-          <el-input v-model="temp.operatorCode" type="text" placeholder="请输入人员code" />
+        <el-form-item label="人员编号" prop="operatorCode">
+          <el-input v-model="temp.operatorCode" clearable type="text" placeholder="请输入人员编号" />
         </el-form-item>
-        <el-form-item label="人员name" prop="operatorName">
-          <el-input v-model="temp.operatorName" type="text" placeholder="请输入人员name" />
+        <el-form-item label="人员名称" prop="operatorName">
+          <el-input v-model="temp.operatorName" clearable type="text" placeholder="请输入人员名称" />
         </el-form-item>
 
         <!-- <el-form-item label="启用时间" prop="startDate">
@@ -109,7 +109,7 @@
           />
         </el-form-item>
         <el-form-item label="备注">
-          <el-input v-model="temp.note" style="width:220px;" :autosize="{ minRows: 2, maxRows: 5}" type="textarea" placeholder="请输入备注" />
+          <el-input v-model="temp.note" clearable style="width:220px;" :autosize="{ minRows: 2, maxRows: 5}" type="textarea" placeholder="请输入备注" />
         </el-form-item>
 
       </el-form>
@@ -201,8 +201,8 @@ export default {
       rules: {
         // type: [{ required: true, message: 'type is required', trigger: 'change' }],
         // timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        operatorCode: [{ required: true, message: '请填写人员code', trigger: 'blur' }],
-        operatorName: [{ required: true, message: '请填写人员name', trigger: 'blur' }],
+        operatorCode: [{ required: true, message: '请填写人员编号', trigger: 'blur' }],
+        operatorName: [{ required: true, message: '请填写人员名称', trigger: 'blur' }],
         startDate: [{ type: 'date', required: true, message: '请填写开始时间', trigger: 'change' }]
         // endDate: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }]
 
@@ -237,6 +237,7 @@ export default {
     }, */
     // 立即刷新数据列表
     refreshList() {
+      this.listQuery.page = 1
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total

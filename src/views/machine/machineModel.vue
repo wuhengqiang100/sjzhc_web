@@ -1,22 +1,22 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="请输入设备模板名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.title" clearable placeholder="请输入设备模板名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
 
-      <el-select v-model="listQuery.useFlag" placeholder="状态" clearable class="filter-item" style="width: 130px">
+      <el-select v-model="listQuery.useFlag" clearable placeholder="状态" class="filter-item" style="width: 130px">
         <el-option v-for="item in useFlagOptions" :key="item.key" :label="item.display_name" :value="item.key" />
       </el-select>
       工序：
-      <el-select v-model="listQuery.operationId" filterable placeholder="请搜索或者选择">
+      <el-select v-model="listQuery.operationId" clearable filterable placeholder="请搜索或者选择">
         <el-option v-for="item in operationOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="handleFilter" />
       </el-select>
       设备：
-      <el-select v-model="listQuery.machineId" filterable placeholder="请搜索或者选择">
+      <el-select v-model="listQuery.machineId" clearable filterable placeholder="请搜索或者选择">
         <el-option v-for="item in machineOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="handleFilter" />
       </el-select>
 
       产品：
-      <el-select v-model="listQuery.productId" filterable placeholder="请搜索或者选择">
+      <el-select v-model="listQuery.productId" clearable filterable placeholder="请搜索或者选择">
         <el-option v-for="item in productOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="handleFilter" />
       </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
@@ -106,36 +106,36 @@
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="125px" style="width: 600px; margin-left:50px;">
 
         <el-form-item label="模板编号" prop="machineModelCode">
-          <el-input v-model="temp.machineModelCode" type="text" placeholder="请输入模板code" />
+          <el-input v-model="temp.machineModelCode" clearable type="text" placeholder="请输入模板code" />
         </el-form-item>
         <el-form-item label="模板名称" prop="machineModelName">
-          <el-input v-model="temp.machineModelName" type="text" placeholder="请输入模板名称" />
+          <el-input v-model="temp.machineModelName" clearable type="text" placeholder="请输入模板名称" />
         </el-form-item>
         <!--    <el-form-item label="模板路径" prop="machineModelPath">
-          <el-input v-model="temp.machineModelPath" type="text" placeholder="请输入模板路径" />
+          <el-input clearable v-model="temp.machineModelPath" type="text" placeholder="请输入模板路径" />
         </el-form-item> -->
         <el-form-item label="工序" prop="operationId">
-          <el-select v-if="dialogStatus == 'create'" v-model="temp.operationId" filterable placeholder="请搜索或者选择">
+          <el-select v-if="dialogStatus == 'create'" v-model="temp.operationId" clearable filterable placeholder="请搜索或者选择">
             <el-option v-for="item in operationOption" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
-          <el-select v-else v-model="temp.operationId" filterable placeholder="请搜索或者选择" disabled>
+          <el-select v-else v-model="temp.operationId" clearable filterable placeholder="请搜索或者选择" disabled>
             <el-option v-for="item in operationOption" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
         <el-form-item label="设备" prop="machineId">
-          <el-select v-if="dialogStatus == 'create'" v-model="temp.machineId" filterable placeholder="请搜索或者选择">
+          <el-select v-if="dialogStatus == 'create'" v-model="temp.machineId" clearable filterable placeholder="请搜索或者选择">
             <el-option v-for="item in machineOption" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
-          <el-select v-else v-model="temp.machineId" filterable placeholder="请搜索或者选择" disabled>
+          <el-select v-else v-model="temp.machineId" clearable filterable placeholder="请搜索或者选择" disabled>
             <el-option v-for="item in machineOption" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
 
         <el-form-item label="产品" prop="productId">
-          <el-select v-if="dialogStatus == 'create'" v-model="temp.productId" filterable placeholder="请搜索或者选择">
+          <el-select v-if="dialogStatus == 'create'" v-model="temp.productId" clearable filterable placeholder="请搜索或者选择">
             <el-option v-for="item in productOption" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
-          <el-select v-else v-model="temp.productId" filterable placeholder="请搜索或者选择" disabled>
+          <el-select v-else v-model="temp.productId" clearable filterable placeholder="请搜索或者选择" disabled>
             <el-option v-for="item in productOption" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
@@ -150,7 +150,7 @@
         </el-form-item> -->
 
         <el-form-item label="备注">
-          <el-input v-model="temp.note" style="width:220px;" :autosize="{ minRows: 2, maxRows: 5}" type="textarea" placeholder="请输入备注" />
+          <el-input v-model="temp.note" clearable style="width:220px;" :autosize="{ minRows: 2, maxRows: 5}" type="textarea" placeholder="请输入备注" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -195,7 +195,7 @@
       @close="resetAdd"
     >
       设备模板名称:
-      <el-input v-model="addFileName" disabled="true" type="text" style="width:200px" />
+      <el-input clearable v-model="addFileName" disabled="true" type="text" style="width:200px" />
       <div class="add-file-right" style="height:70px;margin-left:100px;margin-top:15px;">
         <div class="add-file-right-img" style="margin-left:70px;">上传文件：</div>
         <input
@@ -489,6 +489,7 @@ export default {
     }, */
     // 立即刷新数据列表
     refreshList() {
+      this.listQuery.page = 1
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total

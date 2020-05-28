@@ -3,6 +3,7 @@
     <div class="filter-container">
       <el-input
         v-model="listQuery.title"
+        clearable
         placeholder="请输入操作权限名称"
         style="width: 200px;"
         class="filter-item"
@@ -11,8 +12,8 @@
 
       <el-select
         v-model="listQuery.useFlag"
-        placeholder="状态"
         clearable
+        placeholder="状态"
         class="filter-item"
         style="width: 130px"
       >
@@ -171,6 +172,7 @@
         >
           <el-input
             v-model="temp.functionCode"
+            clearable
             type="text"
             placeholder="请输入操作权限code"
           />
@@ -181,6 +183,7 @@
         >
           <el-input
             v-model="temp.title"
+            clearable
             type="text"
             placeholder="请输入操作权限名称"
           />
@@ -190,7 +193,7 @@
           label="操作权限模块名称"
           prop="name"
         >
-          <el-input
+          <el-input clearable
             v-model="temp.name"
             type="text"
             placeholder="请输入操作权限模块名称"
@@ -372,6 +375,7 @@ export default {
     }, */
     // 立即刷新数据列表
     refreshList() {
+      this.listQuery.page = 1
       fetchCmenuList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total

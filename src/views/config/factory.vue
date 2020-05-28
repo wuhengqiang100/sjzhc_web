@@ -3,6 +3,7 @@
     <div class="filter-container">
       <el-input
         v-model="listQuery.title"
+        clearable
         placeholder="请输入登录名"
         style="width: 200px;"
         class="filter-item"
@@ -11,8 +12,8 @@
 
       <el-select
         v-model="listQuery.useFlag"
-        placeholder="启用状态"
         clearable
+        placeholder="启用状态"
         class="filter-item"
         style="width: 130px"
       >
@@ -209,11 +210,12 @@
               label="用户名称"
               prop="operatorId"
             >
-              <!-- <el-input v-model="temp.operatorId"
+              <!-- <el-input clearable v-model="temp.operatorId"
                         type="text"
                         placeholder="请输入用户id" /> -->
               <el-select
                 v-model="temp.operatorId"
+                clearable
                 filterable
                 placeholder="请搜索或者选择"
               >
@@ -232,6 +234,7 @@
             >
               <el-input
                 v-model="temp.loginName"
+                clearable
                 type="text"
                 placeholder="请输入登陆名"
               />
@@ -242,6 +245,7 @@
             >
               <el-input
                 v-model="temp.loginPass"
+                clearable
                 type="password"
                 placeholder="请输入登陆密码"
               />
@@ -471,6 +475,7 @@ export default {
     },
     // 立即刷新数据列表
     refreshList() {
+      this.listQuery.page = 1
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total

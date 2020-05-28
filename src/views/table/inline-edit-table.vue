@@ -36,7 +36,7 @@
       <el-table-column min-width="300px" label="Title">
         <template slot-scope="{row}">
           <template v-if="row.edit">
-            <el-input v-model="row.title" class="edit-input" size="small" />
+            <el-input v-model="row.title" clearable class="edit-input" size="small" />
             <el-button
               class="cancel-btn"
               size="small"

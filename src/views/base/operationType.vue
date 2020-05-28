@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="请输入工序种类名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.title" clearable placeholder="请输入工序种类名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
 
-      <el-select v-model="listQuery.useFlag" placeholder="状态" clearable class="filter-item" style="width: 130px">
+      <el-select v-model="listQuery.useFlag" clearable placeholder="状态" class="filter-item" style="width: 130px">
         <el-option v-for="item in useFlagOptions" :key="item.key" :label="item.display_name" :value="item.key" />
       </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -30,12 +30,12 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="工序种类id" prop="id" sortable="custom" align="center" :class-name="getSortClass('id')">
+      <el-table-column label="工序种类序号" prop="id" sortable="custom" align="center" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.operationTypeId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="工序种类code" align="center">
+      <el-table-column label="工序人员编码" align="center">
         <template slot-scope="{row}">
           <span>{{ row.operationTypeCode }}</span>
         </template>
@@ -88,11 +88,11 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="50%">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="125px" style="width: 600px; margin-left:50px;">
 
-        <el-form-item label="工序种类code" prop="operationTypeCode">
-          <el-input v-model="temp.operationTypeCode" type="text" placeholder="请输入工序种类code" />
+        <el-form-item label="工序人员编码" prop="operationTypeCode">
+          <el-input v-model="temp.operationTypeCode" clearable type="text" placeholder="请输入工序人员编码" />
         </el-form-item>
         <el-form-item label="工序种类名称" prop="operationTypeName">
-          <el-input v-model="temp.operationTypeName" type="text" placeholder="请输入工序种类name" />
+          <el-input v-model="temp.operationTypeName" clearable type="text" placeholder="请输入工序种类名称" />
         </el-form-item>
         <el-form-item label="启用状态" prop="useFlag">
           <el-switch v-model="temp.useFlag" active-color="#13ce66" inactive-color="#ff4949" />
@@ -106,7 +106,7 @@
         </el-form-item>
 
         <el-form-item label="备注">
-          <el-input v-model="temp.note" style="width:220px;" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入备注" />
+          <el-input v-model="temp.note" clearable style="width:220px;" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入备注" />
         </el-form-item>
 
       </el-form>
@@ -208,8 +208,8 @@ export default {
       rules: {
         // type: [{ required: true, message: 'type is required', trigger: 'change' }],
         // timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        operationTypeCode: [{ required: true, message: '请填写工序种类code', trigger: 'blur' }],
-        operationTypeName: [{ required: true, message: '请填写工序种类name', trigger: 'blur' }],
+        operationTypeCode: [{ required: true, message: '请填写工序人员编码', trigger: 'blur' }],
+        operationTypeName: [{ required: true, message: '请填写工序种类名称', trigger: 'blur' }],
         startDate: [{ type: 'date', required: true, message: '请填写开始时间', trigger: 'change' }]
         // endDate: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }]
 
@@ -244,6 +244,7 @@ export default {
     }, */
     // 立即刷新数据列表
     refreshList() {
+      this.listQuery.page = 1
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total

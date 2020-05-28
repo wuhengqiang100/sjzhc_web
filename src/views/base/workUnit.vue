@@ -1,12 +1,12 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="请输入机台名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.title" clearable placeholder="请输入机台名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       机长：
-      <el-select v-model="listQuery.operatorId" filterable placeholder="请搜索或者选择">
+      <el-select v-model="listQuery.operatorId" clearable filterable placeholder="请搜索或者选择" class="filter-item" style="width: 130px">
         <el-option v-for="item in operatorOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="handleFilter" />
       </el-select>
-      <el-select v-model="listQuery.useFlag" placeholder="状态" clearable class="filter-item" style="width: 130px">
+      <el-select v-model="listQuery.useFlag" clearable placeholder="状态" class="filter-item" style="width: 130px">
         <el-option v-for="item in useFlagOptions" :key="item.key" :label="item.display_name" :value="item.key" />
       </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -38,11 +38,11 @@
           <span>{{ row.workUnitId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="MES机台代码" align="center">
+      <!-- <el-table-column label="MES机台代码" align="center">
         <template slot-scope="{row}">
           <span>{{ row.workUnitCodeMes }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="机台编号" align="center">
         <template slot-scope="{row}">
           <span>{{ row.workUnitCode }}</span>
@@ -103,17 +103,17 @@
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="125px" style="width: 600px; margin-left:50px;">
 
         <el-form-item label="机台编号" prop="workUnitCode">
-          <el-input v-model="temp.workUnitCode" type="text" placeholder="请输入机台编号" />
+          <el-input v-model="temp.workUnitCode" clearable type="text" placeholder="请输入机台编号" />
         </el-form-item>
-        <el-form-item label="MES机台代码" prop="workUnitCodeMes">
-          <el-input v-model="temp.workUnitCodeMes" type="text" placeholder="请输入机台名称" />
-        </el-form-item>
+        <!-- <el-form-item label="MES机台代码" prop="workUnitCodeMes">
+          <el-input clearable v-model="temp.workUnitCodeMes" type="text" placeholder="请输入机台名称" />
+        </el-form-item> -->
         <el-form-item label="机台名称" prop="workUnitName">
-          <el-input v-model="temp.workUnitName" type="text" placeholder="请输入机台名称" />
+          <el-input v-model="temp.workUnitName" clearable type="text" placeholder="请输入机台名称" />
         </el-form-item>
 
         <el-form-item label="机长" prop="operatorId">
-          <el-select v-model="temp.operatorId" filterable placeholder="请搜索或者选择">
+          <el-select v-model="temp.operatorId" clearable filterable placeholder="请搜索或者选择">
             <el-option v-for="item in operatorOption" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
@@ -130,7 +130,7 @@
         </el-form-item> -->
 
         <el-form-item label="备注">
-          <el-input v-model="temp.note" style="width:220px;" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入备注" />
+          <el-input v-model="temp.note" clearable style="width:220px;" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入备注" />
         </el-form-item>
 
       </el-form>
@@ -258,6 +258,7 @@ export default {
     },
     // 立即刷新数据列表
     refreshList() {
+      this.listQuery.page = 1
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total

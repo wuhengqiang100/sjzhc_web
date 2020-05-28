@@ -4,6 +4,7 @@
       生产序号：
       <el-input
         v-model="listQuery.jobId"
+        clearable
         placeholder="请输入生产序号"
         style="width: 120px;"
         class="filter-item"
@@ -12,6 +13,7 @@
       大张号：
       <el-input
         v-model="listQuery.sheetNum"
+        clearable
         placeholder="请输入大张号"
         style="width: 120px;"
         class="filter-item"
@@ -20,6 +22,7 @@
       印码号：
       <el-input
         v-model="listQuery.codeNum"
+        clearable
         placeholder="请输入印码"
         style="width: 120px;"
         class="filter-item"
@@ -29,6 +32,7 @@
       工序：
       <el-select
         v-model="listQuery.operationId"
+        clearable
         filterable
         placeholder="请搜索或者选择"
       >
@@ -43,6 +47,7 @@
       产品：
       <el-select
         v-model="listQuery.productId"
+        clearable
         filterable
         placeholder="请搜索或者选择"
       >
@@ -304,6 +309,7 @@ export default {
     },
     // 立即刷新数据列表
     refreshList() {
+      this.listQuery.page = 1
       fetchReportQaList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total

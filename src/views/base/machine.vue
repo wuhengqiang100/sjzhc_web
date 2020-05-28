@@ -3,6 +3,7 @@
     <div class="filter-container">
       <el-input
         v-model="listQuery.title"
+        clearable
         placeholder="请输入设备名称"
         style="width: 200px;"
         class="filter-item"
@@ -11,8 +12,10 @@
 
       <el-select
         v-model="listQuery.useFlag"
-        placeholder="状态"
         clearable
+        filterable
+        placeholder="状态"
+
         class="filter-item"
         style="width: 130px"
       >
@@ -66,7 +69,7 @@
       @sort-change="sortChange"
     >
       <el-table-column
-        label="设备id"
+        label="设备序号"
         prop="id"
         sortable="custom"
         align="center"
@@ -77,7 +80,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="设备code"
+        label="设备编号"
         align="center"
       >
         <template slot-scope="{ row }">
@@ -150,7 +153,7 @@
       </el-table-column>
       <el-table-column
         label="启用时间"
-        width="112"
+        width="120"
         align="center"
       >
         <template v-if="row.startDate !== null" slot-scope="{ row }">
@@ -159,7 +162,7 @@
       </el-table-column>
       <el-table-column
         label="停用时间"
-        width="112"
+        width="120"
         align="center"
       >
         <template
@@ -237,23 +240,25 @@
         style="width: 600px; margin-left:50px;"
       >
         <el-form-item
-          label="设备code"
+          label="设备编号"
           prop="machineCode"
         >
           <el-input
             v-model="temp.machineCode"
+            clearable
             type="text"
-            placeholder="请输入设备code"
+            placeholder="请输入设备编码"
           />
         </el-form-item>
         <el-form-item
-          label="设备name"
+          label="设备名称"
           prop="machineName"
         >
           <el-input
             v-model="temp.machineName"
+            clearable
             type="text"
-            placeholder="请输入设备name"
+            placeholder="请输入设备名称"
           />
         </el-form-item>
         <el-form-item
@@ -262,6 +267,7 @@
         >
           <el-input
             v-model="temp.machineIp"
+            clearable
             type="text"
             placeholder="请输入设备ip"
           />
@@ -288,7 +294,7 @@
             inactive-color="#ff4949"
           />
         </el-form-item>
-        <el-form-item
+        <!--  <el-form-item
           label="启用时间"
           prop="startDate"
         >
@@ -309,11 +315,12 @@
             value-format="yyyy-MM-dd HH:mm:ss"
             placeholder="请选择一个结束时间"
           />
-        </el-form-item>
+        </el-form-item> -->
 
         <el-form-item label="备注">
           <el-input
             v-model="temp.note"
+            clearable
             style="width:220px;"
             :autosize="{ minRows: 2, maxRows: 5 }"
             type="textarea"
@@ -426,10 +433,10 @@ export default {
         // type: [{ required: true, message: 'type is required', trigger: 'change' }],
         // timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
         machineCode: [
-          { required: true, message: '请填写设备code', trigger: 'blur' }
+          { required: true, message: '请填写设备编码', trigger: 'blur' }
         ],
         machineName: [
-          { required: true, message: '请填写设备name', trigger: 'blur' }
+          { required: true, message: '请填写设备名称', trigger: 'blur' }
         ],
         startDate: [
           {
@@ -471,6 +478,7 @@ export default {
     }, */
     // 立即刷新数据列表
     refreshList() {
+      this.listQuery.page = 1
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
