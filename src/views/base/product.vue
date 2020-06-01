@@ -159,30 +159,30 @@
             </el-form-item> -->
             <el-form-item label="前缀字母启用次数" prop="cartnumFirstCount">
               <!-- <el-input clearable v-model="temp.cartnumFirstCount" type="text" placeholder="请输入前缀字母启用次数" /> -->
-              <el-input v-model="temp.cartnumFirstCount" clearable-number :min="0" :max="10000" controls-position="right" style="width:220px" />
+              <el-input-number v-model="temp.cartnumFirstCount" clearable-number :min="0" :max="10000" controls-position="right" style="width:220px" />
 
             </el-form-item>
 
             <el-form-item label="印刷行数" prop="rowNumber">
               <!-- <el-input clearable v-model="temp.rowNumber" type="text" placeholder="请输入印刷行数" /> -->
-              <el-input v-model="temp.rowNumber" clearable-number :min="0" :max="100" controls-position="right" style="width:220px" />
+              <el-input-number v-model="temp.rowNumber" clearable-number :min="0" :max="100" controls-position="right" style="width:220px" />
 
             </el-form-item>
             <el-form-item label="印刷列数" prop="colNumber">
               <!-- <el-input clearable v-model="temp.colNumber" type="text" placeholder="请输入印刷列数" /> -->
-              <el-input v-model="temp.colNumber" clearable-number :min="0" :max="100" controls-position="right" style="width:220px" />
+              <el-input-number v-model="temp.colNumber" clearable-number :min="0" :max="100" controls-position="right" style="width:220px" />
 
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="开数" prop="convertSheetNumber">
               <!-- <el-input clearable v-model="temp.convertSheetNumber" type="text" placeholder="请输入开数" /> -->
-              <el-input v-model="temp.convertSheetNumber" clearable-number :min="0" :max="100" controls-position="right" style="width:220px" />
+              <el-input-number v-model="temp.convertSheetNumber" clearable-number :min="0" :max="100" controls-position="right" style="width:220px" />
 
             </el-form-item>
             <el-form-item label="大张废数量" prop="sheetWasterNum">
               <!-- <el-input clearable v-model="temp.sheetWasterNum" type="text" placeholder="请输入大张废数量" /> -->
-              <el-input v-model="temp.sheetWasterNum" clearable-number :min="0" :max="100" controls-position="right" style="width:220px" />
+              <el-input-number v-model="temp.sheetWasterNum" clearable-number :min="0" :max="100" controls-position="right" style="width:220px" />
 
             </el-form-item>
             <el-form-item label="启用状态" prop="useFlag">
