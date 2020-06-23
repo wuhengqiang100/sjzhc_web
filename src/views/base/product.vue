@@ -46,7 +46,7 @@
           <!-- <span>{{ row.productName }}</span> -->
         </template>
       </el-table-column>
-      <el-table-column label="前缀字母序号" align="center">
+      <!--    <el-table-column label="前缀字母序号" align="center">
         <template slot-scope="{row}">
           <span>{{ row.cartNumFirst.numCode }}</span>
         </template>
@@ -56,7 +56,7 @@
         <template slot-scope="{row}">
           <span>{{ row.cartnumFirstCount }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="印刷行数" align="center">
         <template slot-scope="{row}">
           <span>{{ row.rowNumber }}</span>
@@ -77,7 +77,7 @@
           <span>{{ row.sheetWasterNum }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="防重号系统的名称" align="center">
+      <!-- <el-table-column label="防重号系统的名称" align="center">
         <template slot-scope="{row}">
           <span>{{ row.qaCodeName }}</span>
         </template>
@@ -86,7 +86,7 @@
         <template slot-scope="{row}">
           <span>{{ row.localProductName }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="启用状态" align="center">
         <template slot-scope="{row}">
           <el-tag v-if="row.useFlag" type="success">
@@ -102,11 +102,11 @@
           <span>{{ row.note }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="前缀字母启用日期" width="112" align="center">
+      <!-- <el-table-column label="前缀字母启用日期" width="112" align="center">
         <template slot-scope="{row}">
           <span>{{ row.cartnumFirstDate| parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="启用时间" width="112" align="center">
         <template v-if="row.startDate !== null" slot-scope="{row}">
           <span>{{ row.startDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
@@ -133,8 +133,8 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="60%">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="160px" style="width: 800px; margin-left:20px;">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="50%">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="170px" style="width: 900px; margin-left:20px;">
         <el-row>
           <el-col :span="12">
             <el-form-item label="产品编号" prop="productCode">
@@ -146,22 +146,17 @@
             <el-form-item label="产品名称" prop="productName">
               <el-input v-model="temp.productName" clearable type="text" placeholder="请输入产品名称" />
             </el-form-item>
+
             <!-- <el-form-item label="前缀字母序号" prop="cartnumFirstId">
-              <el-input clearable v-model="temp.cartnumFirstId" type="text" placeholder="请输入前缀字母序号" />
-            </el-form-item> -->
-            <el-form-item label="前缀字母序号" prop="cartnumFirstId">
               <el-select v-model="temp.cartnumFirstId" clearable filterable placeholder="请搜索或者选择">
                 <el-option v-for="item in cartNumFirstOption" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
-            </el-form-item>
-            <!--     <el-form-item label="前缀字母启用日期" prop="cartnumFirstDate">
-              <el-date-picker v-model="temp.cartnumFirstDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择前缀字母启用日期" />
             </el-form-item> -->
-            <el-form-item label="前缀字母启用次数" prop="cartnumFirstCount">
-              <!-- <el-input clearable v-model="temp.cartnumFirstCount" type="text" placeholder="请输入前缀字母启用次数" /> -->
+
+            <!-- <el-form-item label="前缀字母启用次数" prop="cartnumFirstCount">
               <el-input-number v-model="temp.cartnumFirstCount" clearable-number :min="0" :max="10000" controls-position="right" style="width:220px" />
 
-            </el-form-item>
+            </el-form-item> -->
 
             <el-form-item label="印刷行数" prop="rowNumber">
               <!-- <el-input clearable v-model="temp.rowNumber" type="text" placeholder="请输入印刷行数" /> -->
@@ -194,12 +189,12 @@
             <el-form-item label="停用时间" prop="endDate">
               <el-date-picker v-model="temp.endDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择一个结束时间" />
             </el-form-item> -->
-            <el-form-item label="防重号系统的名称" prop="qaCodeName">
+            <!-- <el-form-item label="防重号系统的名称" prop="qaCodeName">
               <el-input v-model="temp.qaCodeName" clearable type="text" placeholder="请输入防重号系统的名称" />
             </el-form-item>
             <el-form-item label="机检系统本地产品名称" prop="localProductName">
               <el-input v-model="temp.localProductName" clearable type="text" placeholder="请输入机检系统本地产品名称" />
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="备注">
               <el-input v-model="temp.note" clearable style="width:220px;" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入备注" />
             </el-form-item>
@@ -324,8 +319,8 @@ export default {
         colNumber: [{ required: true, message: '请填写印刷列数', trigger: 'blur' }],
         convertSheetNumber: [{ required: true, message: '请填写开数', trigger: 'blur' }],
         sheetWasterNum: [{ required: true, message: '请填写大张废数量', trigger: 'blur' }],
-        qaCodeName: [{ required: true, message: '请填写防重号系统的产品名称', trigger: 'blur' }],
-        localProductName: [{ required: true, message: '请填写防机检系统本地产品名称', trigger: 'blur' }],
+        // qaCodeName: [{ required: true, message: '请填写防重号系统的产品名称', trigger: 'blur' }],
+        // localProductName: [{ required: true, message: '请填写防机检系统本地产品名称', trigger: 'blur' }],
         startDate: [{ type: 'date', required: true, message: '请填写开始时间', trigger: 'change' }]
         // endDate: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }]
 

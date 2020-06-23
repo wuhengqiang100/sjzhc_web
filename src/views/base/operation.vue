@@ -110,13 +110,13 @@
         <el-form-item label="启用状态" prop="useFlag">
           <el-switch v-model="temp.useFlag" active-color="#13ce66" inactive-color="#ff4949" />
         </el-form-item>
-        <el-form-item label="启用时间" prop="startDate">
+        <!--   <el-form-item label="启用时间" prop="startDate">
           <el-date-picker v-model="temp.startDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择一个开始时间" />
         </el-form-item>
         <el-form-item label="停用时间" prop="endDate">
           <el-date-picker v-model="temp.endDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择一个结束时间" />
 
-        </el-form-item>
+        </el-form-item> -->
 
         <el-form-item label="备注">
           <el-input v-model="temp.note" clearable style="width:220px;" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入备注" />

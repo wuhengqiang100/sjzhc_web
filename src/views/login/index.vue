@@ -10,12 +10,12 @@
     >
       <div class="title-container">
         <!-- <h3 class="box animated wobble title "><img :src="logo"
-        class="sidebar-logo" />石家庄核查信息综合管理系统</h3>-->
+        class="sidebar-logo" />海南核查信息综合管理系统</h3>-->
         <h3 class="animated wobble title">
           <img
             :src="logo"
             class="sidebar-logo"
-          >石家庄核查信息综合管理系统
+          >海南核查信息综合管理系统
         </h3>
       </div>
       <el-tabs

@@ -33,7 +33,7 @@
             <el-card style="height: 460px;overflow-y: scroll;">
               <el-checkbox-group v-model="checkboxGroup1" size="mini">
                 <el-row style="margin-top: 10px;">
-                  <el-col :span="22"><el-checkbox label="石家庄核查信息综合管理系统" border /></el-col>
+                  <el-col :span="22"><el-checkbox label="海南核查信息综合管理系统" border /></el-col>
                   <el-col :span="2"><el-button type="primary" icon="el-icon-edit" circle size="mini" /></el-col>
                 </el-row>
                 <el-row style="margin-top: 10px;">
