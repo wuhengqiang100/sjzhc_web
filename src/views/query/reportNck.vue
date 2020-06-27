@@ -234,7 +234,7 @@ export default {
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
-        }, 1 * 1000)
+        }, 1 * 500)
       })
     },
     resetListQuery() {
@@ -298,7 +298,7 @@ export default {
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
-        }, 1 * 1000)
+        }, 1 * 500)
       })
     },
     handleReset() {

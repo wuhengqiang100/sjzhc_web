@@ -40,6 +40,12 @@
           <span>{{ row.operationCode }}</span>
         </template>
       </el-table-column>
+      <el-table-column v-if="look.operationCodeMes==='true'" label="mes工序编号" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.operationCodeMes }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column label="工序名称" align="center">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.operationName }}</span>
@@ -47,7 +53,7 @@
       </el-table-column>
       <el-table-column label="工序类别" align="center">
         <template slot-scope="{row}">
-          <span v-if="row.operationType!=null">{{ row.operationType.operatoionName }}</span>
+          <span v-if="row.operationType!=null">{{ row.operationType.operationTypeName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="启用状态" align="center">
@@ -95,6 +101,9 @@
 
         <el-form-item label="工序编号" prop="operationCode">
           <el-input v-model="temp.operationCode" clearable type="text" placeholder="请输入工序编号" />
+        </el-form-item>
+        <el-form-item v-if="look.operationCodeMes==='true'" label="MES工序编号" prop="operationCodeMes">
+          <el-input v-model="temp.operationCodeMes" clearable type="text" placeholder="请输入MES工序编号" />
         </el-form-item>
         <el-form-item label="工序名称" prop="operationName">
           <el-input v-model="temp.operationName" clearable type="text" placeholder="请输入工序名称" />
@@ -205,6 +214,7 @@ export default {
       temp: {
         operationId: undefined,
         operationCode: '',
+        operationCodeMes: '',
         operationName: '',
         operationTypeId: '',
         useFlag: true,
@@ -229,12 +239,16 @@ export default {
         // endDate: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }]
 
       },
-      downloadLoading: false
+      downloadLoading: false,
+      look: {
+        operationCodeMes: ''
+      }
     }
   },
   // 初始化获取数据列表
   created() {
     this.getList()
+    this.getSystemSet()
   },
   methods: {
     // 有加载圈的加载数据列表
@@ -247,12 +261,16 @@ export default {
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
-        }, 1 * 1000)
+        }, 1 * 500)
       })
+    },
+    // 获取此页面中的系统配置显示数据
+    getSystemSet() {
+      this.look.operationCodeMes = localStorage.getItem('operationCodeMes')
     },
     // 立即刷新数据列表
     refreshList() {
-      this.listQuery.page = 1
+      // this.listQuery.page = 1
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
@@ -268,7 +286,7 @@ export default {
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
-        }, 1 * 1000)
+        }, 1 * 500)
       })
     },
     // 获取工序种类类别oprions
@@ -316,6 +334,7 @@ export default {
       this.temp = {
         operationId: undefined,
         operationCode: '',
+        operationCodeMes: '',
         operationName: '',
         operationTypeId: '',
         useFlag: true,

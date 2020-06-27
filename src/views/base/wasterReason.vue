@@ -250,12 +250,12 @@ export default {
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
-        }, 1 * 1000)
+        }, 1 * 500)
       })
     },
     // 立即刷新数据列表
     refreshList() {
-      this.listQuery.page = 1
+      // this.listQuery.page = 1
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
@@ -271,7 +271,7 @@ export default {
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
-        }, 1 * 1000)
+        }, 1 * 500)
       })
     },
     // 获取工序类别oprions

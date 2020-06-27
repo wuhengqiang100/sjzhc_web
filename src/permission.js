@@ -5,10 +5,33 @@ import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
+import { getSystemConfigData } from '@/api/systemSet'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 const whiteList = ['/login', '/auth-redirect'] // no redirect whitelist
+
+// const systemSet = {
+//   factoryId: '',
+//   factoryCode: '',
+//   factoryName: '',
+//   ftpIp: '',
+//   ftpName: '',
+//   ftpPass: '',
+//   machineCodeMes: Boolean,
+//   operationCodeMes: Boolean,
+//   operatorCodeMes: Boolean,
+//   productCodeMes: Boolean,
+//   workUnitCodeMes: Boolean,
+//   machineWasteNoJudge: Boolean,
+//   productCartNumFirstId: Boolean,
+//   productCartNumFirstDate: Boolean,
+//   productCartNumFirstCount: Boolean,
+//   productSheetWasterNum: Boolean,
+//   productQaCodeName: Boolean,
+//   productLocalProductName: Boolean
+
+// }
 
 router.beforeEach(async(to, from, next) => {
   // start progress bar
@@ -34,7 +57,25 @@ router.beforeEach(async(to, from, next) => {
         try {
           // get user info
           // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
-          const { roles } = await store.dispatch('user/getInfo')
+          const { roles } = await store.dispatch('user/getInfo') // 获取用户的个人信息
+          await store.dispatch('system/config')// 获取系统的配置信息
+          // localStorage.setItem('systemSet', systemSet)
+
+          getSystemConfigData().then(response => {
+            localStorage.setItem('machineCodeMes', response.systemSet.machineCodeMes)
+            localStorage.setItem('operationCodeMes', response.systemSet.operationCodeMes)
+            localStorage.setItem('operatorCodeMes', response.systemSet.operatorCodeMes)
+            localStorage.setItem('productCodeMes', response.systemSet.productCodeMes)
+            localStorage.setItem('workUnitCodeMes', response.systemSet.workUnitCodeMes)
+            localStorage.setItem('machineWasteNoJudge', response.systemSet.machineWasteNoJudge)
+            localStorage.setItem('productCartNumFirstId', response.systemSet.productCartNumFirstId)
+            localStorage.setItem('productCartNumFirstDate', response.systemSet.productCartNumFirstDate)
+            localStorage.setItem('productCartNumFirstCount', response.systemSet.productCartNumFirstCount)
+            localStorage.setItem('productSheetWasterNum', response.systemSet.productSheetWasterNum)
+            localStorage.setItem('productQaCodeName', response.systemSet.productQaCodeName)
+            localStorage.setItem('productLocalProductName', response.systemSet.productLocalProductName)
+          })
+          // console.log(localStorage.getItem('systemSet'))
 
           // generate accessible routes map based on roles
           const accessRoutes = await store.dispatch('permission/generateRoutes', roles)

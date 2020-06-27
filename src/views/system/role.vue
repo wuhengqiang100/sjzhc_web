@@ -375,7 +375,7 @@ export default {
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
-        }, 1 * 1000)
+        }, 1 * 500)
       })
     },
     // 获取所有的menus,以及c端function
@@ -438,7 +438,7 @@ export default {
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
-        }, 1 * 1000)
+        }, 1 * 500)
       })
     },
     // 角色禁用启用操作

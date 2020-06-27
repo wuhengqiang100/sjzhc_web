@@ -87,7 +87,11 @@
           <span>{{ row.machineCode }}</span>
         </template>
       </el-table-column>
-
+      <el-table-column v-if="look.machineCodeMes==='true'" label="mes设备编号" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.machineCodeMes }}</span>
+        </template>
+      </el-table-column>
       <el-table-column
         label="设备名称"
         align="center"
@@ -111,6 +115,7 @@
         </template>
       </el-table-column>
       <el-table-column
+        v-if="look.machineWasteNoJudge==='true'"
         label="机检严重废人工不干预标志"
         align="center"
       >
@@ -250,6 +255,9 @@
             placeholder="请输入设备编码"
           />
         </el-form-item>
+        <el-form-item v-if="look.machineCodeMes==='true'" label="MES设备编号" prop="machineCodeMes">
+          <el-input v-model="temp.machineCodeMes" clearable type="text" placeholder="请输入MES设备编号" />
+        </el-form-item>
         <el-form-item
           label="设备名称"
           prop="machineName"
@@ -274,6 +282,7 @@
         </el-form-item>
 
         <el-form-item
+          v-if="look.machineWasteNoJudge==='true'"
           label="机检严重废人工不干预标志"
           prop="useMachineWasteNoJudge"
         >
@@ -413,6 +422,7 @@ export default {
       temp: {
         machineId: undefined,
         machineCode: '',
+        machineCodeMes: '',
         machineName: '',
         machineIp: '',
         useMachineWasteNoJudge: true,
@@ -448,12 +458,19 @@ export default {
         ]
         // endDate: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }]
       },
-      downloadLoading: false
+      downloadLoading: false,
+      // 控制显示的系统配置
+
+      look: {
+        machineCodeMes: '',
+        machineWasteNoJudge: ''
+      }
     }
   },
   // 初始化获取数据列表
   created() {
     this.getList()
+    this.getSystemSet()
   },
   methods: {
     // 有加载圈的加载数据列表
@@ -466,8 +483,13 @@ export default {
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
-        }, 1 * 1000)
+        }, 1 * 500)
       })
+    },
+    // 获取此页面中的系统配置显示数据
+    getSystemSet() {
+      this.look.machineCodeMes = localStorage.getItem('machineCodeMes')
+      this.look.machineWasteNoJudge = localStorage.getItem('machineWasteNoJudge')
     },
     /*     getMachineTypes() {
       fetchMachineTypeList().then(response => {
@@ -478,7 +500,7 @@ export default {
     }, */
     // 立即刷新数据列表
     refreshList() {
-      this.listQuery.page = 1
+      // this.listQuery.page = 1
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
@@ -494,7 +516,7 @@ export default {
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
-        }, 1 * 1000)
+        }, 1 * 500)
       })
     },
     // 设备禁用启用操作
@@ -536,6 +558,7 @@ export default {
       this.temp = {
         machineId: undefined,
         machineCode: '',
+        machineCodeMes: '',
         machineName: '',
         machineIp: '',
         useMachineWasteNoJudge: true,

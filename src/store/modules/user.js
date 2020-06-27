@@ -1,6 +1,7 @@
 import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
+import { getSystemConfigData } from '@/api/systemSet'
 
 const state = {
   token: getToken(),
@@ -28,8 +29,29 @@ const mutations = {
   }
 }
 
-const actions = {
+// const systemSet = {
+//   factoryId: '',
+//   factoryCode: '',
+//   factoryName: '',
+//   ftpIp: '',
+//   ftpName: '',
+//   ftpPass: '',
+//   machineCodeMes: Boolean,
+//   operationCodeMes: Boolean,
+//   operatorCodeMes: Boolean,
+//   productCodeMes: Boolean,
+//   workUnitCodeMes: Boolean,
+//   machineWasteNoJudge: Boolean,
+//   productCartNumFirstId: Boolean,
+//   productCartNumFirstDate: Boolean,
+//   productCartNumFirstCount: Boolean,
+//   productSheetWasterNum: Boolean,
+//   productQaCodeName: Boolean,
+//   productLocalProductName: Boolean
 
+// }
+
+const actions = {
   // user login
   login({ commit }, userInfo) {
     const { username, password } = userInfo
@@ -68,6 +90,51 @@ const actions = {
         commit('SET_AVATAR', avatar)
         commit('SET_INTRODUCTION', introduction)
         resolve(data)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  // const systemSet = {
+  //   factoryId: '',
+  //   factoryCode: '',
+  //   factoryName: '',
+  //   ftpIp: '',
+  //   ftpName: '',
+  //   ftpPass: '',
+  //   machineCodeMes: Boolean,
+  //   operationCodeMes: Boolean,
+  //   operatorCodeMes: Boolean,
+  //   productCodeMes: Boolean,
+  //   workUnitCodeMes: Boolean,
+  //   machineWasteNoJudge: Boolean,
+  //   productCartNumFirstId: Boolean,
+  //   productCartNumFirstDate: Boolean,
+  //   productCartNumFirstCount: Boolean,
+  //   productSheetWasterNum: Boolean,
+  //   productQaCodeName: Boolean,
+  //   productLocalProductName: Boolean
+
+  // }
+
+  // get system config
+  getSystemConfig() {
+    return new Promise((resolve, reject) => {
+      getSystemConfigData().then(response => {
+        localStorage.setItem('machineCodeMes', response.systemSet.machineCodeMes)
+        localStorage.setItem('operationCodeMes', response.systemSet.operationCodeMes)
+        localStorage.setItem('operatorCodeMes', response.systemSet.operatorCodeMes)
+        localStorage.setItem('productCodeMes', response.systemSet.productCodeMes)
+        localStorage.setItem('workUnitCodeMes', response.systemSet.workUnitCodeMes)
+        localStorage.setItem('machineWasteNoJudge', response.systemSet.machineWasteNoJudge)
+        localStorage.setItem('productCartNumFirstId', response.systemSet.productCartNumFirstId)
+        localStorage.setItem('productCartNumFirstDate', response.systemSet.productCartNumFirstDate)
+        localStorage.setItem('productCartNumFirstCount', response.systemSet.productCartNumFirstCount)
+        localStorage.setItem('productSheetWasterNum', response.systemSet.productSheetWasterNum)
+        localStorage.setItem('productQaCodeName', response.systemSet.productQaCodeName)
+        localStorage.setItem('productLocalProductName', response.systemSet.productLocalProductName)
+        return true
       }).catch(error => {
         reject(error)
       })

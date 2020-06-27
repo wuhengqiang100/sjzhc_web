@@ -352,7 +352,7 @@ export default {
 
         setTimeout(() => {
           this.listLoading = false
-        }, 1 * 1000)
+        }, 1 * 500)
       })
     },
     getSelectOption() {

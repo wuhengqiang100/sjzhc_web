@@ -40,23 +40,28 @@
           <span>{{ row.productCode }}</span>
         </template>
       </el-table-column>
+      <el-table-column v-if="look.productCodeMes==='true'" label="MES工序编号" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.productCodeMes }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="产品名称" align="center">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.productName }}</span>
           <!-- <span>{{ row.productName }}</span> -->
         </template>
       </el-table-column>
-      <!--    <el-table-column label="前缀字母序号" align="center">
+      <el-table-column v-if="look.productCartNumFirstId==='true'" label="前缀字母序号" align="center">
         <template slot-scope="{row}">
           <span>{{ row.cartNumFirst.numCode }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="前缀字母启用次数" align="center">
+      <el-table-column v-if="look.productCartNumFirstCount==='true'" label="前缀字母启用次数" align="center">
         <template slot-scope="{row}">
           <span>{{ row.cartnumFirstCount }}</span>
         </template>
-      </el-table-column> -->
+      </el-table-column>
       <el-table-column label="印刷行数" align="center">
         <template slot-scope="{row}">
           <span>{{ row.rowNumber }}</span>
@@ -72,21 +77,21 @@
           <span>{{ row.convertSheetNumber }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="大张废数量" align="center">
+      <el-table-column v-if="look.productSheetWasterNum==='true'" label="大张废数量" align="center">
         <template slot-scope="{row}">
           <span>{{ row.sheetWasterNum }}</span>
         </template>
       </el-table-column>
-      <!-- <el-table-column label="防重号系统的名称" align="center">
+      <el-table-column v-if="look.productQaCodeName==='true'" label="防重号系统的名称" align="center">
         <template slot-scope="{row}">
           <span>{{ row.qaCodeName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="机检系统本地产品名称" align="center">
+      <el-table-column v-if="look.productLocalProductName==='true'" label="机检系统本地产品名称" align="center">
         <template slot-scope="{row}">
           <span>{{ row.localProductName }}</span>
         </template>
-      </el-table-column> -->
+      </el-table-column>
       <el-table-column label="启用状态" align="center">
         <template slot-scope="{row}">
           <el-tag v-if="row.useFlag" type="success">
@@ -102,11 +107,11 @@
           <span>{{ row.note }}</span>
         </template>
       </el-table-column>
-      <!-- <el-table-column label="前缀字母启用日期" width="112" align="center">
+      <el-table-column v-if="look.productCartNumFirstDate==='true'" label="前缀字母启用日期" width="112" align="center">
         <template slot-scope="{row}">
           <span>{{ row.cartnumFirstDate| parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
-      </el-table-column> -->
+      </el-table-column>
       <el-table-column label="启用时间" width="112" align="center">
         <template v-if="row.startDate !== null" slot-scope="{row}">
           <span>{{ row.startDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
@@ -140,61 +145,54 @@
             <el-form-item label="产品编号" prop="productCode">
               <el-input v-model="temp.productCode" clearable type="text" placeholder="请输入产品编码" />
             </el-form-item>
-            <!-- <el-form-item label="MES产品编号" prop="productCodeMes">
-              <el-input clearable v-model="temp.productCodeMes" type="text" placeholder="请输入MES产品编号" />
-            </el-form-item> -->
+            <el-form-item v-if="look.productCodeMes==='true'" label="MES产品编号" prop="productCodeMes">
+              <el-input v-model="temp.productCodeMes" clearable type="text" placeholder="请输入MES产品编号" />
+            </el-form-item>
             <el-form-item label="产品名称" prop="productName">
               <el-input v-model="temp.productName" clearable type="text" placeholder="请输入产品名称" />
             </el-form-item>
 
-            <!-- <el-form-item label="前缀字母序号" prop="cartnumFirstId">
+            <el-form-item v-if="look.productCartNumFirstId==='true'" label="前缀字母序号" prop="cartnumFirstId">
               <el-select v-model="temp.cartnumFirstId" clearable filterable placeholder="请搜索或者选择">
                 <el-option v-for="item in cartNumFirstOption" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
-            </el-form-item> -->
+            </el-form-item>
 
-            <!-- <el-form-item label="前缀字母启用次数" prop="cartnumFirstCount">
+            <el-form-item v-if="look.productCartNumFirstCount==='true'" label="前缀字母启用次数" prop="cartnumFirstCount">
               <el-input-number v-model="temp.cartnumFirstCount" clearable-number :min="0" :max="10000" controls-position="right" style="width:220px" />
-
-            </el-form-item> -->
+            </el-form-item>
 
             <el-form-item label="印刷行数" prop="rowNumber">
-              <!-- <el-input clearable v-model="temp.rowNumber" type="text" placeholder="请输入印刷行数" /> -->
               <el-input-number v-model="temp.rowNumber" clearable-number :min="0" :max="100" controls-position="right" style="width:220px" />
 
             </el-form-item>
             <el-form-item label="印刷列数" prop="colNumber">
-              <!-- <el-input clearable v-model="temp.colNumber" type="text" placeholder="请输入印刷列数" /> -->
               <el-input-number v-model="temp.colNumber" clearable-number :min="0" :max="100" controls-position="right" style="width:220px" />
-
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="开数" prop="convertSheetNumber">
-              <!-- <el-input clearable v-model="temp.convertSheetNumber" type="text" placeholder="请输入开数" /> -->
               <el-input-number v-model="temp.convertSheetNumber" clearable-number :min="0" :max="100" controls-position="right" style="width:220px" />
 
             </el-form-item>
-            <el-form-item label="大张废数量" prop="sheetWasterNum">
-              <!-- <el-input clearable v-model="temp.sheetWasterNum" type="text" placeholder="请输入大张废数量" /> -->
+            <el-form-item v-if="look.productSheetWasterNum==='true'" label="大张废数量" prop="sheetWasterNum">
               <el-input-number v-model="temp.sheetWasterNum" clearable-number :min="0" :max="100" controls-position="right" style="width:220px" />
-
             </el-form-item>
             <el-form-item label="启用状态" prop="useFlag">
               <el-switch v-model="temp.useFlag" active-color="#13ce66" inactive-color="#ff4949" />
             </el-form-item>
-            <!--       <el-form-item label="启用时间" prop="startDate">
+            <!-- <el-form-item label="启用时间" prop="startDate">
               <el-date-picker v-model="temp.startDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择一个开始时间" />
             </el-form-item>
             <el-form-item label="停用时间" prop="endDate">
               <el-date-picker v-model="temp.endDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择一个结束时间" />
             </el-form-item> -->
-            <!-- <el-form-item label="防重号系统的名称" prop="qaCodeName">
+            <el-form-item v-if="look.productQaCodeName==='true'" label="防重号系统的名称" prop="qaCodeName">
               <el-input v-model="temp.qaCodeName" clearable type="text" placeholder="请输入防重号系统的名称" />
             </el-form-item>
-            <el-form-item label="机检系统本地产品名称" prop="localProductName">
+            <el-form-item v-if="look.productLocalProductName==='true'" label="机检系统本地产品名称" prop="localProductName">
               <el-input v-model="temp.localProductName" clearable type="text" placeholder="请输入机检系统本地产品名称" />
-            </el-form-item> -->
+            </el-form-item>
             <el-form-item label="备注">
               <el-input v-model="temp.note" clearable style="width:220px;" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入备注" />
             </el-form-item>
@@ -210,16 +208,6 @@
           确认
         </el-button>
       </div>
-    </el-dialog>
-
-    <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
-      <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
-        <el-table-column prop="key" label="Channel" />
-        <el-table-column prop="pv" label="Pv" />
-      </el-table>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">Confirm</el-button>
-      </span>
     </el-dialog>
   </div>
 </template>
@@ -318,20 +306,30 @@ export default {
         rowNumber: [{ required: true, message: '请填写印刷行数', trigger: 'blur' }],
         colNumber: [{ required: true, message: '请填写印刷列数', trigger: 'blur' }],
         convertSheetNumber: [{ required: true, message: '请填写开数', trigger: 'blur' }],
-        sheetWasterNum: [{ required: true, message: '请填写大张废数量', trigger: 'blur' }],
+        // sheetWasterNum: [{ required: true, message: '请填写大张废数量', trigger: 'blur' }],
         // qaCodeName: [{ required: true, message: '请填写防重号系统的产品名称', trigger: 'blur' }],
         // localProductName: [{ required: true, message: '请填写防机检系统本地产品名称', trigger: 'blur' }],
         startDate: [{ type: 'date', required: true, message: '请填写开始时间', trigger: 'change' }]
         // endDate: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }]
 
       },
-      downloadLoading: false
+      downloadLoading: false,
+      look: {
+        productCodeMes: '',
+        productCartNumFirstId: '',
+        productCartNumFirstDate: '',
+        productCartNumFirstCount: '',
+        productSheetWasterNum: '',
+        productQaCodeName: '',
+        productLocalProductName: ''
+      }
     }
   },
   // 初始化获取数据列表
   created() {
     this.getList()
     this.getProductOptions()
+    this.getSystemSet()
   },
   methods: {
     // 有加载圈的加载数据列表
@@ -344,8 +342,18 @@ export default {
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
-        }, 1 * 1000)
+        }, 1 * 500)
       })
+    },
+    // 获取此页面中的系统配置显示数据
+    getSystemSet() {
+      this.look.productCodeMes = localStorage.getItem('productCodeMes')
+      this.look.productCartNumFirstId = localStorage.getItem('productCartNumFirstId')
+      this.look.productCartNumFirstDate = localStorage.getItem('productCartNumFirstDate')
+      this.look.productCartNumFirstCount = localStorage.getItem('productCartNumFirstCount')
+      this.look.productSheetWasterNum = localStorage.getItem('productSheetWasterNum')
+      this.look.productQaCodeName = localStorage.getItem('productQaCodeName')
+      this.look.productLocalProductName = localStorage.getItem('productLocalProductName')
     },
     // 获取前缀字母序号operions
     getProductOptions() {
@@ -355,7 +363,7 @@ export default {
     },
     // 立即刷新数据列表
     refreshList() {
-      this.listQuery.page = 1
+      // this.listQuery.page = 1
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
@@ -371,7 +379,7 @@ export default {
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
-        }, 1 * 1000)
+        }, 1 * 500)
       })
     },
     // 产品禁用启用操作

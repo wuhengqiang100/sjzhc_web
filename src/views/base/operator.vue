@@ -40,6 +40,12 @@
           <span>{{ row.operatorCode }}</span>
         </template>
       </el-table-column>
+      <el-table-column v-if="look.operatorCodeMes==='true'" label="mes人员编号" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.operatorCodeMes }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column label="人员名称" align="center" min-width="120px">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.operatorName }}</span>
@@ -87,6 +93,9 @@
         <el-form-item label="人员编号" prop="operatorCode">
           <el-input v-model="temp.operatorCode" clearable type="text" placeholder="请输入人员编号" />
         </el-form-item>
+        <el-form-item v-if="look.operatorCodeMes==='true'" label="MES人员编号" prop="productCodeMes">
+          <el-input v-model="temp.productCodeMes" clearable type="text" placeholder="请输入MES人员编号" />
+        </el-form-item>
         <el-form-item label="人员名称" prop="operatorName">
           <el-input v-model="temp.operatorName" clearable type="text" placeholder="请输入人员名称" />
         </el-form-item>
@@ -128,6 +137,8 @@
 <script>
 
 import { fetchList, createOperator, updateOperator, updateUseFlag, deleteOperator } from '@/api/operator'
+// import { getSystemConfigData} from '@/api/systemSet'
+
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -184,6 +195,7 @@ export default {
       temp: {
         operatorId: undefined,
         operatorCode: '',
+        operatorCodeMes: '',
         operatorName: '',
         startDate: '',
         endDate: '',
@@ -207,12 +219,16 @@ export default {
         // endDate: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }]
 
       },
-      downloadLoading: false
+      downloadLoading: false,
+      look: {
+        operatorCodeMes: ''
+      }
     }
   },
   // 初始化获取数据列表
   created() {
     this.getList()
+    this.getSystemSet()
   },
   methods: {
     // 有加载圈的加载数据列表
@@ -225,9 +241,14 @@ export default {
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
-        }, 1 * 1000)
+        }, 1 * 500)
       })
     },
+    // 获取此页面中的系统配置显示数据
+    getSystemSet() {
+      this.look.operatorCodeMes = localStorage.getItem('operatorCodeMes')
+    },
+
     /*     getoperatorTypes() {
       fetchoperatorTypeList().then(response => {
         console.log('tag', response.data)
@@ -237,7 +258,7 @@ export default {
     }, */
     // 立即刷新数据列表
     refreshList() {
-      this.listQuery.page = 1
+      // this.listQuery.page = 1
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
@@ -253,7 +274,7 @@ export default {
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
-        }, 1 * 1000)
+        }, 1 * 500)
       })
     },
     // 人员禁用启用操作
@@ -295,6 +316,7 @@ export default {
       this.temp = {
         operatorId: undefined,
         operatorCode: '',
+        operatorCodeMes: '',
         operatorName: '',
         startDate: '',
         endDate: '',

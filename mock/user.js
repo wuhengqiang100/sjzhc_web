@@ -69,6 +69,17 @@ export default [
       }
     }
   },
+  // get system config
+  {
+    url: '/system/config',
+    type: 'get',
+    response: _ => {
+      return {
+        code: 20000,
+        data: 'success'
+      }
+    }
+  },
 
   // user logout
   {

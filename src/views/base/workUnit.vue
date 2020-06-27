@@ -38,11 +38,11 @@
           <span>{{ row.workUnitId }}</span>
         </template>
       </el-table-column>
-      <!-- <el-table-column label="MES机台代码" align="center">
+      <el-table-column v-if="look.workUnitCodeMes==='true'" label="MES机台编号" align="center">
         <template slot-scope="{row}">
           <span>{{ row.workUnitCodeMes }}</span>
         </template>
-      </el-table-column> -->
+      </el-table-column>
       <el-table-column label="机台编号" align="center">
         <template slot-scope="{row}">
           <span>{{ row.workUnitCode }}</span>
@@ -105,9 +105,9 @@
         <el-form-item label="机台编号" prop="workUnitCode">
           <el-input v-model="temp.workUnitCode" clearable type="text" placeholder="请输入机台编号" />
         </el-form-item>
-        <!-- <el-form-item label="MES机台代码" prop="workUnitCodeMes">
-          <el-input clearable v-model="temp.workUnitCodeMes" type="text" placeholder="请输入机台名称" />
-        </el-form-item> -->
+        <el-form-item v-if="look.workUnitCodeMes==='true'" label="MES机台编号" prop="workUnitCodeMes">
+          <el-input v-model="temp.workUnitCodeMes" clearable type="text" placeholder="请输入MES机台编号" />
+        </el-form-item>
         <el-form-item label="机台名称" prop="workUnitName">
           <el-input v-model="temp.workUnitName" clearable type="text" placeholder="请输入机台名称" />
         </el-form-item>
@@ -234,12 +234,16 @@ export default {
         // endDate: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }]
 
       },
-      downloadLoading: false
+      downloadLoading: false,
+      look: {
+        workUnitCodeMes: ''
+      }
     }
   },
   // 初始化获取数据列表
   created() {
     this.getList()
+    this.getSystemSet()
     this.getWorkUnitTypes()
   },
   methods: {
@@ -253,12 +257,17 @@ export default {
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
-        }, 1 * 1000)
+        }, 1 * 500)
       })
     },
+    // 获取此页面中的系统配置显示数据
+    getSystemSet() {
+      this.look.workUnitCodeMes = localStorage.getItem('workUnitCodeMes')
+    },
+
     // 立即刷新数据列表
     refreshList() {
-      this.listQuery.page = 1
+      // this.listQuery.page = 1
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
@@ -274,7 +283,7 @@ export default {
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
-        }, 1 * 1000)
+        }, 1 * 500)
       })
     },
     // 获取机台种类类别oprions

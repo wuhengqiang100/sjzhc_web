@@ -363,7 +363,7 @@ export default {
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
-        }, 1 * 1000)
+        }, 1 * 500)
       })
     },
     /*     getMachineTypes() {
@@ -375,7 +375,7 @@ export default {
     }, */
     // 立即刷新数据列表
     refreshList() {
-      this.listQuery.page = 1
+      // this.listQuery.page = 1
       fetchCmenuList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
@@ -391,7 +391,7 @@ export default {
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
-        }, 1 * 1000)
+        }, 1 * 500)
       })
     },
     // 操作权限禁用启用操作
