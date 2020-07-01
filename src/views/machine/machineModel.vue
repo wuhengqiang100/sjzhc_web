@@ -52,18 +52,18 @@
       </el-table-column>
       <el-table-column label="工序" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.operation.operationName }}</span>
+          <span v-if="row.operation!=null">{{ row.operation.operationName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="设备" align="center" min-width="130px">
         <template slot-scope="{row}">
-          <span>{{ row.machine.machineName }}</span>
+          <span v-if="row.machine!=null">{{ row.machine.machineName }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="产品" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.product.productName }}</span>
+          <span v-if="row.product!=null">{{ row.product.productName }}</span>
         </template>
       </el-table-column>
 

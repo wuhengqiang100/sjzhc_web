@@ -61,7 +61,7 @@
         align="center"
       >
         <template slot-scope="{row}">
-          <span>{{ row.operator.operatorName }}</span>
+          <span v-if="row.operator!=null">{{ row.operator.operatorName }}</span>
         </template>
       </el-table-column>
       <el-table-column

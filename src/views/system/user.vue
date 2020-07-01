@@ -115,11 +115,11 @@
         min-width="200px"
       >
         <template slot-scope="{row}">
-          <span>{{ row.operator.operatorName }}</span>
+          <span v-if="row.operator!=null">{{ row.operator.operatorName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="角色" align="center" min-width="200px">
-        <template slot-scope="{row}"> <span>{{ row.roleString }}</span></template>
+        <template v-if="row.roleString!=null" slot-scope="{row}"> <span>{{ row.roleString }}</span></template>
       </el-table-column>
       <el-table-column
         label="操作"

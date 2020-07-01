@@ -233,15 +233,16 @@
     <el-dialog
       :title="textMap[dialogStatus]"
       :visible.sync="dialogFormVisible"
-      width="50%"
+      width="30%"
     >
       <el-form
         ref="dataForm"
         :rules="rules"
         :model="temp"
         label-position="left"
+
         size="mini"
-        label-width="180px"
+        label-width="125px"
         style="width: 600px; margin-left:50px;"
       >
         <el-form-item

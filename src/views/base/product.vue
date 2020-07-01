@@ -53,13 +53,13 @@
       </el-table-column>
       <el-table-column v-if="look.productCartNumFirstId==='true'" label="前缀字母序号" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.cartNumFirst.numCode }}</span>
+          <span v-if="row.cartNumFirst!=null">{{ row.cartNumFirst.numCode }}</span>
         </template>
       </el-table-column>
 
       <el-table-column v-if="look.productCartNumFirstCount==='true'" label="前缀字母启用次数" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.cartnumFirstCount }}</span>
+          <span v-if="row.cartnumFirstCount!=null">{{ row.cartnumFirstCount }}</span>
         </template>
       </el-table-column>
       <el-table-column label="印刷行数" align="center">
@@ -79,17 +79,17 @@
       </el-table-column>
       <el-table-column v-if="look.productSheetWasterNum==='true'" label="大张废数量" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.sheetWasterNum }}</span>
+          <span v-if="row.sheetWasterNum!=null">{{ row.sheetWasterNum }}</span>
         </template>
       </el-table-column>
       <el-table-column v-if="look.productQaCodeName==='true'" label="防重号系统的名称" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.qaCodeName }}</span>
+          <span v-if="row.qaCodeName!=null">{{ row.qaCodeName }}</span>
         </template>
       </el-table-column>
       <el-table-column v-if="look.productLocalProductName==='true'" label="机检系统本地产品名称" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.localProductName }}</span>
+          <span v-if="row.localProductName!=null">{{ row.localProductName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="启用状态" align="center">
@@ -109,7 +109,7 @@
       </el-table-column>
       <el-table-column v-if="look.productCartNumFirstDate==='true'" label="前缀字母启用日期" width="112" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.cartnumFirstDate| parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span v-if="row.cartnumFirstDate!=null">{{ row.cartnumFirstDate| parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="启用时间" width="112" align="center">
@@ -138,8 +138,8 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="50%">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="170px" style="width: 900px; margin-left:20px;">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="45%">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="125px" style="width: 800px; margin-left:20px;">
         <el-row>
           <el-col :span="12">
             <el-form-item label="产品编号" prop="productCode">

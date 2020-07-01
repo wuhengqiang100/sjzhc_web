@@ -141,8 +141,15 @@
         <template slot-scope="{row}">
           <span>{{ row.breadcrumb }}</span>
         </template>
-      </el-table-column>
 
+      </el-table-column>
+      <!-- <el-table-column label="操作" fixed="right" align="center" width="50px" class-name="small-padding fixed-width">
+        <template slot-scope="{row}">
+
+          <el-button v-if="row.useFlag" size="mini" type="warning" @click="handleModifyUseFlag(row,false)">禁用</el-button>
+          <el-button v-else size="mini" type="success" @click="handleModifyUseFlag(row,true)">启用</el-button>
+        </template>
+      </el-table-column> -->
     </el-table>
     <pagination
       v-show="total>0"

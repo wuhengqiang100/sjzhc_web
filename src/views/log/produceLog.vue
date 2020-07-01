@@ -135,7 +135,7 @@
         align="center"
       >
         <template slot-scope="{row}">
-          <span>{{ row.product.productName }}</span>
+          <span v-if="row.product!=null">{{ row.product.productName }}</span>
         </template>
       </el-table-column>
 
