@@ -16,9 +16,9 @@
       <template v-if="device!=='mobile'">
         <!-- <search id="header-search"
                 class="right-menu-item" /> -->
-        <!--  <el-tooltip class="item" effect="dark" content="大屏监控" placement="bottom-start">
+        <el-tooltip class="item" effect="dark" content="大屏监控" placement="bottom-start">
           <big-screen id="bigScreen" class="right-menu-item hover-effect" />
-        </el-tooltip> -->
+        </el-tooltip>
         <!-- <error-log class="errLog-container right-menu-item hover-effect" /> -->
         <el-tooltip class="item" effect="dark" content="全屏" placement="bottom-start">
           <screenfull id="screenfull" class="right-menu-item hover-effect" />

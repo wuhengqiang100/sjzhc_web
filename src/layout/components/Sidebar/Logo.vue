@@ -31,7 +31,7 @@
           :src="logo"
           class="sidebar-logo"
         >
-        <h1 class="sidebar-title">{{ title }} </h1>
+        <h1 class="sidebar-title">{{ factoryName }} </h1>
       </router-link>
     </transition>
   </div>
@@ -48,12 +48,21 @@ export default {
   },
   data() {
     return {
-      title: '核查综合信息管理系统',
+      factoryName: '',
       // baseURL: process.env.VUE_APP_BASE_API,
 
       logo: process.env.VUE_APP_BASE_API + '/static/admin/img/logo1.png'
       // logo: 'https://localhost:9527/assets/logo/1.png'
       // logo: 'E:\kexinwork\sjz\sizhc_web\src\icons\logo/3.png'
+    }
+  },
+  created() {
+    // window.addEventListener('storage', this.afterQRScan)
+    this.getSysConfig()
+  },
+  methods: {
+    getSysConfig() {
+      this.factoryName = localStorage.getItem('factoryName')
     }
   }
 }

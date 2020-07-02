@@ -122,6 +122,7 @@ const actions = {
   getSystemConfig() {
     return new Promise((resolve, reject) => {
       getSystemConfigData().then(response => {
+        localStorage.setItem('factoryName', response.systemSet.factoryName)
         localStorage.setItem('machineCodeMes', response.systemSet.machineCodeMes)
         localStorage.setItem('operationCodeMes', response.systemSet.operationCodeMes)
         localStorage.setItem('operatorCodeMes', response.systemSet.operatorCodeMes)

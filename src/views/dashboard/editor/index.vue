@@ -16,7 +16,7 @@
       <div class="info-container">
         <span class="display_name">{{ name }}</span>
         <!-- <span style="font-size:20px;padding-top:20px;display:inline-block;">Editor's Dashboard</span> -->
-        <span style="font-size:20px;padding-top:20px;display:inline-block;">欢迎使用 核查信息综合管理系统</span>
+        <span style="font-size:20px;padding-top:20px;display:inline-block;">欢迎使用 {{ factoryName }}</span>
 
         <!--  <a-button type="primary">Button></a-button>
         <a-icon type="step-backward" />
@@ -45,6 +45,7 @@ export default {
   components: { PanThumb, GithubCorner },
   data() {
     return {
+      factoryName: '',
       emptyGif: process.env.VUE_APP_BASE_API + '/static/admin/img/zhuyegif.gif'
       // emptyGif: '../../../assets/logo/runningMan.gif'
     }
@@ -60,7 +61,12 @@ export default {
   created() {
     // console.log(process.env.VUE_APP_BASE_API),
     //   console.log(this.emptyGif)
-
+    this.getSysConfig()
+  },
+  methods: {
+    getSysConfig() {
+      this.factoryName = localStorage.getItem('factoryName')
+    }
   }
 }
 </script>

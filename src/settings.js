@@ -1,5 +1,6 @@
 module.exports = {
-  title: '海南核查信息综合管理系统',
+  // title: '海南核查信息综合管理系统',
+  title: '核查系统',
 
   /**
    * @type {boolean} true | false
