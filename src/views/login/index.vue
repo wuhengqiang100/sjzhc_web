@@ -173,6 +173,10 @@ export default {
     getSysConfig() {
       getSystemConfigData().then(response => {
         this.factoryName = response.systemSet.factoryName
+        // layer.msg('hello')
+        layui.use('layer', layer => {
+          layer.msg('hello')
+        })
       })
     },
     checkCapslock({ shiftKey, key } = {}) {

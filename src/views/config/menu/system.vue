@@ -36,8 +36,10 @@
         </el-col>
       </el-row>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')">修改</el-button>
-        <el-button @click="resetForm('ruleForm')">重置</el-button>
+
+        <el-button @click="resetForm('ruleForm')">清空</el-button>
+        <el-button @click="getSystemConfig()">重载</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
       </el-form-item>
     </el-form>
   </div>

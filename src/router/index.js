@@ -78,7 +78,8 @@ export const constantRoutes = [
   },
   // 重定向到大屏监控
   {
-    path: '/bigScreen',
+    // path: '/bigScreen',
+    path: '/bigScreen/:id',
     component: () => import('@/views/monitor/bigScreen/index'),
     hidden: true
   },

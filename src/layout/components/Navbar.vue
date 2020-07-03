@@ -17,6 +17,11 @@
         <!-- <search id="header-search"
                 class="right-menu-item" /> -->
         <el-tooltip class="item" effect="dark" content="大屏监控" placement="bottom-start">
+          <!-- <big-screen id="bigScreen" class="right-menu-item hover-effect" /> -->
+          <router-link id="bigScreen" to="/bigScreen/1" class="right-menu-item hover-effect">大屏</router-link>
+
+        </el-tooltip>
+        <el-tooltip class="item" effect="dark" content="大屏监控" placement="bottom-start">
           <big-screen id="bigScreen" class="right-menu-item hover-effect" />
         </el-tooltip>
         <!-- <error-log class="errLog-container right-menu-item hover-effect" /> -->

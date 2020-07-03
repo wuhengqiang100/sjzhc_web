@@ -10,7 +10,7 @@
       <div class="bullshit">
         <div class="bullshit__oops">哦!</div>
         <div class="bullshit__info">保留所有权利
-          <a style="color:#20a0ff" href="https://wallstreetcn.com" target="_blank">华尔街见闻 </a>
+          <a style="color:#20a0ff" href="http://www.cbpm-kexin.com/" target="_blank">中钞科信 </a>
         </div>
         <div class="bullshit__headline">{{ message }}</div>
         <div class="bullshit__info">请检查您输入的网址是否正确，或者点击下面的按钮返回首页</div>
