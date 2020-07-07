@@ -77,10 +77,28 @@ export const constantRoutes = [
     hidden: true
   },
   // 重定向到大屏监控
-  {
+  // 北京防伪大屏路由
+  /*  {
     // path: '/bigScreen',
     path: '/bigScreen/:id',
     component: () => import('@/views/monitor/bigScreen/index'),
+    hidden: true
+  }, */
+  // 南昌监控大屏路由
+  // 左侧card页
+  {
+    path: '/bigScreen/left',
+    component: () => import('@/views/monitor/ncMonitor/leftCard/index'),
+    hidden: true
+  }, // 中间分析页
+  {
+    path: '/bigScreen/center',
+    component: () => import('@/views/monitor/ncMonitor/centerAnalyze/index'),
+    hidden: true
+  }, // 右边表报警页
+  {
+    path: '/bigScreen/right',
+    component: () => import('@/views/monitor/ncMonitor/rightAlert/index'),
     hidden: true
   },
   {

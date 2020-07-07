@@ -67,10 +67,9 @@
           </el-form>
           <div class="centerDownload">
             <p>推荐使用:  <a :href="firefoxDowbload">火狐浏览器</a>  <a :href="flashDowbload">火狐Flash插件</a></p>
-            <p><button type="button" class="layui-btn">
+            <!--    <p><button type="button" class="layui-btn">
               <i class="layui-icon">&#xe608;</i> 添加
-            </button></p>
-
+            </button></p> -->
           </div>
           <div class="footer">
             <img :src="kexinLogo" class="footerLogo"><span>Copyright ©2008-2020 <a href="http://www.cbpm-kexin.com/" target="_black">深圳市中钞科信金融科技有限公司</a> 版权所有</span>
@@ -176,10 +175,6 @@ export default {
     getSysConfig() {
       getSystemConfigData().then(response => {
         this.factoryName = response.systemSet.factoryName
-        console.log('layui集成成功')
-        layui.use('layer', layer => {
-          layer.msg('hello')
-        })
       })
     },
     checkCapslock({ shiftKey, key } = {}) {
