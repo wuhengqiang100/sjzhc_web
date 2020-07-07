@@ -242,7 +242,7 @@ export default {
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
-        }, 1 * 500)
+        }, 1 * 1000)
       })
     },
     /*     getMachineTypes() {
@@ -270,7 +270,7 @@ export default {
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
-        }, 1 * 500)
+        }, 1 * 1000)
       })
     },
     // 工序禁用启用操作

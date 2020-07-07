@@ -67,6 +67,9 @@
           </el-form>
           <div class="centerDownload">
             <p>推荐使用:  <a :href="firefoxDowbload">火狐浏览器</a>  <a :href="flashDowbload">火狐Flash插件</a></p>
+            <p><button type="button" class="layui-btn">
+              <i class="layui-icon">&#xe608;</i> 添加
+            </button></p>
 
           </div>
           <div class="footer">
@@ -173,7 +176,7 @@ export default {
     getSysConfig() {
       getSystemConfigData().then(response => {
         this.factoryName = response.systemSet.factoryName
-        // layer.msg('hello')
+        console.log('layui集成成功')
         layui.use('layer', layer => {
           layer.msg('hello')
         })

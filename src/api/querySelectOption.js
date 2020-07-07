@@ -78,3 +78,17 @@ export function listOptionReportQa() {
   })
 }
 
+export function listOptionMachineWarningDeal() {
+  return request({
+    url: '/option/machineWarningDeal',
+    method: 'post'
+  })
+}
+
+export function listOptionDisplayPlatformInfo() {
+  return request({
+    url: '/option/displayPlatformInfo',
+    method: 'post'
+  })
+}
+

@@ -6,6 +6,9 @@
         <el-col :span="6">
           <el-form-item label="系统名称" prop="factoryName"><el-input v-model="ruleForm.factoryName" clearable style="width:250px" /></el-form-item>
           <el-form-item label="系统编码" prop="factoryCode"><el-input v-model="ruleForm.factoryCode" clearable style="width:250px" /></el-form-item>
+          <el-form-item label="系统编码" prop="factoryCode">
+            <el-upload action="https://jsonplaceholder.typicode.com/posts/" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove"> <i class="el-icon-plus" />    </el-upload>
+          </el-form-item>
           <!-- <el-form-item label="Ftp地址" prop="ftpIp"><el-input v-model="ruleForm.ftpIp" clearable style="width:200px" /></el-form-item>
           <el-form-item label="Ftp用户名" prop="ftpName"><el-input v-model="ruleForm.ftpName" clearable style="width:200px" /></el-form-item>
           <el-form-item label="Ftp密码" prop="ftpPass"><el-input v-model="ruleForm.ftpPass" clearable style="width:200px" /></el-form-item> -->

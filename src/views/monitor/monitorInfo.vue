@@ -219,7 +219,7 @@ export default {
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
-        }, 1 * 500)
+        }, 1 * 1000)
       })
     },
     /*     getoperatorTypes() {
@@ -247,7 +247,7 @@ export default {
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
-        }, 1 * 500)
+        }, 1 * 1000)
       })
     },
     // 人员禁用启用操作

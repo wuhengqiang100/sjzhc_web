@@ -164,7 +164,7 @@ const useFlagOptions = [
 // }, {})
 
 export default {
-  name: 'OpatTable',
+  name: 'DealTable',
   components: { Pagination },
   directives: { waves },
   filters: {
