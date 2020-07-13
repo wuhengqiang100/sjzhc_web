@@ -78,12 +78,12 @@ export const constantRoutes = [
   },
   // 重定向到大屏监控
   // 北京防伪大屏路由
-  /*  {
+  {
     // path: '/bigScreen',
-    path: '/bigScreen/:id',
+    path: '/bigScreen/bj',
     component: () => import('@/views/monitor/bigScreen/index'),
     hidden: true
-  }, */
+  },
   // 南昌监控大屏路由
   // 左侧card页
   {

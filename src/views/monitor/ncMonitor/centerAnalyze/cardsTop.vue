@@ -17,43 +17,58 @@
         <el-row :gutter="10">
           <el-col :span="12">
             <el-row class="row-class main-value" type="flex" justify="center">
-              <el-col :span="8">产品名称</el-col>
-              <el-col :span="12"><span>{{ card.productName }}</span></el-col>
+              <el-col :span="8">防重号开关</el-col>
+              <el-col :span="12"><span><el-switch v-model="value1" active-color="#13ce66" inactive-color="#ff4949" width="35" /></span></el-col>
               <!-- <el-col :span="12"><span>{{ index }}</span></el-col> -->
             </el-row>
-            <el-row class="row-class compare-value" type="flex" justify="center">
-              <el-col :span="8">卷轴号</el-col>
-              <el-col :span="12"><span>{{ card.rollNum }}</span></el-col>
+            <el-row class="row-class main-value" type="flex" justify="center">
+              <el-col :span="8">检测状态</el-col>
+              <el-col :span="12"><span><el-switch v-model="value2" active-color="#13ce66" inactive-color="#ff4949" width="35" /></span></el-col>
             </el-row>
             <el-row class="row-class compare-value" type="flex" justify="center">
-              <el-col :span="8">机速</el-col>
-              <el-col :span="12"><span>{{ card.machineSpeed }}</span></el-col>
+              <el-col :span="8">产品品种</el-col>
+              <el-col :span="12"><span>{{ card.productName }}</span></el-col>
             </el-row>
             <el-row class="row-class compare-value" type="flex" justify="center">
-              <el-col :span="8">生产班组</el-col>
+              <el-col :span="8">检测类型</el-col>
               <el-col :span="12"><span>{{ card.shiftTeam }}</span></el-col>
             </el-row>
-            <el-row class="row-class compare-value" type="flex" justify="center">
-              <el-col :span="8">怀疑品数</el-col>
-              <el-col :span="12"><span class="question-number">{{ card.doubtNum }}</span></el-col>
+            <!-- <el-row class="row-class compare-value" type="flex" justify="center">
+              <el-col :span="8">大万号</el-col>
+              <el-col :span="12"><span>{{ card.shiftTeam }}</span></el-col>
             </el-row>
-            <el-row class="row-class compare-value" type="flex" justify="center">
-              <el-col :span="8">废品数</el-col>
-              <el-col :span="12"><span class="error-number">{{ card.wasteNum }}</span></el-col>
-            </el-row>
-            <el-row class="row-class compare-value" type="flex" justify="center">
+ -->
+            <!--    <el-row class="row-class compare-value" type="flex" justify="center">
               <el-col :span="7">开始时间</el-col>
               <el-col :span="13"><span style="font-size:12px">{{ card.startDate }}</span></el-col>
             </el-row>
             <el-row class="row-class compare-value" type="flex" justify="center">
               <el-col :span="7">结束时间</el-col>
               <el-col :span="13"><span style="font-size:12px">{{ card.endDate }}</span></el-col>
-            </el-row>
+            </el-row> -->
 
           </el-col>
           <el-col :span="12">
             <el-col>
               <el-row class="row-class compare-value" type="flex" justify="center">
+                <el-col :span="8">大万号</el-col>
+                <el-col :span="12"><span class="question-number">{{ card.doubtNum }}</span></el-col>
+              </el-row>
+              <el-row class="row-class compare-value" type="flex" justify="center">
+                <el-col :span="8">车号</el-col>
+                <el-col :span="12"><span class="error-number">{{ card.wasteNum }}</span></el-col>
+              </el-row>
+              <el-row class="row-class compare-value" type="flex" justify="center">
+                <el-col :span="8">怀疑品数</el-col>
+                <el-col :span="12">
+                  <!-- <dv-digital-flop :config="card.doubtNum" style="width:200px;height:50px;" /> -->
+                  <span class="question-number">{{ card.doubtNum }}</span></el-col>
+              </el-row>
+              <el-row class="row-class compare-value" type="flex" justify="center">
+                <el-col :span="8">废品数</el-col>
+                <el-col :span="12"><span class="error-number">{{ card.wasteNum }}</span></el-col>
+              </el-row>
+              <!-- <el-row class="row-class compare-value" type="flex" justify="center">
                 <el-col :span="7">状态</el-col>
                 <el-col :span="13">
                   <span v-if="card.status==0">未开机</span>
@@ -64,10 +79,11 @@
               <el-row class="row-class compare-value" type="flex" justify="center">
                 <el-col :span="7">模板</el-col>
                 <el-col :span="13"><span>{{ card.templateName }}</span></el-col>
-              </el-row>
-              <el-row type="flex" justify="center" style="margin-top:50px">
+              </el-row> -->
+              <!-- 好品率 -->
+              <!-- <el-row type="flex" justify="center" style="margin-top:50px">
                 <el-col :span="20" :offset="4"><dv-charts class="ring-charts" :option="card.ring" /></el-col>
-              </el-row>
+              </el-row> -->
 
             </el-col>
           </el-col>
@@ -77,13 +93,13 @@
         <div class="card-footer-item">
           <div class="footer-title">生产总数</div>
           <div class="footer-detail">
-            <dv-digital-flop :config="card.total" style="width:70%;height:35px;" />
+            <dv-digital-flop :config="card.total" />
           </div>
         </div>
         <div class="card-footer-item">
           <div class="footer-title">好品数</div>
           <div class="footer-detail">
-            <dv-digital-flop :config="card.num" style="width:70%;height:35px;" />
+            <dv-digital-flop :config="card.num" />
           </div>
         </div>
       </div>
@@ -177,7 +193,10 @@ export default {
   data() {
     return {
       cards: [],
-      monitorList: []
+      monitorList: [],
+      value1: '',
+      value2: ''
+
     }
   },
   mounted() {
@@ -185,7 +204,7 @@ export default {
 
     createData()
 
-    setInterval(this.createData, 3000)
+    setInterval(this.createData, 10000)
   },
   methods: {
     createData() {
@@ -346,22 +365,23 @@ export default {
     // -webkit-box-sizing: border-box;
     // box-sizing: border-box;
 }
+
 #cards {
   display: flex;
   justify-content: space-between;
-  height: 49%;
+  height: 20%;
 
   .card-item {
     background-color: rgba(6, 30, 93, 0.5);
     border-top: 2px solid rgba(1, 153, 209, 0.5);
-    width: 33%;
+    width: 24.5%;
     display: flex;
     flex-direction: column;
   }
 
   .card-header {
     display: flex;
-    height: 20%;
+    height: 15%;
     align-items: center;
     justify-content: space-between;
 

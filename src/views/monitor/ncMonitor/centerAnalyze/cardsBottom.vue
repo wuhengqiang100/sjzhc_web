@@ -247,34 +247,36 @@ export default {
   font-weight: bold;
   line-height: 24px;
 
-  font-size: 16px;
+  font-size: 12px;
 
   span {
-    font-size: 22px;
+    font-size: 18px;
     color: #00c0ff;
-    margin-left: 22px;
+    margin-left: 8px;
   }
 }
 
 .compare-value {
   height: 22px;
   line-height: 24px;
-  font-size: 16px;
+  font-size: 12px;
 
   span {
-    margin-left: 22px;
+    margin-left: 14px;
   }
 }
 
 #cards {
   display: flex;
-  justify-content: space-between;
-  height: 49%;
+  // justify-content: space-between;
+  justify-content: flex-start;
+  height: 25%;
 
   .card-item {
     background-color: rgba(6, 30, 93, 0.5);
     border-top: 2px solid rgba(1, 153, 209, 0.5);
-    width: 33%;
+    width: 19.5%;
+     margin-right: 0.5%;
     display: flex;
     flex-direction: column;
   }
@@ -298,6 +300,7 @@ export default {
     }
   }
   .card-content {
+    margin-top:10px;
     height: 55%;
   }
   .main-content {
@@ -312,7 +315,7 @@ export default {
   }
 
   .card-footer {
-    height: 25%;
+    height: 20%;
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -324,21 +327,21 @@ export default {
     width: 40%;
     background-color: rgba(6, 30, 93, 0.7);
     border-radius: 3px;
-
     .footer-title {
-      font-size: 15px;
+      font-size: 14px;
       margin-bottom: 5px;
     }
 
     .footer-detail {
-      font-size: 20px;
+      font-size: 16px;
       color: #1294fb;
       display: flex;
-      font-size: 18px;
       align-items: center;
 
       .dv-digital-flop {
-        margin-right: 5px;
+        margin-left:40px;
+        width:120px;
+        height:25px;
       }
     }
   }

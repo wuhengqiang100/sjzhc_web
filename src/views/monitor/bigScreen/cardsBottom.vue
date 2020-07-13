@@ -268,13 +268,15 @@ export default {
 
 #cards {
   display: flex;
-  justify-content: space-between;
+  // justify-content: space-between;
+  justify-content: flex-start;
   height: 49%;
 
   .card-item {
     background-color: rgba(6, 30, 93, 0.5);
     border-top: 2px solid rgba(1, 153, 209, 0.5);
     width: 33%;
+    margin-right: 0.25%;
     display: flex;
     flex-direction: column;
   }

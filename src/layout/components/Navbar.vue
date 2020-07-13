@@ -18,19 +18,22 @@
                 class="right-menu-item" /> -->
         <el-tooltip class="item" effect="dark" content="大屏监控" placement="bottom-start">
           <!-- <big-screen id="bigScreen" class="right-menu-item hover-effect" /> -->
-          <router-link id="bigScreen" to="/bigScreen/left" class="right-menu-item hover-effect">左大屏</router-link>
+          <router-link id="bigScreen" to="/bigScreen/bj" class="right-menu-item hover-effect">左大屏</router-link>
         </el-tooltip>
         <el-tooltip class="item" effect="dark" content="大屏监控" placement="bottom-start">
-          <!-- <big-screen id="bigScreen" class="right-menu-item hover-effect" /> -->
+          <big-screen id="bigScreen" class="right-menu-item hover-effect" />
+        </el-tooltip>
+        <!-- 南昌大屏 -->
+        <!--  <el-tooltip class="item" effect="dark" content="大屏监控" placement="bottom-start">
+          <router-link id="bigScreen" to="/bigScreen/left" class="right-menu-item hover-effect">左大屏</router-link>
+        </el-tooltip>
+          <el-tooltip class="item" effect="dark" content="大屏监控" placement="bottom-start">
           <router-link id="bigScreen" to="/bigScreen/center" class="right-menu-item hover-effect">中大屏</router-link>
         </el-tooltip>
         <el-tooltip class="item" effect="dark" content="大屏监控" placement="bottom-start">
-          <!-- <big-screen id="bigScreen" class="right-menu-item hover-effect" /> -->
           <router-link id="bigScreen" to="/bigScreen/right" class="right-menu-item hover-effect">右大屏</router-link>
-        </el-tooltip>
-        <!--      <el-tooltip class="item" effect="dark" content="大屏监控" placement="bottom-start">
-          <big-screen id="bigScreen" class="right-menu-item hover-effect" />
         </el-tooltip> -->
+
         <!-- <error-log class="errLog-container right-menu-item hover-effect" /> -->
         <el-tooltip class="item" effect="dark" content="全屏" placement="bottom-start">
           <screenfull id="screenfull" class="right-menu-item hover-effect" />

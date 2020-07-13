@@ -61,6 +61,12 @@ router.beforeEach(async(to, from, next) => {
           await store.dispatch('system/config')// 获取系统的配置信息
           // localStorage.setItem('systemSet', systemSet)
 
+          // generate accessible routes map based on roles
+          const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
+
+          // dynamically add accessible routes
+          router.addRoutes(accessRoutes)
+
           getSystemConfigData().then(response => {
             localStorage.setItem('factoryName', response.systemSet.factoryName)
             localStorage.setItem('machineCodeMes', response.systemSet.machineCodeMes)
@@ -77,12 +83,6 @@ router.beforeEach(async(to, from, next) => {
             localStorage.setItem('productLocalProductName', response.systemSet.productLocalProductName)
           })
           // console.log(localStorage.getItem('systemSet'))
-
-          // generate accessible routes map based on roles
-          const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
-
-          // dynamically add accessible routes
-          router.addRoutes(accessRoutes)
 
           // hack method to ensure that addRoutes is complete
           // set the replace: true, so the navigation will not leave a history record

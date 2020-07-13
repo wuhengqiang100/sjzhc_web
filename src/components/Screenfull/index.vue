@@ -14,7 +14,7 @@ export default {
   name: 'Screenfull',
   data() {
     return {
-      isFullscreen: false
+      isFullscreen: true
     }
   },
   mounted() {

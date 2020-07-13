@@ -83,8 +83,10 @@
 <script>
 // import { getUUID } from '@/utils'
 // import { validUsername } from '@/utils/validate'
+// import layer from 'layui-layer'
 import SocialSign from './components/SocialSignin'
 import { getSystemConfigData } from '@/api/systemSet'
+
 export default {
   name: 'Login',
   components: {
@@ -159,6 +161,7 @@ export default {
   },
   created() {
     // this.getCaptcha()
+
     this.getSysConfig()
   },
   mounted() {
@@ -175,6 +178,7 @@ export default {
     getSysConfig() {
       getSystemConfigData().then(response => {
         this.factoryName = response.systemSet.factoryName
+        // layer.msg('layer集成成功!')
       })
     },
     checkCapslock({ shiftKey, key } = {}) {

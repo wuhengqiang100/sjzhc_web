@@ -47,7 +47,7 @@ import topHeader from './topHeader'
 import cardsTop from './cardsTop'
 import cardsBottom from './cardsBottom'
 import decora from './decora'
-
+import screenfull from 'screenfull'
 export default {
   name: 'DataView',
   components: {
@@ -64,15 +64,62 @@ export default {
     decora
   },
   data() {
-    return {}
+    return {
+      isFullscreen: false
+    }
   },
   created() {
-
+    this.toggleFullscreen()
+  },
+  mounted() {
+    window.onresize = () => {
+      // 全屏下监控是否按键了ESC
+      if (!this.checkFull()) {
+        // 全屏下按键esc后要执行的动作
+        this.isFullscreen = false
+      }
+    }
   },
   methods: {
     getId() {
       console.log(this.$route.params.id)
+    },
+    toggleFullscreen() {
+      if (!screenfull.enabled) {
+        this.$message({
+          message: 'you browser can not work',
+          type: 'warning'
+        })
+        return false
+      }
+      screenfull.toggle()
+    },
+    /**
+     * 全屏事件
+     */
+    screenfull() {
+      if (!screenfull.enabled) {
+        this.$message({
+          message: 'Your browser does not work',
+          type: 'warning'
+        })
+        return false
+      }
+      screenfull.toggle()
+      this.isFullscreen = true
+    },
+    /**
+     * 是否全屏并按键ESC键的方法
+     */
+    checkFull() {
+      var isFull = document.fullscreenEnabled || window.fullScreen || document.webkitIsFullScreen || document.msFullscreenEnabled
+      // to fix : false || undefined == undefined
+      if (isFull === undefined) {
+        isFull = false
+      }
+      return isFull
     }
+
   }
 }
 </script>

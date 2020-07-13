@@ -9,15 +9,14 @@
         <!-- <decora /> -->
         <div class="block-left-right-content">
           <!-- <ranking-board /> -->
-          <div style="width:75%">
-
+          <div style="width:100%">
             <cardsTop />
             <span style="margin-top:2%" />
-            <cardsBottom />
+            <!-- <cardsBottom /> -->
           </div>
-          <div style="width:25%">
+          <!-- <div style="width:25%">
             <scroll-board />
-          </div>
+          </div> -->
 
           <!-- <div class="block-top-bottom-content">
              <div class="block-top-content">
@@ -44,7 +43,7 @@ import topHeader from './topHeader'
 // import rankingBoard from './rankingBoard'
 // import roseChart from './roseChart'
 // import waterLevelChart from './waterLevelChart'
-import scrollBoard from './scrollBoard'
+// import scrollBoard from './scrollBoard'
 import cardsTop from './cardsTop'
 import cardsBottom from './cardsBottom'
 import decora from './decora'
@@ -57,8 +56,9 @@ export default {
     // rankingBoard,
     // roseChart,
     // waterLevelChart,
-    scrollBoard,
+    // scrollBoard,
     cardsTop,
+    // eslint-disable-next-line vue/no-unused-components
     cardsBottom,
     // eslint-disable-next-line vue/no-unused-components
     decora

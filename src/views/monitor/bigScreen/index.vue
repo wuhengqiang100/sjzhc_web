@@ -12,7 +12,7 @@
           <div style="width:75%">
 
             <cardsTop />
-            <span style="margin-top:2%" />
+            <span style="margin-top:4%" />
             <cardsBottom />
           </div>
           <div style="width:25%">
