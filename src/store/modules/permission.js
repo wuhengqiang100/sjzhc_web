@@ -155,6 +155,7 @@ import user from '@/views/system/user' */
   },
   { path: '*', redirect: '/404', hidden: true }
 ] */
+
 export const asyncRoutes = [
   /*  {
     'path': '/base',

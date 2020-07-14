@@ -42,8 +42,11 @@ router.beforeEach(async(to, from, next) => {
 
   // determine whether the user has logged in
   const hasToken = getToken()
-
-  if (hasToken) {
+  // 大屏路由拦截,不需要登录直接访问
+  if (to.path.includes('/bigScreen')) {
+    next()
+    NProgress.done()
+  } else if (hasToken) {
     if (to.path === '/login') {
       // if is logged in, redirect to the home page
       next({ path: '/' })
