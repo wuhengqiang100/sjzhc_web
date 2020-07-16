@@ -415,7 +415,9 @@ export default {
         operationName: undefined,
         machineName: undefined,
         workUnitName: undefined,
-        sort: '+id'
+        sort: '+id',
+        startDate: '',
+        endDate: ''
       }
     },
     handleFilter() {
@@ -445,6 +447,7 @@ export default {
     handleReset() {
       this.resetListQuery()
       // this.getList()
+      this.dateValue = ''
       this.handleFilter()
     },
     formatJson(filterVal, jsonData) {

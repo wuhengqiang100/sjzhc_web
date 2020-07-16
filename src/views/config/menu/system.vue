@@ -4,19 +4,27 @@
       <el-tag effect="dark" size="medium">系统配置</el-tag>
       <el-row style="margin-top:20px">
         <el-col :span="6">
-          <el-form-item label="系统名称" prop="factoryName"><el-input v-model="ruleForm.factoryName" clearable style="width:250px" /></el-form-item>
-          <el-form-item label="系统编码" prop="factoryCode"><el-input v-model="ruleForm.factoryCode" clearable style="width:250px" /></el-form-item>
+          <el-form-item label="系统名称" prop="factoryName"><el-input v-model="ruleForm.factoryName" clearable style="width:200px" /></el-form-item>
+          <el-form-item label="系统编码" prop="factoryCode"><el-input v-model="ruleForm.factoryCode" clearable style="width:200px" /></el-form-item>
 
           <!-- <el-form-item label="Ftp地址" prop="ftpIp"><el-input v-model="ruleForm.ftpIp" clearable style="width:200px" /></el-form-item>
           <el-form-item label="Ftp用户名" prop="ftpName"><el-input v-model="ruleForm.ftpName" clearable style="width:200px" /></el-form-item>
           <el-form-item label="Ftp密码" prop="ftpPass"><el-input v-model="ruleForm.ftpPass" clearable style="width:200px" /></el-form-item> -->
         </el-col>
-        <el-col :span="6"><div class="grid-content bg-purple-light" />
-          <el-form-item label="登录页背景" prop="factoryCode">
-            <el-upload action="https://jsonplaceholder.typicode.com/posts/" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove"> <i class="el-icon-plus" />    </el-upload>
+        <el-col :span="12">
+          <el-form-item label="登录页背景">
+            <button id="test1" type="button" class="layui-btn">上传图片</button>
+
+            <div class="layui-upload">
+
+              <div class="layui-upload-list" style="">
+                <img id="demo1" class="layui-upload-img">
+                <p id="demoText" />
+              </div>
+            </div>
+            <!-- <el-upload :action="uploadAction" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove"> <i class="el-icon-plus" />    </el-upload> -->
           </el-form-item>
         </el-col>
-        <el-col :span="6"><div class="grid-content bg-purple-light" /></el-col>
         <el-col :span="6"><div class="grid-content bg-purple-light" /></el-col>
       </el-row>
       <el-tag type="success" size="medium" effect="dark">属性显示状态</el-tag>
@@ -57,7 +65,7 @@ import { getSystemConfigData, saveSystemConfig } from '@/api/systemSet'
 import waves from '@/directive/waves' // waves directive
 // import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-
+import layer from 'layui-layer'
 const machineTypeOptions = []
 
 // eslint-disable-next-line no-unused-vars
@@ -92,6 +100,7 @@ export default {
   },
   data() {
     return {
+      uploadAction: process.env.VUE_APP_BASE_API + '/file/upload',
       ruleForm: {
         factoryId: '',
         factoryCode: '',
@@ -140,6 +149,40 @@ export default {
   created() {
     this.getSystemConfig()
   },
+  mounted() {
+    layui.use('upload', function() {
+      var $ = layui.jquery
+      var upload = layui.upload
+
+      // 普通图片上传
+      var uploadInst = upload.render({
+        elem: '#test1',
+        url: process.env.VUE_APP_BASE_API + '/file/upload', // 改成您自己的上传接口
+        before: function(obj) {
+          // 预读本地文件示例，不支持ie8
+          obj.preview(function(index, file, result) {
+            $('#demo1').attr('src', result) // 图片链接（base64）
+          })
+        },
+        done: function(res) {
+          // 如果上传失败
+          if (res.code === 20000) {
+            return layer.msg('上传成功')
+          } else {
+            return layer.msg('上传失败')
+          }
+        },
+        error: function() {
+          // 演示失败状态，并实现重传
+          // var demoText = $('#demoText')
+          // demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>')
+          // demoText.find('.demo-reload').on('click', function() {
+          //   uploadInst.upload()
+          // })
+        }
+      })
+    })
+  },
   methods: {
     getSystemConfig() {
       getSystemConfigData().then(response => {
@@ -172,4 +215,16 @@ export default {
   }
 }
 </script>
+
+<style lang="less">
+  .layui-upload {
+    min-height: 180px;
+    .layui-upload-list {
+
+      .layui-upload-img{
+        max-height: 180px;
+      }
+    }
+  }
+</style>>
 

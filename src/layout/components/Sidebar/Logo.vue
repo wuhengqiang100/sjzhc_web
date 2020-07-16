@@ -38,6 +38,8 @@
 </template>
 
 <script>
+import { getSystemConfigData } from '@/api/systemSet'
+
 export default {
   name: 'SidebarLogo',
   props: {
@@ -57,12 +59,20 @@ export default {
     }
   },
   created() {
-    // window.addEventListener('storage', this.afterQRScan)
+    // console.log(process.env.VUE_APP_BASE_API),
+    //   console.log(this.emptyGif)
     this.getSysConfig()
   },
   methods: {
+    // getSysConfig() {
+    //   this.factoryName = localStorage.getItem('factoryName')
+    // }
     getSysConfig() {
-      this.factoryName = localStorage.getItem('factoryName')
+      getSystemConfigData().then(response => {
+        this.factoryName = response.systemSet.factoryName
+        // localStorage.setItem('factoryName'.this.factoryName)
+        // layer.msg('layer集成成功!')
+      })
     }
   }
 }

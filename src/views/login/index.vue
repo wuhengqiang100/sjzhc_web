@@ -114,6 +114,7 @@ export default {
       kexinLogo: process.env.VUE_APP_BASE_API + '/static/admin/img/kexin.png',
       firefoxDowbload: process.env.VUE_APP_BASE_API + '/file/download?id=1',
       flashDowbload: process.env.VUE_APP_BASE_API + '/file/download/?id=2',
+      loginBg: '',
       loginForm: {
         // username: 'admin',
         // password: '111111'
@@ -178,6 +179,8 @@ export default {
     getSysConfig() {
       getSystemConfigData().then(response => {
         this.factoryName = response.systemSet.factoryName
+        this.loginBg = process.env.VUE_APP_BASE_API + response.systemSet.loginBg
+        localStorage.setItem('factoryName'.this.factoryName)
         // layer.msg('layer集成成功!')
       })
     },
@@ -284,8 +287,7 @@ export default {
       width: 100%;
       height: 100%;
       content: "";
-      // background-image: url(~@/assets/img/login_bg.jpg);
-      background-image: url(~@/assets/img/pic.jpg);
+      background-image: url(http://127.0.0.1:8088/file/img/loginBg.jpg);
       background-size: cover;
     }
     .site-content__wrapper {

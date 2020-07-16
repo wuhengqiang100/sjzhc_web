@@ -9,7 +9,7 @@
       :reverse="true"
     />
 
-    <div class="center-title">北京安全线机检数据监控
+    <div class="center-title">{{ monitorName }}
       <screenfull
         id="screenfull"
         class="right-menu-item hover-effect"
@@ -22,6 +22,8 @@
 
 // import { parseTime } from '@/utils'
 import Screenfull from '@/components/Screenfull'
+import { getMonitorName } from '@/api/monitor'
+
 export default {
   name: 'TopHeader',
   components: {
@@ -29,10 +31,20 @@ export default {
   },
   data() {
     return {
-      nowDate: new Date()
+      nowDate: new Date(),
+      monitorName: ''
     }
   },
-  methods: {}
+  mounted() {
+    this.getMonitor()
+  },
+  methods: {
+    getMonitor() {
+      getMonitorName(1).then(response => {
+        this.monitorName = response.monitorName
+      })
+    }
+  }
 }
 </script>
 

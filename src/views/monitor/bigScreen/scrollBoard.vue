@@ -39,7 +39,7 @@ export default {
           header: ['站点', '报警描述'],
           data: response.warnings,
           index: true,
-          columnWidth: [65, 110],
+          columnWidth: [65, 180],
           align: ['center'],
           rowNum: 20,
           headerBGC: '#1981f6',

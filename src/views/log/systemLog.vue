@@ -215,7 +215,7 @@ export default {
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
-        }, 1 * 500)
+        }, 1 * 1000)
       })
     },
     /*     getMachineTypes() {
@@ -273,29 +273,39 @@ export default {
         // useFlag: undefined,
         // importance: undefined,
         title: undefined,
-        sort: '+id'
+        sort: '+id',
+        startDate: '',
+        endDate: ''
       }
     },
     handleFilter() {
       this.listQuery.page = 1
-      this.listLoading = true
+
       if (this.dateValue !== '') {
+        this.listLoading = true
         this.listQuery.startDate = parseTime(this.dateValue[0])
         this.listQuery.endDate = parseTime(this.dateValue[1])
-      }
-      fetchSytemList(this.listQuery).then(response => {
-        this.list = response.data.items
-        this.total = response.data.total
+        fetchSytemList(this.listQuery).then(response => {
+          this.list = response.data.items
+          this.total = response.data.total
 
-        // Just to simulate the time of the request
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1 * 500)
-      })
+          // Just to simulate the time of the request
+          setTimeout(() => {
+            this.listLoading = false
+          }, 1 * 500)
+        })
+      } else {
+        this.$message({
+          message: '请选择时间',
+          type: 'success'
+        })
+        return false
+      }
     },
     handleReset() {
       this.resetListQuery()
-      this.getList()
+      this.dateValue = ''
+      this.handleFilter()
     },
 
     formatJson(filterVal, jsonData) {
