@@ -92,18 +92,18 @@
     <el-dialog
       title="重置密码"
       :visible.sync="centerDialogVisible"
-      width="30%"
+      width="25%"
       center
       :modal="false"
     >
       <el-form :model="temp">
-        <el-form-item label="原密码" :label-width="formLabelWidth">
+        <el-form-item label="原密码:" :label-width="formLabelWidth">
           <el-input v-model="temp.oldPassword" clearable type="text" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="新密码" :label-width="formLabelWidth">
+        <el-form-item label="新密码:" :label-width="formLabelWidth">
           <el-input v-model="temp.newPassword" clearable type="password" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="重置密码" :label-width="formLabelWidth">
+        <el-form-item label="重置密码:" :label-width="formLabelWidth">
           <el-input v-model="temp.confirmPassword" clearable type="password" autocomplete="off" />
         </el-form-item>
       </el-form>

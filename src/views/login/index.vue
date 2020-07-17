@@ -81,6 +81,7 @@
 </template>
 
 <script>
+
 // import { getUUID } from '@/utils'
 // import { validUsername } from '@/utils/validate'
 // import layer from 'layui-layer'
@@ -114,7 +115,6 @@ export default {
       kexinLogo: process.env.VUE_APP_BASE_API + '/static/admin/img/kexin.png',
       firefoxDowbload: process.env.VUE_APP_BASE_API + '/file/download?id=1',
       flashDowbload: process.env.VUE_APP_BASE_API + '/file/download/?id=2',
-      loginBg: '',
       loginForm: {
         // username: 'admin',
         // password: '111111'
@@ -179,7 +179,6 @@ export default {
     getSysConfig() {
       getSystemConfigData().then(response => {
         this.factoryName = response.systemSet.factoryName
-        this.loginBg = process.env.VUE_APP_BASE_API + response.systemSet.loginBg
         localStorage.setItem('factoryName'.this.factoryName)
         // layer.msg('layer集成成功!')
       })
@@ -483,14 +482,15 @@ $light_gray: rgb(58, 53, 53);
   .footer {
     position:absolute;
     float: left;
-    margin-top: 340px;
+    margin-top: 380px;
     margin-left: 10px;
     .footerLogo {
       width: 20%;
       height:20%;
     }
     span {
-      margin-top:120px;
+      float: right;
+      margin-top:40px;
       font-size: 12px;
     }
   }

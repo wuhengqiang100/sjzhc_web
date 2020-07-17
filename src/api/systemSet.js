@@ -18,3 +18,12 @@ export function saveSystemConfig(data) {
   })
 }
 
+export function editBg(fileName) {
+  return request({
+    url: '/file/editBg',
+    method: 'post',
+    params: { fileName }
+    // baseURL: "http://127.0.0.1:8088"
+  })
+}
+

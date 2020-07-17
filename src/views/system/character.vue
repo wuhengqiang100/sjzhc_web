@@ -120,6 +120,7 @@
 
               <el-transfer
                 v-model="value"
+                filterable
                 style="text-align: left; display: inline-block;margin: auto"
                 :titles="titles"
                 :data="data"
@@ -466,8 +467,9 @@ export default {
 </script>
 
 <style lang="less">
+
 .el-dialog .el-form .el-form-item .el-input {
-  width: 220px;
+  width: 150px;
 }
 /* .el-form-item__content .el-transfe .el-transfer-panel {
     border: 1px solid #e6ebf5;

@@ -11,21 +11,40 @@
           <el-form-item label="Ftp用户名" prop="ftpName"><el-input v-model="ruleForm.ftpName" clearable style="width:200px" /></el-form-item>
           <el-form-item label="Ftp密码" prop="ftpPass"><el-input v-model="ruleForm.ftpPass" clearable style="width:200px" /></el-form-item> -->
         </el-col>
-        <el-col :span="12">
-          <el-form-item label="登录页背景">
-            <button id="test1" type="button" class="layui-btn">上传图片</button>
 
-            <div class="layui-upload">
+        <el-col :span="6">
+          <!-- <el-form-item label="工厂名称"> -->
+          <label style="margin-right:20px;">登陆页背景</label>
+          <el-select v-model="factorySelectValue" clearable placeholder="请选择" @change="factorySelectChange()">
+            <el-option
+              v-for="item in factoryOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
 
-              <div class="layui-upload-list" style="">
-                <img id="demo1" class="layui-upload-img">
-                <p id="demoText" />
-              </div>
-            </div>
-            <!-- <el-upload :action="uploadAction" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove"> <i class="el-icon-plus" />    </el-upload> -->
-          </el-form-item>
+          </el-select>
+          <div class="layui-upload-list" style="">
+            <img id="demo1" :src="factorySelectValue" class="layui-upload-img" style="max-height:200px;">
+            <p id="demoText" />
+          </div>
+          <!-- </el-form-item> -->
+
         </el-col>
-        <el-col :span="6"><div class="grid-content bg-purple-light" /></el-col>
+        <el-col :span="12">
+          <!-- <el-form-item> -->
+          <!-- <button id="test1" type="button" class="layui-btn">上传图片</button> -->
+          <el-button type="primary" @click="uploadFactoryBg()">确定<i class="el-icon-upload el-icon--right" /></el-button>
+          <el-button id="test1" type="primary">上传<i class="el-icon-upload el-icon--right" /></el-button>
+          <div class="layui-upload">
+
+            <div class="layui-upload-list" style="">
+              <img id="demo1" class="layui-upload-img" style="max-height:200px;">
+              <p id="demoText" />
+            </div>
+          </div>
+          <!-- </el-form-item> -->
+        </el-col>
       </el-row>
       <el-tag type="success" size="medium" effect="dark">属性显示状态</el-tag>
       <el-row style="margin-top:20px">
@@ -60,13 +79,30 @@
 
 <script>
 
-import { getSystemConfigData, saveSystemConfig } from '@/api/systemSet'
+import { getSystemConfigData, saveSystemConfig, editBg } from '@/api/systemSet'
 
 import waves from '@/directive/waves' // waves directive
 // import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import layer from 'layui-layer'
 const machineTypeOptions = []
+
+const factoryOptions = [
+  { value: 'http://127.0.0.1:8088/file/img/loginBg.jpg', label: '默认背景' },
+  { value: 'http://127.0.0.1:8088/file/img/保定钞纸.jpg', label: '保定钞纸' },
+  { value: 'http://127.0.0.1:8088/file/img/北京防伪.jpg', label: '北京防伪' },
+  { value: 'http://127.0.0.1:8088/file/img/北京印钞.jpg', label: '北京印钞' },
+  { value: 'http://127.0.0.1:8088/file/img/成都印钞.jpg', label: '成都印钞' },
+  { value: 'http://127.0.0.1:8088/file/img/广州印钞.jpg', label: '广州印钞' },
+  { value: 'http://127.0.0.1:8088/file/img/昆山钞纸.jpg', label: '昆山钞纸' },
+  { value: 'http://127.0.0.1:8088/file/img/南昌印钞.jpg', label: '南昌印钞' },
+  { value: 'http://127.0.0.1:8088/file/img/南京造币.jpg', label: '南京造币' },
+  { value: 'http://127.0.0.1:8088/file/img/上海印钞.jpg', label: '上海印钞' },
+  { value: 'http://127.0.0.1:8088/file/img/上海造币.jpg', label: '上海造币' },
+  { value: 'http://127.0.0.1:8088/file/img/沈阳造币.jpg', label: '沈阳造币' },
+  { value: 'http://127.0.0.1:8088/file/img/石家庄印钞.jpg', label: '石家庄印钞' },
+  { value: 'http://127.0.0.1:8088/file/img/西安印钞.jpg', label: '西安印钞' }
+]
 
 // eslint-disable-next-line no-unused-vars
 const useFlagOptions = [
@@ -101,6 +137,9 @@ export default {
   data() {
     return {
       uploadAction: process.env.VUE_APP_BASE_API + '/file/upload',
+      // loginbg: 'http://127.0.0.1:8088/file/img/loginBg.jpg',
+      factoryOptions,
+      factorySelectValue: 'http://127.0.0.1:8088/file/img/loginBg.jpg',
       ruleForm: {
         factoryId: '',
         factoryCode: '',
@@ -125,24 +164,6 @@ export default {
       rules: {
         factoryName: [{ required: true, message: '请输入系统名称', trigger: 'blur' }],
         factoryCode: [{ required: true, message: '请输入系统编码', trigger: 'blur' }]
-        /*    region: [
-          { required: true, message: '请选择活动区域', trigger: 'change' }
-        ],
-        date1: [
-          { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-        ],
-        date2: [
-          { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
-        ],
-        type: [
-          { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
-        ],
-        resource: [
-          { required: true, message: '请选择活动资源', trigger: 'change' }
-        ],
-        desc: [
-          { required: true, message: '请填写活动形式', trigger: 'blur' }
-        ] */
       }
     }
   },
@@ -153,8 +174,8 @@ export default {
     layui.use('upload', function() {
       var $ = layui.jquery
       var upload = layui.upload
-
       // 普通图片上传
+      // eslint-disable-next-line no-unused-vars
       var uploadInst = upload.render({
         elem: '#test1',
         url: process.env.VUE_APP_BASE_API + '/file/upload', // 改成您自己的上传接口
@@ -167,6 +188,7 @@ export default {
         done: function(res) {
           // 如果上传失败
           if (res.code === 20000) {
+            this.factorySelectValue = ''
             return layer.msg('上传成功')
           } else {
             return layer.msg('上传失败')
@@ -211,6 +233,17 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields()
+    },
+    uploadFactoryBg() {
+      console.log(this.factorySelectValue)
+      editBg(this.factorySelectValue).then(() => {
+        this.$notify({
+          title: 'Success',
+          message: '修改成功',
+          type: 'success',
+          duration: 2000
+        })
+      })
     }
   }
 }
