@@ -46,6 +46,12 @@ Vue.use(Element, {
 Vue.component(Button.name, Button)
 Vue.component(Table.name, 	Table)
 
+// import G2 from '@antv/g2'
+// Vue.use(G2)
+
+// const g2plot = require('@antv/g2plot') // 1. 引入g2plot
+// Vue.prototype.$g2plot = g2plot // 2. 将g2plot挂载到vue中
+
 Vue.use(dataV)
 
 Vue.use(animated)

@@ -88,20 +88,20 @@ import layer from 'layui-layer'
 const machineTypeOptions = []
 
 const factoryOptions = [
-  { value: 'http://127.0.0.1:8088/file/img/loginBg.jpg', label: '默认背景' },
-  { value: 'http://127.0.0.1:8088/file/img/保定钞纸.jpg', label: '保定钞纸' },
-  { value: 'http://127.0.0.1:8088/file/img/北京防伪.jpg', label: '北京防伪' },
-  { value: 'http://127.0.0.1:8088/file/img/北京印钞.jpg', label: '北京印钞' },
-  { value: 'http://127.0.0.1:8088/file/img/成都印钞.jpg', label: '成都印钞' },
-  { value: 'http://127.0.0.1:8088/file/img/广州印钞.jpg', label: '广州印钞' },
-  { value: 'http://127.0.0.1:8088/file/img/昆山钞纸.jpg', label: '昆山钞纸' },
-  { value: 'http://127.0.0.1:8088/file/img/南昌印钞.jpg', label: '南昌印钞' },
-  { value: 'http://127.0.0.1:8088/file/img/南京造币.jpg', label: '南京造币' },
-  { value: 'http://127.0.0.1:8088/file/img/上海印钞.jpg', label: '上海印钞' },
-  { value: 'http://127.0.0.1:8088/file/img/上海造币.jpg', label: '上海造币' },
-  { value: 'http://127.0.0.1:8088/file/img/沈阳造币.jpg', label: '沈阳造币' },
-  { value: 'http://127.0.0.1:8088/file/img/石家庄印钞.jpg', label: '石家庄印钞' },
-  { value: 'http://127.0.0.1:8088/file/img/西安印钞.jpg', label: '西安印钞' }
+  { value: process.env.VUE_APP_BASE_API + '/file/img/loginBg.jpg', label: '默认背景' },
+  { value: process.env.VUE_APP_BASE_API + '/file/img/保定钞纸.jpg', label: '保定钞纸' },
+  { value: process.env.VUE_APP_BASE_API + '/file/img/北京防伪.jpg', label: '北京防伪' },
+  { value: process.env.VUE_APP_BASE_API + '/file/img/北京印钞.jpg', label: '北京印钞' },
+  { value: process.env.VUE_APP_BASE_API + '/file/img/成都印钞.jpg', label: '成都印钞' },
+  { value: process.env.VUE_APP_BASE_API + '/file/img/广州印钞.jpg', label: '广州印钞' },
+  { value: process.env.VUE_APP_BASE_API + '/file/img/昆山钞纸.jpg', label: '昆山钞纸' },
+  { value: process.env.VUE_APP_BASE_API + '/file/img/南昌印钞.jpg', label: '南昌印钞' },
+  { value: process.env.VUE_APP_BASE_API + '/file/img/南京造币.jpg', label: '南京造币' },
+  { value: process.env.VUE_APP_BASE_API + '/file/img/上海印钞.jpg', label: '上海印钞' },
+  { value: process.env.VUE_APP_BASE_API + '/file/img/上海造币.jpg', label: '上海造币' },
+  { value: process.env.VUE_APP_BASE_API + '/file/img/沈阳造币.jpg', label: '沈阳造币' },
+  { value: process.env.VUE_APP_BASE_API + '/file/img/石家庄印钞.jpg', label: '石家庄印钞' },
+  { value: process.env.VUE_APP_BASE_API + '/file/img/西安印钞.jpg', label: '西安印钞' }
 ]
 
 // eslint-disable-next-line no-unused-vars
@@ -139,7 +139,7 @@ export default {
       uploadAction: process.env.VUE_APP_BASE_API + '/file/upload',
       // loginbg: 'http://127.0.0.1:8088/file/img/loginBg.jpg',
       factoryOptions,
-      factorySelectValue: 'http://127.0.0.1:8088/file/img/loginBg.jpg',
+      factorySelectValue: process.env.VUE_APP_BASE_API + '/file/img/loginBg.jpg',
       ruleForm: {
         factoryId: '',
         factoryCode: '',

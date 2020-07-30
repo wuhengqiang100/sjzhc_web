@@ -1,5 +1,5 @@
 <template>
-  <div class="site-wrapper site-page--login">
+  <div class="site-wrapper site-page--login" :style="{'background-image':loginBgUrl}" style="background-size: cover;">
     <div class="site-content__wrapper">
       <div class="site-content">
         <div class="brand-info">
@@ -115,6 +115,7 @@ export default {
       kexinLogo: process.env.VUE_APP_BASE_API + '/static/admin/img/kexin.png',
       firefoxDowbload: process.env.VUE_APP_BASE_API + '/file/download?id=1',
       flashDowbload: process.env.VUE_APP_BASE_API + '/file/download/?id=2',
+      loginBgUrl: 'url(' + process.env.VUE_APP_BASE_API + '/file/img/loginBg.jpg)',
       loginForm: {
         // username: 'admin',
         // password: '111111'
@@ -286,7 +287,8 @@ export default {
       width: 100%;
       height: 100%;
       content: "";
-      background-image: url(http://127.0.0.1:8088/file/img/loginBg.jpg);
+      // background-image: url(http://192.168.7.20:8088/file/img/loginBg.jpg);
+      // background-image: url('{{ loginBgUrl }}');
       background-size: cover;
     }
     .site-content__wrapper {
@@ -482,7 +484,7 @@ $light_gray: rgb(58, 53, 53);
   .footer {
     position:absolute;
     float: left;
-    margin-top: 380px;
+    margin-top: 360px;
     margin-left: 10px;
     .footerLogo {
       width: 20%;

@@ -33,14 +33,14 @@
               <el-col :span="8">生产班组</el-col>
               <el-col :span="12"><span>{{ card.shiftTeam }}</span></el-col>
             </el-row>
-            <el-row class="row-class compare-value" type="flex" justify="center">
+            <!--       <el-row class="row-class compare-value" type="flex" justify="center">
               <el-col :span="8">怀疑品数</el-col>
               <el-col :span="12"><span class="question-number">{{ card.doubtNum }}</span></el-col>
             </el-row>
             <el-row class="row-class compare-value" type="flex" justify="center">
               <el-col :span="8">废品数</el-col>
               <el-col :span="12"><span class="error-number">{{ card.wasteNum }}</span></el-col>
-            </el-row>
+            </el-row> -->
             <el-row class="row-class compare-value" type="flex" justify="center">
               <el-col :span="7">开始时间</el-col>
               <el-col :span="13"><span style="font-size:12px">{{ card.startDate }}</span></el-col>
@@ -61,20 +61,20 @@
                   <span v-if="card.status==2">设备异常</span>
                 </el-col>
               </el-row>
-              <el-row class="row-class compare-value" type="flex" justify="center">
+              <!--  <el-row class="row-class compare-value" type="flex" justify="center">
                 <el-col :span="7">模板</el-col>
                 <el-col :span="13"><span>{{ card.templateName }}</span></el-col>
               </el-row>
               <el-row type="flex" justify="center" style="margin-top:50px">
                 <el-col :span="20" :offset="4"><dv-charts class="ring-charts" :option="card.ring" /></el-col>
-              </el-row>
+              </el-row> -->
 
             </el-col>
           </el-col>
         </el-row>
       </div>
       <div class="card-footer">
-        <div class="card-footer-item">
+        <!-- <div class="card-footer-item">
           <div class="footer-title">生产总数</div>
           <div class="footer-detail">
             <dv-digital-flop :config="card.total" style="width:70%;height:35px;" />
@@ -85,7 +85,7 @@
           <div class="footer-detail">
             <dv-digital-flop :config="card.num" style="width:70%;height:35px;" />
           </div>
-        </div>
+        </div> -->
       </div>
 
     </div>
@@ -245,24 +245,25 @@ export default {
 }
 .main-value {
   font-weight: bold;
-  line-height: 24px;
+  line-height: 20px;
 
-  font-size: 16px;
+  font-size: 14px;
 
   span {
-    font-size: 22px;
+    font-size: 20px;
     color: #00c0ff;
     margin-left: 22px;
   }
 }
 
 .compare-value {
-  height: 22px;
-  line-height: 24px;
-  font-size: 16px;
+  height: 20px;
+  line-height: 20px;
+  font-size: 14px;
 
   span {
-    margin-left: 22px;
+    color: #a9bfec;
+    margin-left: 20px;
   }
 }
 
@@ -270,13 +271,13 @@ export default {
   display: flex;
   // justify-content: space-between;
   justify-content: flex-start;
-  height: 49%;
+  height: 45%;
 
   .card-item {
     background-color: rgba(6, 30, 93, 0.5);
     border-top: 2px solid rgba(1, 153, 209, 0.5);
-    width: 33%;
-    margin-right: 0.25%;
+    width: 24.5%;
+    margin-right: 0.5%;
     display: flex;
     flex-direction: column;
   }
@@ -300,10 +301,10 @@ export default {
     }
   }
   .card-content {
-    height: 55%;
+    height: 40%;
   }
   .main-content {
-    height: 55%;
+    height: 40%;
   }
   .ring-charts {
     height: 150px;
@@ -314,7 +315,8 @@ export default {
   }
 
   .card-footer {
-    height: 25%;
+    margin-top:20px;
+    height: 40%;
     display: flex;
     align-items: center;
     justify-content: space-around;

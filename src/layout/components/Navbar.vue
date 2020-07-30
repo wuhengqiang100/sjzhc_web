@@ -18,11 +18,13 @@
                 class="right-menu-item" /> -->
         <el-tooltip class="item" effect="dark" content="大屏监控" placement="bottom-start">
           <!-- <big-screen id="bigScreen" class="right-menu-item hover-effect" /> -->
-          <router-link id="bigScreen" to="/bigScreen/bj" class="right-menu-item hover-effect">左大屏</router-link>
+          <router-link id="bigScreen" to="/bigScreen/bj" class="right-menu-item hover-effect">
+            <i class="layui-icon layui-icon-website" />
+          </router-link>
         </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="大屏监控" placement="bottom-start">
+        <!--   <el-tooltip class="item" effect="dark" content="大屏监控" placement="bottom-start">
           <big-screen id="bigScreen" class="right-menu-item hover-effect" />
-        </el-tooltip>
+        </el-tooltip> -->
         <!-- 南昌大屏 -->
         <!--  <el-tooltip class="item" effect="dark" content="大屏监控" placement="bottom-start">
           <router-link id="bigScreen" to="/bigScreen/left" class="right-menu-item hover-effect">左大屏</router-link>
@@ -199,6 +201,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.layui-icon-website {
+  font-size: 18px;
+  color: #1e2c36;
+}
 .navbar {
   height: 50px;
   overflow: hidden;

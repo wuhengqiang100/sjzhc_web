@@ -1,5 +1,7 @@
 <template>
+
   <div id="cards">
+
     <div v-for="(card, key, index) in cards" :key="index" class="card-item">
       <!-- <el-row> -->
       <div class="card-header">
@@ -14,12 +16,12 @@
       </div>
       <!-- <dv-charts class="ring-charts" :option="card.ring" /> -->
       <div class="card-content">
+
         <el-row :gutter="10">
-          <el-col :span="12">
+          <el-col :span="11">
             <el-row class="row-class main-value" type="flex" justify="center">
               <el-col :span="8">产品名称</el-col>
               <el-col :span="12"><span>{{ card.productName }}</span></el-col>
-              <!-- <el-col :span="12"><span>{{ index }}</span></el-col> -->
             </el-row>
             <el-row class="row-class compare-value" type="flex" justify="center">
               <el-col :span="8">卷轴号</el-col>
@@ -30,28 +32,11 @@
               <el-col :span="12"><span>{{ card.machineSpeed }}</span></el-col>
             </el-row>
             <el-row class="row-class compare-value" type="flex" justify="center">
-              <el-col :span="8">生产班组</el-col>
-              <el-col :span="12"><span>{{ card.shiftTeam }}</span></el-col>
+              <el-col :span="8">当前米数</el-col>
+              <el-col :span="12"><span>{{ card.curLenth }}</span></el-col>
             </el-row>
-            <el-row class="row-class compare-value" type="flex" justify="center">
-              <el-col :span="8">怀疑品数</el-col>
-              <el-col :span="12"><span class="question-number">{{ card.doubtNum }}</span></el-col>
-            </el-row>
-            <el-row class="row-class compare-value" type="flex" justify="center">
-              <el-col :span="8">废品数</el-col>
-              <el-col :span="12"><span class="error-number">{{ card.wasteNum }}</span></el-col>
-            </el-row>
-            <el-row class="row-class compare-value" type="flex" justify="center">
-              <el-col :span="7">开始时间</el-col>
-              <el-col :span="13"><span style="font-size:12px">{{ card.startDate }}</span></el-col>
-            </el-row>
-            <el-row class="row-class compare-value" type="flex" justify="center">
-              <el-col :span="7">结束时间</el-col>
-              <el-col :span="13"><span style="font-size:12px">{{ card.endDate }}</span></el-col>
-            </el-row>
-
           </el-col>
-          <el-col :span="12">
+          <el-col :span="13">
             <el-col>
               <el-row class="row-class compare-value" type="flex" justify="center">
                 <el-col :span="7">状态</el-col>
@@ -62,107 +47,37 @@
                 </el-col>
               </el-row>
               <el-row class="row-class compare-value" type="flex" justify="center">
-                <el-col :span="7">模板</el-col>
-                <el-col :span="13"><span>{{ card.templateName }}</span></el-col>
+                <el-col :span="7">开始时间</el-col>
+                <el-col :span="13"><span style="font-size:12px">{{ card.startDate }}</span></el-col>
               </el-row>
-              <el-row type="flex" justify="center" style="margin-top:50px">
-                <el-col :span="20" :offset="4"><dv-charts class="ring-charts" :option="card.ring" /></el-col>
-              </el-row>
-
-            </el-col>
-          </el-col>
-        </el-row>
-      </div>
-      <div class="card-footer">
-        <div class="card-footer-item">
-          <div class="footer-title">生产总数</div>
-          <div class="footer-detail">
-            <dv-digital-flop :config="card.total" style="width:70%;height:35px;" />
-          </div>
-        </div>
-        <div class="card-footer-item">
-          <div class="footer-title">好品数</div>
-          <div class="footer-detail">
-            <dv-digital-flop :config="card.num" style="width:70%;height:35px;" />
-          </div>
-        </div>
-      </div>
-      <!-- </el-row> -->
-      <!-- <el-row v-else> -->
-      <!--  <div class="card-header">
-        <div class="card-header-left">
-          <dv-decoration-11 v-if="card.status==0" class="card-title">{{ card.title }}</dv-decoration-11>
-          <dv-decoration-11 v-if="card.status==1" class="card-title1">{{ card.title }}</dv-decoration-11>
-          <dv-decoration-11 v-if="card.status==2" class="card-title2">{{ card.title }}</dv-decoration-11>
-        </div>
-        <div class="card-header-right">
-          <dv-decoration-1 style="width:160px;height:40px;" :color="['red', 'green']" dur="9" />
-        </div>
-      </div>
-
-      <div class="card-content">
-        <el-row :gutter="10">
-          <el-col :span="12">
-            <el-row class="row-class main-value" type="flex" justify="center">
-              <el-col :span="8">产品名称</el-col>
-              <el-col :span="12"><span>{{ card.productName }}</span></el-col>
-            </el-row>
-            <el-row class="row-class compare-value" type="flex" justify="center">
-              <el-col :span="8">卷轴号</el-col>
-              <el-col :span="12"><span>{{ card.rollNum }}</span></el-col>
-            </el-row>
-            <el-row class="row-class compare-value" type="flex" justify="center">
-              <el-col :span="8">机速</el-col>
-              <el-col :span="12"><span>{{ card.machineSpeed }}</span></el-col>
-            </el-row>
-            <el-row class="row-class compare-value" type="flex" justify="center">
-              <el-col :span="8">生产班组</el-col>
-              <el-col :span="12"><span>{{ card.shiftTeam }}</span></el-col>
-            </el-row>
-            <el-row class="row-class compare-value" type="flex" justify="center">
-              <el-col :span="8">怀疑品数</el-col>
-              <el-col :span="12"><span class="question-number">{{ card.doubtNum }}</span></el-col>
-            </el-row>
-            <el-row class="row-class compare-value" type="flex" justify="center">
-              <el-col :span="8">废品数</el-col>
-              <el-col :span="12"><span class="error-number">{{ card.wasteNum }}</span></el-col>
-            </el-row>
-            <el-row class="row-class compare-value" type="flex" justify="center">
-              <el-col :span="7">开始时间</el-col>
-              <el-col :span="13"><span style="font-size:12px">{{ card.startDate }}</span></el-col>
-            </el-row>
-            <el-row class="row-class compare-value" type="flex" justify="center">
-              <el-col :span="7">结束时间</el-col>
-              <el-col :span="13"><span style="font-size:12px">{{ card.endDate }}</span></el-col>
-            </el-row>
-
-          </el-col>
-          <el-col :span="12">
-            <el-col>
               <el-row class="row-class compare-value" type="flex" justify="center">
-                <el-col :span="7">模板</el-col>
-                <el-col :span="13"><span>{{ card.templateName }}</span></el-col>
+                <el-col :span="7">结束时间</el-col>
+                <el-col :span="13"><span style="font-size:12px">{{ card.endDate }}</span></el-col>
               </el-row>
-              <dv-charts class="ring-charts" :option="card.ring" />
+              <el-row class="row-class compare-value" type="flex" justify="center">
+                <el-col :span="8">总长度</el-col>
+                <el-col :span="12"><span>10000</span></el-col>
+              </el-row>
             </el-col>
           </el-col>
         </el-row>
+        <el-row style="margin-top:5px;margin-bottom:5px;">
+          <el-col style="margin-left:20px" :span="3">生产进度</el-col>
+          <el-col :span="19"><el-progress style="margin-left:30px" :percentage="50" status="success" /></el-col>
+        </el-row>
       </div>
+
       <div class="card-footer">
-        <div class="card-footer-item">
-          <div class="footer-title">生产总数</div>
-          <div class="footer-detail">
-            <dv-digital-flop :config="card.total" style="width:70%;height:35px;" />
-          </div>
-        </div>
-        <div class="card-footer-item">
-          <div class="footer-title">好品数</div>
-          <div class="footer-detail">
-            <dv-digital-flop :config="card.num" style="width:70%;height:35px;" />
-          </div>
-        </div>
-      </div> -->
-      <!-- </el-row> -->
+        <dv-charts class="left" :option="option" style="height:200px" />
+        <dv-decoration-2 :reverse="true" style="width:5px;height:180px;" />
+        <dv-capsule-chart :config="config1" style="width:200px;height:150px;margin-top:30px" />
+
+        <!-- <dv-active-ring-chart :config="config" style="width:200px;height:200px" /> -->
+        <!-- <dv-decoration-2 :reverse="true" style="width:5px;height:200px;" /> -->
+        <!-- <dv-active-ring-chart :config="config" style="width:200px;height:200px" /> -->
+
+      </div>
+      <dv-decoration-2 style="width:470.4px;height:5px;" />
 
     </div>
   </div>
@@ -170,15 +85,94 @@
 
 <script>
 import { fetchListCardTop } from '@/api/monitor'
-// import { listOptionAuditParameter, listOptionAuditParameterByIds } from '@/api/querySelectOption'
 
 export default {
   name: 'CardsTop',
+  components: {
+    // LabelTag
+  },
   data() {
     return {
       cards: [],
-      monitorList: []
+      monitorList: [],
+      option: {
+        series: [
+          {
+            type: 'pie',
+            data: [
+              { name: '缺陷1', value: 93 },
+              { name: '缺陷2', value: 66 },
+              { name: '缺陷3', value: 52 },
+              { name: '缺陷4', value: 34 },
+              { name: '缺陷5', value: 22 }
+            ],
+            radius: ['45%', '65%'],
+            insideLabel: {
+              show: false
+            },
+            outsideLabel: {
+              labelLineEndLength: 10,
+              formatter: '{percent}%\n{name}',
+              style: {
+                fontSize: 14,
+                fill: '#fff'
+              }
+            }
+          }
+        ],
+        color: ['#00baff', '#3de7c9', '#fff', '#ffc530', '#469f4b']
+      },
+      config: {
+        data: [
+          {
+            name: '缺陷1',
+            value: 55
+          },
+          {
+            name: '缺陷2',
+            value: 120
+          },
+          {
+            name: '缺陷3',
+            value: 78
+          },
+          {
+            name: '缺陷4',
+            value: 66
+          },
+          {
+            name: '缺陷5',
+            value: 80
+          }
+        ],
+        digitalFlopStyle: {
+          fontSize: 14,
+          fill: '#fff'
+        }
+      },
+      config1: {
+        data: [
+          {
+            name: '轻微废',
+            value: 200
+          },
+          {
+            name: '一般废',
+            value: 67
+          },
+          {
+            name: '严重废',
+            value: 55
+          }
+        ],
+        colors: ['#96bfff', '#32c5e9', '#e690d1'],
+        showValue: true
+      }
+
     }
+  },
+  created() {
+
   },
   mounted() {
     const { createData } = this
@@ -188,6 +182,9 @@ export default {
     setInterval(this.createData, 3000)
   },
   methods: {
+    createCharts() {
+
+    },
     createData() {
       // const { randomExtend } = this
       fetchListCardTop().then(response => {
@@ -197,22 +194,23 @@ export default {
           // title: '设备' + (i + 1),
           rollNum: this.monitorList[i].rollNum,
           productName: this.monitorList[i].productName,
-          templateName: this.monitorList[i].templateName,
+          // templateName: this.monitorList[i].templateName,
           shiftTeam: this.monitorList[i].shiftTeam,
           startDate: this.monitorList[i].startDate,
           endDate: this.monitorList[i].endDate,
-          totalNum: this.monitorList[i].totalNum,
-          goodNum: this.monitorList[i].goodNum,
-          doubtNum: this.monitorList[i].doubtNum,
-          wasteNum: this.monitorList[i].wasteNum,
-          goodRate: this.monitorList[i].goodRate,
+          curLenth: this.monitorList[i].curLenth,
+          // totalNum: this.monitorList[i].totalNum,
+          // goodNum: this.monitorList[i].goodNum,
+          // doubtNum: this.monitorList[i].doubtNum,
+          // wasteNum: this.monitorList[i].wasteNum,
+          // goodRate: this.monitorList[i].goodRate,
           machineSpeed: this.monitorList[i].machineSpeed,
           machineId: this.monitorList[i].machineId,
           machineName: this.monitorList[i].machineName,
           status: this.monitorList[i].status,
 
-          title: this.monitorList[i].machineName,
-          total: {
+          title: this.monitorList[i].machineName
+          /*  total: {
             // number: [randomExtend(9500, 10000)],
             number: [this.monitorList[i].totalNum],
             content: '{nt}',
@@ -269,7 +267,7 @@ export default {
               }
             ],
             color: ['#03d3ec']
-          }
+          } */
         }))
       })
     },
@@ -321,12 +319,12 @@ export default {
 }
 .main-value {
   font-weight: bold;
-  line-height: 24px;
+  line-height: 20px;
 
-  font-size: 16px;
+  font-size: 12px;
 
   span {
-    font-size: 22px;
+    font-size: 20px;
     color: #00c0ff;
     margin-left: 22px;
   }
@@ -350,7 +348,7 @@ export default {
   display: flex;
   // justify-content: space-between;
   justify-content: flex-start;
-  height: 49%;
+  height: 45%;
 
 /*   .card-item {
     background-color: rgba(6, 30, 93, 0.5);
@@ -364,8 +362,8 @@ export default {
   .card-item {
     background-color: rgba(6, 30, 93, 0.5);
     border-top: 2px solid rgba(1, 153, 209, 0.5);
-    width: 33%;
-    margin-right: 0.25%;
+    width: 24.5%;
+    margin-right: 0.5%;
     display: flex;
     flex-direction: column;
   }
@@ -388,10 +386,10 @@ export default {
     }
   }
   .card-content {
-    height: 55%;
+    height: 45%;
   }
   .main-content {
-    height: 55%;
+    height: 45%;
   }
   .ring-charts {
     height: 150px;
@@ -402,10 +400,18 @@ export default {
   }
 
   .card-footer {
-    height: 25%;
+    height: 50%;
     display: flex;
-    align-items: center;
-    justify-content: space-around;
+    align-items: left;
+    // justify-content: space-around;
+    // justify-content: space-between;
+    justify-content: flex-start;
+    .left {
+      flex: 1;
+      // padding-bottom: 20px;
+      // padding-right: 20px;
+      box-sizing: border-box;
+    }
   }
 
   .card-footer-item {
