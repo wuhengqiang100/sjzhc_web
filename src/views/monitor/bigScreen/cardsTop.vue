@@ -68,9 +68,9 @@
       </div>
 
       <div class="card-footer">
-        <dv-charts class="left" :option="option" style="height:200px" />
+        <dv-charts class="left" :option="card.defectCircle" style="height:200px" />
         <dv-decoration-2 :reverse="true" style="width:5px;height:180px;" />
-        <dv-capsule-chart :config="config1" style="width:200px;height:150px;margin-top:30px" />
+        <dv-capsule-chart :config="card.defectDegree" style="width:200px;height:150px;margin-top:30px" />
 
         <!-- <dv-active-ring-chart :config="config" style="width:200px;height:200px" /> -->
         <!-- <dv-decoration-2 :reverse="true" style="width:5px;height:200px;" /> -->
@@ -95,33 +95,7 @@ export default {
     return {
       cards: [],
       monitorList: [],
-      option: {
-        series: [
-          {
-            type: 'pie',
-            data: [
-              { name: '缺陷1', value: 93 },
-              { name: '缺陷2', value: 66 },
-              { name: '缺陷3', value: 52 },
-              { name: '缺陷4', value: 34 },
-              { name: '缺陷5', value: 22 }
-            ],
-            radius: ['45%', '65%'],
-            insideLabel: {
-              show: false
-            },
-            outsideLabel: {
-              labelLineEndLength: 10,
-              formatter: '{percent}%\n{name}',
-              style: {
-                fontSize: 14,
-                fill: '#fff'
-              }
-            }
-          }
-        ],
-        color: ['#00baff', '#3de7c9', '#fff', '#ffc530', '#469f4b']
-      },
+      // defectCircle: {},
       config: {
         data: [
           {
@@ -149,8 +123,8 @@ export default {
           fontSize: 14,
           fill: '#fff'
         }
-      },
-      config1: {
+      }
+      /*       defectDegree: {
         data: [
           {
             name: '轻微废',
@@ -167,7 +141,7 @@ export default {
         ],
         colors: ['#96bfff', '#32c5e9', '#e690d1'],
         showValue: true
-      }
+      } */
 
     }
   },
@@ -209,7 +183,47 @@ export default {
           machineName: this.monitorList[i].machineName,
           status: this.monitorList[i].status,
 
-          title: this.monitorList[i].machineName
+          title: this.monitorList[i].machineName,
+          defectCircle: {
+            series: [
+              {
+                type: 'pie',
+                data: this.monitorList[i].defectCircleData,
+                radius: ['45%', '65%'],
+                insideLabel: {
+                  show: false
+                },
+                outsideLabel: {
+                  labelLineEndLength: 10,
+                  formatter: '{percent}%\n{name}',
+                  style: {
+                    fontSize: 14,
+                    fill: '#fff'
+                  }
+                }
+              }
+            ],
+            color: ['#00baff', '#3de7c9', '#fff', '#ffc530', '#469f4b']
+          },
+          defectDegree: {
+            data: [
+              {
+                name: '轻微废',
+                value: this.monitorList[i].slightWaste
+              },
+              {
+                name: '一般废',
+                value: this.monitorList[i].generalWaste
+              },
+              {
+                name: '严重废',
+                value: this.monitorList[i].seriousWaste
+              }
+            ],
+            colors: ['#96bfff', '#32c5e9', '#e690d1'],
+            showValue: true
+          }
+
           /*  total: {
             // number: [randomExtend(9500, 10000)],
             number: [this.monitorList[i].totalNum],
