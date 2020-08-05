@@ -25,6 +25,13 @@ export function listOptionOperator() {
     method: 'post'
   })
 }
+
+export function listOptionOperation() {
+  return request({
+    url: '/option/operation',
+    method: 'post'
+  })
+}
 export function listOptionWasterReason() {
   return request({
     url: '/option/wasterReason',

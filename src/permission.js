@@ -72,18 +72,23 @@ router.beforeEach(async(to, from, next) => {
 
           getSystemConfigData().then(response => {
             localStorage.setItem('factoryName', response.systemSet.factoryName)
+            localStorage.setItem('factoryCode', response.systemSet.factoryCode)
             localStorage.setItem('machineCodeMes', response.systemSet.machineCodeMes)
             localStorage.setItem('operationCodeMes', response.systemSet.operationCodeMes)
             localStorage.setItem('operatorCodeMes', response.systemSet.operatorCodeMes)
             localStorage.setItem('productCodeMes', response.systemSet.productCodeMes)
             localStorage.setItem('workUnitCodeMes', response.systemSet.workUnitCodeMes)
             localStorage.setItem('machineWasteNoJudge', response.systemSet.machineWasteNoJudge)
+            localStorage.setItem('machineIp', response.systemSet.machineIp)
             localStorage.setItem('productCartNumFirstId', response.systemSet.productCartNumFirstId)
             localStorage.setItem('productCartNumFirstDate', response.systemSet.productCartNumFirstDate)
             localStorage.setItem('productCartNumFirstCount', response.systemSet.productCartNumFirstCount)
             localStorage.setItem('productSheetWasterNum', response.systemSet.productSheetWasterNum)
             localStorage.setItem('productQaCodeName', response.systemSet.productQaCodeName)
             localStorage.setItem('productLocalProductName', response.systemSet.productLocalProductName)
+            localStorage.setItem('productRowNumber', response.systemSet.productRowNumber)
+            localStorage.setItem('productColNumber', response.systemSet.productColNumber)
+            localStorage.setItem('productConvertSheetNumber', response.systemSet.productConvertSheetNumber)
           })
           // console.log(localStorage.getItem('systemSet'))
 

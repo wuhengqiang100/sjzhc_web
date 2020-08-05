@@ -5,7 +5,14 @@ export function fetchList(query) {
     url: '/operationType/list',
     method: 'get',
     params: query
-    // baseURL: "http://127.0.0.1:8088"
+  })
+}
+
+export function importOperationType(query) {
+  return request({
+    url: '/operationType/import',
+    method: 'get',
+    params: query
   })
 }
 
@@ -14,7 +21,6 @@ export function updateUseFlag(id) {
     url: '/operationType/updateUseFlag',
     method: 'post',
     params: { id }
-    // baseURL: "http://127.0.0.1:8088"
   })
 }
 
@@ -23,7 +29,6 @@ export function createOperationType(data) {
     url: '/operationType/create',
     method: 'post',
     data
-    // baseURL: "http://127.0.0.1:8088"
   })
 }
 
@@ -32,7 +37,6 @@ export function updateOperationType(data) {
     url: '/operationType/update',
     method: 'post',
     data
-    // baseURL: "http://127.0.0.1:8088"
   })
 }
 export function deleteOperationType(id) {

@@ -57,14 +57,21 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="机器严重废标志" prop="machineWasteNoJudge"><el-switch v-model="ruleForm.machineWasteNoJudge" /></el-form-item>
+          <el-form-item label="设备ip" prop="machineIp"><el-switch v-model="ruleForm.machineIp" /></el-form-item>
           <el-form-item label="产品首字母id" prop="productCartNumFirstId"><el-switch v-model="ruleForm.productCartNumFirstId" /></el-form-item>
           <el-form-item label="产品首字母使用日期" prop="productCartNumFirstDate"><el-switch v-model="ruleForm.productCartNumFirstDate" /></el-form-item>
           <el-form-item label="产品首字母使用次数" prop="productCartNumFirstCount"><el-switch v-model="ruleForm.productCartNumFirstCount" /></el-form-item>
-          <el-form-item label="产品大张废" prop="productSheetWasterNum"><el-switch v-model="ruleForm.productSheetWasterNum" /></el-form-item>
+
         </el-col>
         <el-col :span="6">
+          <el-form-item label="产品大张废" prop="productSheetWasterNum"><el-switch v-model="ruleForm.productSheetWasterNum" /></el-form-item>
           <el-form-item label="产品防重号系统名称" prop="productQaCodeName"><el-switch v-model="ruleForm.productQaCodeName" /></el-form-item>
           <el-form-item label="产品本地系统名称" prop="productLocalProductName"><el-switch v-model="ruleForm.productLocalProductName" /></el-form-item>
+          <el-form-item label="产品印刷行数" prop="productRowNumber"><el-switch v-model="ruleForm.productRowNumber" /></el-form-item>
+          <el-form-item label="产品印刷列数" prop="productColNumber"><el-switch v-model="ruleForm.productColNumber" /></el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="产品总开数" prop="productConvertSheetNumber"><el-switch v-model="ruleForm.productConvertSheetNumber" /></el-form-item>
         </el-col>
       </el-row>
       <el-form-item>
@@ -153,12 +160,16 @@ export default {
         productCodeMes: Boolean,
         workUnitCodeMes: Boolean,
         machineWasteNoJudge: Boolean,
+        machineIp: Boolean,
         productCartNumFirstId: Boolean,
         productCartNumFirstDate: Boolean,
         productCartNumFirstCount: Boolean,
         productSheetWasterNum: Boolean,
         productQaCodeName: Boolean,
-        productLocalProductName: Boolean
+        productLocalProductName: Boolean,
+        productRowNumber: Boolean,
+        productColNumber: Boolean,
+        productConvertSheetNumber: Boolean
 
       },
       rules: {

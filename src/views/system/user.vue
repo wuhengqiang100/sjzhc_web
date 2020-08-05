@@ -20,7 +20,7 @@
       >
         <el-option v-for="item in operatorOption" :key="item.value" :label="item.label" :value="item.value" @keyup.enter.native="handleFilter" />
       </el-select>
-      <el-select
+      <!-- <el-select
         v-model="listQuery.useFlag"
         clearable
         placeholder="启用状态"
@@ -33,7 +33,7 @@
           :label="item.display_name"
           :value="item.key"
         />
-      </el-select>
+      </el-select> -->
       <el-button
         v-waves
         class="filter-item"

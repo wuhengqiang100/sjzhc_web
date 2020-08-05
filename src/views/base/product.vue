@@ -15,9 +15,9 @@
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
         添加
       </el-button>
-      <!--     <el-button class="filter-item" style="margin-left: 10px;" type="warning" icon="el-icon-download" @click="handleCreate">
+      <el-button v-if="look.factoryCode==1" class="filter-item" style="margin-left: 10px;" type="warning" icon="el-icon-download" @click="handleImport">
         导入
-      </el-button> -->
+      </el-button>
     </div>
 
     <el-table
@@ -35,7 +35,7 @@
           <span>{{ row.productId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="工序编号" align="center">
+      <el-table-column label="产品编号" align="center">
         <template slot-scope="{row}">
           <span>{{ row.productCode }}</span>
         </template>
@@ -62,17 +62,17 @@
           <span v-if="row.cartnumFirstCount!=null">{{ row.cartnumFirstCount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="印刷行数" align="center">
+      <el-table-column v-if="look.productRowNumber==='true'" label="印刷行数" align="center">
         <template slot-scope="{row}">
           <span>{{ row.rowNumber }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="印刷列数" align="center">
+      <el-table-column v-if="look.productColNumber==='true'" label="印刷列数" align="center">
         <template slot-scope="{row}">
           <span>{{ row.colNumber }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="开数" align="center">
+      <el-table-column v-if="look.productConvertSheetNumber==='true'" label="开数" align="center">
         <template slot-scope="{row}">
           <span>{{ row.convertSheetNumber }}</span>
         </template>
@@ -162,16 +162,15 @@
               <el-input-number v-model="temp.cartnumFirstCount" clearable-number :min="0" :max="10000" controls-position="right" style="width:220px" />
             </el-form-item>
 
-            <el-form-item label="印刷行数" prop="rowNumber">
+            <el-form-item v-if="look.productRowNumber==='true'" label="印刷行数" prop="rowNumber">
               <el-input-number v-model="temp.rowNumber" clearable-number :min="0" :max="100" controls-position="right" style="width:220px" />
-
             </el-form-item>
-            <el-form-item label="印刷列数" prop="colNumber">
+            <el-form-item v-if="look.productColNumber==='true'" label="印刷列数" prop="colNumber">
               <el-input-number v-model="temp.colNumber" clearable-number :min="0" :max="100" controls-position="right" style="width:220px" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="开数" prop="convertSheetNumber">
+            <el-form-item v-if="look.productConvertSheetNumber==='true'" label="开数" prop="convertSheetNumber">
               <el-input-number v-model="temp.convertSheetNumber" clearable-number :min="0" :max="100" controls-position="right" style="width:220px" />
 
             </el-form-item>
@@ -214,12 +213,12 @@
 
 <script>
 
-import { fetchList, fetchPv, createProduct, updateProduct, updateUseFlag, deleteProduct } from '@/api/product'
+import { fetchList, fetchPv, createProduct, updateProduct, updateUseFlag, deleteProduct, importProduct } from '@/api/product'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import { listOptionProduct } from '@/api/querySelectOption'
-
+import layer from 'layui-layer'
 const productTypeOptions = []
 
 const useFlagOptions = [
@@ -315,13 +314,17 @@ export default {
       },
       downloadLoading: false,
       look: {
+        factoryCode: '',
         productCodeMes: '',
         productCartNumFirstId: '',
         productCartNumFirstDate: '',
         productCartNumFirstCount: '',
         productSheetWasterNum: '',
         productQaCodeName: '',
-        productLocalProductName: ''
+        productLocalProductName: '',
+        productRowNumber: '',
+        productColNumber: '',
+        productConvertSheetNumber: ''
       }
     }
   },
@@ -347,6 +350,8 @@ export default {
     },
     // 获取此页面中的系统配置显示数据
     getSystemSet() {
+      this.look.factoryCode = localStorage.getItem('factoryCode')
+
       this.look.productCodeMes = localStorage.getItem('productCodeMes')
       this.look.productCartNumFirstId = localStorage.getItem('productCartNumFirstId')
       this.look.productCartNumFirstDate = localStorage.getItem('productCartNumFirstDate')
@@ -354,6 +359,9 @@ export default {
       this.look.productSheetWasterNum = localStorage.getItem('productSheetWasterNum')
       this.look.productQaCodeName = localStorage.getItem('productQaCodeName')
       this.look.productLocalProductName = localStorage.getItem('productLocalProductName')
+      this.look.productRowNumber = localStorage.getItem('productRowNumber')
+      this.look.productColNumber = localStorage.getItem('productColNumber')
+      this.look.productConvertSheetNumber = localStorage.getItem('productConvertSheetNumber')
     },
     // 获取前缀字母序号operions
     getProductOptions() {
@@ -509,6 +517,19 @@ export default {
           type: 'success',
           duration: 2000
         })
+      })
+    },
+    // 导入操作
+    handleImport() {
+      // 加载层
+      var loadingIndex = layer.load(0, { shade: false }) // 0代表加载的风格，支持0-2
+      importProduct().then((res) => {
+        layer.close(loadingIndex)
+        this.$message({
+          type: 'success',
+          message: res.message
+        })
+        this.refreshList()
       })
     },
     // 监听删除dialog事件

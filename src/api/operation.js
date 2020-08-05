@@ -9,6 +9,13 @@ export function fetchList(query) {
   })
 }
 
+export function importOperation(query) {
+  return request({
+    url: '/operation/import',
+    method: 'get',
+    params: query
+  })
+}
 export function fetchOperationTypeList() {
   return request({
     url: '/operationType/listOption',

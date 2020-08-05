@@ -15,9 +15,9 @@
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
         添加
       </el-button>
-      <!--     <el-button class="filter-item" style="margin-left: 10px;" type="warning" icon="el-icon-download" @click="handleCreate">
+      <el-button v-if="look.factoryCode==1" class="filter-item" style="margin-left: 10px;" type="warning" icon="el-icon-download" @click="handleImport">
         导入
-      </el-button> -->
+      </el-button>
     </div>
 
     <el-table
@@ -35,7 +35,7 @@
           <span>{{ row.operationTypeId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="工序人员编码" align="center">
+      <el-table-column label="工序种类编码" align="center">
         <template slot-scope="{row}">
           <span>{{ row.operationTypeCode }}</span>
         </template>
@@ -85,10 +85,10 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="50%">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="30%">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" size="mini" label-width="125px" style="width: 600px; margin-left:50px;">
 
-        <el-form-item label="工序人员编码" prop="operationTypeCode">
+        <el-form-item label="工序种类编码" prop="operationTypeCode">
           <el-input v-model="temp.operationTypeCode" clearable type="text" placeholder="请输入工序人员编码" />
         </el-form-item>
         <el-form-item label="工序种类名称" prop="operationTypeName">
@@ -119,25 +119,16 @@
         </el-button>
       </div>
     </el-dialog>
-
-    <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
-      <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
-        <el-table-column prop="key" label="Channel" />
-        <el-table-column prop="pv" label="Pv" />
-      </el-table>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">Confirm</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
 <script>
 
-import { fetchList, createOperationType, updateOperationType, updateUseFlag, deleteOperationType } from '@/api/operationType'
+import { fetchList, createOperationType, updateOperationType, updateUseFlag, deleteOperationType, importOperationType } from '@/api/operationType'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import layer from 'layui-layer'
 
 const operationTypeTypeOptions = []
 
@@ -146,7 +137,6 @@ const useFlagOptions = [
   { key: '1', display_name: '启用' }
 ]
 
-// arr to obj, such as { CN : "China", US : "USA" }
 const calendarTypeKeyValue = operationTypeTypeOptions.reduce((acc, cur) => {
   acc[cur.key] = cur.display_name
   return acc
@@ -214,12 +204,17 @@ export default {
         // endDate: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }]
 
       },
-      downloadLoading: false
+      downloadLoading: false,
+      // 控制显示的系统配置
+      look: {
+        factoryCode: ''
+      }
     }
   },
   // 初始化获取数据列表
   created() {
     this.getList()
+    this.getSystemSet()
   },
   methods: {
     // 有加载圈的加载数据列表
@@ -235,13 +230,11 @@ export default {
         }, 1 * 500)
       })
     },
-    /*     getMachineTypes() {
-      fetchMachineTypeList().then(response => {
-        console.log('tag', response.data)
-        this.operationTypeTypeOptions = response.data
-        console.log('tag', this.operationTypeTypeOptions)
-      })
-    }, */
+    // 获取此页面中的系统配置显示数据
+    getSystemSet() {
+      this.look.factoryCode = localStorage.getItem('factoryCode')
+    },
+
     // 立即刷新数据列表
     refreshList() {
       // this.listQuery.page = 1
@@ -380,6 +373,19 @@ export default {
           type: 'success',
           duration: 2000
         })
+      })
+    },
+    // 导入操作
+    handleImport() {
+      // 加载层
+      var loadingIndex = layer.load(0, { shade: false }) // 0代表加载的风格，支持0-2
+      importOperationType().then((res) => {
+        layer.close(loadingIndex)
+        this.$message({
+          type: 'success',
+          message: res.message
+        })
+        this.refreshList()
       })
     },
     // 监听删除dialog事件

@@ -15,9 +15,9 @@
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
         添加
       </el-button>
-      <!--     <el-button class="filter-item" style="margin-left: 10px;" type="warning" icon="el-icon-download" @click="handleCreate">
+      <el-button v-if="look.factoryCode==1" class="filter-item" style="margin-left: 10px;" type="warning" icon="el-icon-download" @click="handleImport">
         导入
-      </el-button> -->
+      </el-button>
     </div>
 
     <el-table
@@ -136,12 +136,13 @@
 
 <script>
 
-import { fetchList, createOperator, updateOperator, updateUseFlag, deleteOperator } from '@/api/operator'
+import { fetchList, createOperator, updateOperator, updateUseFlag, deleteOperator, importOperator } from '@/api/operator'
 // import { getSystemConfigData} from '@/api/systemSet'
 
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import layer from 'layui-layer'
 
 const operatorTypeOptions = []
 
@@ -221,7 +222,8 @@ export default {
       },
       downloadLoading: false,
       look: {
-        operatorCodeMes: ''
+        operatorCodeMes: '',
+        factoryCode: ''
       }
     }
   },
@@ -247,15 +249,9 @@ export default {
     // 获取此页面中的系统配置显示数据
     getSystemSet() {
       this.look.operatorCodeMes = localStorage.getItem('operatorCodeMes')
+      this.look.factoryCode = localStorage.getItem('factoryCode')
     },
 
-    /*     getoperatorTypes() {
-      fetchoperatorTypeList().then(response => {
-        console.log('tag', response.data)
-        this.operatorTypeOptions = response.data
-        console.log('tag', this.operatorTypeOptions)
-      })
-    }, */
     // 立即刷新数据列表
     refreshList() {
       // this.listQuery.page = 1
@@ -395,6 +391,19 @@ export default {
           type: 'success',
           duration: 2000
         })
+      })
+    },
+    // 导入操作
+    handleImport() {
+      // 加载层
+      var loadingIndex = layer.load(0, { shade: false }) // 0代表加载的风格，支持0-2
+      importOperator().then((res) => {
+        layer.close(loadingIndex)
+        this.$message({
+          type: 'success',
+          message: res.message
+        })
+        this.refreshList()
       })
     },
     // 监听删除dialog事件

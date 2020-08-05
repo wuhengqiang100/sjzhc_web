@@ -9,6 +9,14 @@ export function fetchList(query) {
   })
 }
 
+export function importProduct(query) {
+  return request({
+    url: '/product/import',
+    method: 'get',
+    params: query
+  })
+}
+
 export function fetchMachineTypeList() {
   return request({
     url: '/product/listOption',

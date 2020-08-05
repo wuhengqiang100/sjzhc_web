@@ -53,9 +53,9 @@
       >
         添加
       </el-button>
-      <!--     <el-button class="filter-item" style="margin-left: 10px;" type="warning" icon="el-icon-download" @click="handleCreate">
+      <el-button v-if="look.factoryCode==1" class="filter-item" style="margin-left: 10px;" type="warning" icon="el-icon-download" @click="handleImport">
         导入
-      </el-button> -->
+      </el-button>
     </div>
 
     <el-table
@@ -107,6 +107,7 @@
         </template>
       </el-table-column>
       <el-table-column
+        v-if="look.machineIp==='true'"
         label="设备ip"
         align="center"
       >
@@ -271,6 +272,7 @@
           />
         </el-form-item>
         <el-form-item
+          v-if="look.machineIp==='true'"
           label="设备ip"
           prop="machineIp"
         >
@@ -304,28 +306,6 @@
             inactive-color="#ff4949"
           />
         </el-form-item>
-        <!--  <el-form-item
-          label="启用时间"
-          prop="startDate"
-        >
-          <el-date-picker
-            v-model="temp.startDate"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="请选择一个开始时间"
-          />
-        </el-form-item>
-        <el-form-item
-          label="停用时间"
-          prop="endDate"
-        >
-          <el-date-picker
-            v-model="temp.endDate"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="请选择一个结束时间"
-          />
-        </el-form-item> -->
 
         <el-form-item label="备注">
           <el-input
@@ -362,11 +342,13 @@ import {
   createMachine,
   updateMachine,
   updateUseFlag,
-  deleteMachine
+  deleteMachine,
+  importMachine
 } from '@/api/machine'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import layer from 'layui-layer'
 
 const machineTypeOptions = []
 
@@ -464,7 +446,9 @@ export default {
 
       look: {
         machineCodeMes: '',
-        machineWasteNoJudge: ''
+        machineWasteNoJudge: '',
+        machineIp: '',
+        factoryCode: ''
       }
     }
   },
@@ -491,14 +475,9 @@ export default {
     getSystemSet() {
       this.look.machineCodeMes = localStorage.getItem('machineCodeMes')
       this.look.machineWasteNoJudge = localStorage.getItem('machineWasteNoJudge')
+      this.look.machineIp = localStorage.getItem('machineIp')
+      this.look.factoryCode = localStorage.getItem('factoryCode')
     },
-    /*     getMachineTypes() {
-      fetchMachineTypeList().then(response => {
-        console.log('tag', response.data)
-        this.machineTypeOptions = response.data
-        console.log('tag', this.machineTypeOptions)
-      })
-    }, */
     // 立即刷新数据列表
     refreshList() {
       // this.listQuery.page = 1
@@ -640,6 +619,19 @@ export default {
           type: 'success',
           duration: 2000
         })
+      })
+    },
+    // 导入操作
+    handleImport() {
+      // 加载层
+      var loadingIndex = layer.load(0, { shade: false }) // 0代表加载的风格，支持0-2
+      importMachine().then((res) => {
+        layer.close(loadingIndex)
+        this.$message({
+          type: 'success',
+          message: res.message
+        })
+        this.refreshList()
       })
     },
     // 监听删除dialog事件
