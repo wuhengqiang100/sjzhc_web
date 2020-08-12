@@ -48,21 +48,41 @@
                 </el-tooltip>
                 <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登陆</el-button>
               </el-tab-pane>
-              <!--       <el-tab-pane label="刷卡登陆" name="second">
-                  <el-form-item prop="userId">
-                    <span class="svg-container">
-                      <svg-icon icon-class="user" />
-                    </span>
-                    <el-input clearable
-                      ref="userId"
-                      v-model="userId"
-                      placeholder="userId"
-                      name="userId"
-                      type="text"
-                      autocomplete="on"
-                    />
-                  </el-form-item>
-                </el-tab-pane>-->
+              <el-tab-pane v-if="look.factoryCode==1" label="刷卡登陆" name="second">
+                <!--   <el-form-item>
+                   <span class="svg-container">
+                    <svg-icon icon-class="user" />
+                  </span>
+                  <el-progress type="circle" :percentage="percentage" status="success" />
+                  <el-input
+                    ref="userId"
+                    v-model="userId"
+                    prop="userId"
+                    clearable
+                    placeholder="userId"
+                    name="userId"
+                    type="text"
+                    autocomplete="on"
+                    @focus="focuAction"
+                    @blur="blurAction"
+                    @change="inputAction"
+                  />
+                </el-form-item> -->
+                <el-progress type="circle" :percentage="percentage" status="success" />
+                <el-input
+                  ref="userId"
+                  v-model="userId"
+                  prop="userId"
+                  clearable
+                  placeholder="userId"
+                  name="userId"
+                  type="text"
+                  autocomplete="on"
+                  @focus="focuAction"
+                  @blur="blurAction"
+                  @change="inputAction"
+                />
+              </el-tab-pane>
             </el-tabs>
           </el-form>
           <div class="centerDownload">
@@ -145,7 +165,11 @@ export default {
       redirect: undefined,
       otherQuery: {},
       activeName: 'first',
-      userId: null
+      userId: null,
+      percentage: '',
+      look: {
+        factoryCode: ''
+      }
 
     }
   },
@@ -180,6 +204,7 @@ export default {
     getSysConfig() {
       getSystemConfigData().then(response => {
         this.factoryName = response.systemSet.factoryName
+        this.look.factoryCode = response.systemSet.factoryCode
         localStorage.setItem('factoryName'.this.factoryName)
         // layer.msg('layer集成成功!')
       })
@@ -206,6 +231,17 @@ export default {
       if (this.activeName === 'second') {
         this.$refs.userId.focus()
       }
+    },
+    focuAction(str) {
+      console.log('获取焦点')
+      this.percentage = 10
+    },
+    inputAction(str) {
+      this.percentage = 100
+      console.log(str)
+    },
+    blurAction(str) {
+      console.log('失去焦点')
     },
     showPwd() {
       if (this.passwordType === 'password') {
@@ -323,6 +359,14 @@ export default {
       line-height: 1.58;
       opacity: .6;
     }
+    .login-container .login-form {
+      position: relative;
+      width: 520px;
+      max-width: 100%;
+      padding: 160px 35px 0;
+      margin: 0 auto;
+      overflow: hidden;
+  }
     .login-main {
       position: absolute;
       top: 0;

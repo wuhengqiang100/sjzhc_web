@@ -48,27 +48,27 @@
               </el-row>
               <el-row class="row-class compare-value" type="flex" justify="center">
                 <el-col :span="7">开始时间</el-col>
-                <el-col :span="13"><span style="font-size:12px">{{ card.startDate }}</span></el-col>
+                <el-col :span="13"><span>{{ card.startDate }}</span></el-col>
               </el-row>
-              <el-row class="row-class compare-value" type="flex" justify="center">
+              <!--  <el-row class="row-class compare-value" type="flex" justify="center">
                 <el-col :span="7">结束时间</el-col>
                 <el-col :span="13"><span style="font-size:12px">{{ card.endDate }}</span></el-col>
-              </el-row>
+              </el-row> -->
               <el-row class="row-class compare-value" type="flex" justify="center">
-                <el-col :span="8">总长度</el-col>
-                <el-col :span="12"><span>10000</span></el-col>
+                <el-col :span="7">总长度</el-col>
+                <el-col :span="13"><span>10000</span></el-col>
               </el-row>
             </el-col>
           </el-col>
         </el-row>
         <el-row style="margin-top:5px;margin-bottom:5px;">
           <el-col style="margin-left:20px" :span="3">生产进度</el-col>
-          <el-col :span="19"><el-progress style="margin-left:30px" :percentage="50" status="success" /></el-col>
+          <el-col :span="19"><el-progress style="margin-left:30px" :percentage="card.progressRate" status="success" /></el-col>
         </el-row>
       </div>
 
       <div class="card-footer">
-        <dv-charts class="left" :option="card.defectCircle" style="height:200px" />
+        <dv-charts class="left" :option="card.defectCircle" style="height:180px" />
         <dv-decoration-2 :reverse="true" style="width:5px;height:180px;" />
         <dv-capsule-chart :config="card.defectDegree" style="width:200px;height:150px;margin-top:30px" />
 
@@ -171,18 +171,14 @@ export default {
           // templateName: this.monitorList[i].templateName,
           shiftTeam: this.monitorList[i].shiftTeam,
           startDate: this.monitorList[i].startDate,
-          endDate: this.monitorList[i].endDate,
+          // endDate: this.monitorList[i].endDate,
           curLenth: this.monitorList[i].curLenth,
-          // totalNum: this.monitorList[i].totalNum,
-          // goodNum: this.monitorList[i].goodNum,
-          // doubtNum: this.monitorList[i].doubtNum,
-          // wasteNum: this.monitorList[i].wasteNum,
-          // goodRate: this.monitorList[i].goodRate,
+          totalLenth: this.monitorList[i].totalLenth,
+          progressRate: this.monitorList[i].progressRate,
           machineSpeed: this.monitorList[i].machineSpeed,
           machineId: this.monitorList[i].machineId,
           machineName: this.monitorList[i].machineName,
           status: this.monitorList[i].status,
-
           title: this.monitorList[i].machineName,
           defectCircle: {
             series: [
@@ -209,15 +205,15 @@ export default {
             data: [
               {
                 name: '轻微废',
-                value: this.monitorList[i].slightWaste
+                value: this.monitorList[i].level0
               },
               {
                 name: '一般废',
-                value: this.monitorList[i].generalWaste
+                value: this.monitorList[i].level1
               },
               {
                 name: '严重废',
-                value: this.monitorList[i].seriousWaste
+                value: this.monitorList[i].level2
               }
             ],
             colors: ['#96bfff', '#32c5e9', '#e690d1'],
@@ -340,17 +336,17 @@ export default {
   span {
     font-size: 20px;
     color: #00c0ff;
-    margin-left: 22px;
+    margin-left: 20px;
   }
 }
 
 .compare-value {
   height: 22px;
-  line-height: 24px;
-  font-size: 16px;
+  line-height: 20px;
+  font-size: 12px;
 
   span {
-    margin-left: 22px;
+    margin-left: 20px;
   }
 }
 /* .el-row {
