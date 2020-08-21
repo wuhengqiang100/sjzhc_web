@@ -16,6 +16,17 @@ export function login(data) {
   })
 }
 
+/**
+ * 刷卡登陆接口
+ */
+export function loginCard(cardId) {
+  return request({
+    url: '/common/login',
+    method: 'get',
+    params: { cardId }
+  })
+}
+
 export function getInfo(token) {
   return request({
     url: '/common/info',

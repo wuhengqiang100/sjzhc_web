@@ -49,35 +49,17 @@
                 <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登陆</el-button>
               </el-tab-pane>
               <el-tab-pane v-if="look.factoryCode==1" label="刷卡登陆" name="second">
-                <!--   <el-form-item>
-                   <span class="svg-container">
-                    <svg-icon icon-class="user" />
-                  </span>
-                  <el-progress type="circle" :percentage="percentage" status="success" />
-                  <el-input
-                    ref="userId"
-                    v-model="userId"
-                    prop="userId"
-                    clearable
-                    placeholder="userId"
-                    name="userId"
-                    type="text"
-                    autocomplete="on"
-                    @focus="focuAction"
-                    @blur="blurAction"
-                    @change="inputAction"
-                  />
-                </el-form-item> -->
-                <el-progress type="circle" :percentage="percentage" status="success" />
+                <el-progress type="circle" :percentage="percentage" status="success" style="margin-left:30%;margin-top:9px;" />
                 <el-input
-                  ref="userId"
-                  v-model="userId"
-                  prop="userId"
+                  ref="rfid"
+                  v-model="rfid"
+                  prop="rfid"
                   clearable
-                  placeholder="userId"
-                  name="userId"
+                  placeholder="rfid"
+                  name="rfid"
                   type="text"
                   autocomplete="on"
+
                   @focus="focuAction"
                   @blur="blurAction"
                   @change="inputAction"
@@ -87,9 +69,6 @@
           </el-form>
           <div class="centerDownload">
             <p>推荐使用:  <a :href="firefoxDowbload">火狐浏览器</a>  <a :href="flashDowbload">火狐Flash插件</a></p>
-            <!--    <p><button type="button" class="layui-btn">
-              <i class="layui-icon">&#xe608;</i> 添加
-            </button></p> -->
           </div>
           <div class="footer">
             <img :src="kexinLogo" class="footerLogo"><span>Copyright ©2008-2020 <a href="http://www.cbpm-kexin.com/" target="_black">深圳市中钞科信金融科技有限公司</a> 版权所有</span>
@@ -107,6 +86,7 @@
 // import layer from 'layui-layer'
 import SocialSign from './components/SocialSignin'
 import { getSystemConfigData } from '@/api/systemSet'
+import layer from 'layui-layer'
 
 export default {
   name: 'Login',
@@ -165,7 +145,7 @@ export default {
       redirect: undefined,
       otherQuery: {},
       activeName: 'first',
-      userId: null,
+      rfid: null,
       percentage: '',
       look: {
         factoryCode: ''
@@ -229,16 +209,34 @@ export default {
       console.log(this.activeName)
       // 快捷登陆
       if (this.activeName === 'second') {
-        this.$refs.userId.focus()
+        this.$ref.rfid.focus()
+        return true
       }
+      return false
     },
     focuAction(str) {
       console.log('获取焦点')
       this.percentage = 10
     },
     inputAction(str) {
-      this.percentage = 100
+      console.log('刷卡数据过去成功')
       console.log(str)
+      this.$store
+        .dispatch('user/loginCard', str)
+        .then(() => {
+          layer.msg('刷卡登陆成功')
+          this.percentage = 100
+          setTimeout(() => {
+            this.$router.push({
+              path: this.redirect || '/',
+              query: this.otherQuery
+            })
+            this.loading = false
+          }, 500)
+        })
+        .catch(() => {
+          this.percentage = 1
+        })
     },
     blurAction(str) {
       console.log('失去焦点')

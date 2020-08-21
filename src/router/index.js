@@ -113,8 +113,8 @@ export const constantRoutes = [
         meta: { title: '主页', icon: 'dashboard', affix: true }
       }
     ]
-  },
-  {
+  }
+/*   {
     path: '/documentation',
     component: Layout,
     hidden: true,
@@ -157,7 +157,7 @@ export const constantRoutes = [
         meta: { title: 'Profile', icon: 'user', noCache: true }
       }
     ]
-  }
+  } */
 ]
 
 /**

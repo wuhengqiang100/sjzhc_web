@@ -4,7 +4,7 @@
     <div class="filter-container">
       <el-row>
         <el-col :span="10">
-          <el-card class="box-card" style="height:800px;max-height:850px;overflow-y: scroll;">
+          <el-card class="box-card" style="height:800px;max-height:850px;overflow-y: scroll;overflow-x: scroll;">
             <div slot="header" class="clearfix">
               <span><el-tag effect="dark">待审核车次</el-tag></span>
               <span style="float: right; padding: 3px 0">
@@ -77,7 +77,7 @@
         </el-col>
         <el-col :span="13">
           <el-row>
-            <el-card class="box-card" style="height:800px;max-height:850px;overflow-y: scroll;">
+            <el-card class="box-card" style="height:800px;max-height:850px;overflow-y: scroll;overflow-x: scroll;">
               <div slot="header" class="clearfix">
                 <span><el-tag effect="dark" type="success">已审核车次</el-tag></span>
                 <span style="float: right; padding: 3px 0;width:auto">
@@ -647,6 +647,7 @@ export default {
           this.refresh() // 定时刷新获取数据
         }, 2 * 2000)
       } else {
+        this.refresh()
         clearInterval(this.interval)
       }
     }

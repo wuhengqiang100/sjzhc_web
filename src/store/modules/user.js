@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/user'
+import { login, loginCard, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 import { getSystemConfigData } from '@/api/systemSet'
@@ -57,6 +57,20 @@ const actions = {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
+        resetRouter()
+        const { data } = response
+        commit('SET_TOKEN', data.token)
+        setToken(data.token)
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  loginCard({ commit }, cardId) {
+    return new Promise((resolve, reject) => {
+      loginCard(cardId.trim()).then(response => {
         resetRouter()
         const { data } = response
         commit('SET_TOKEN', data.token)
