@@ -44,7 +44,7 @@
     "url": "https://github.com/PanJiaChen/vue-element-admin/issues"
   },
   "dependencies": {
-    "@antv/g2": "^4.0.14",
+    "@antv/g2": "^4.0.15",
     "@jiaminghi/data-view": "^2.7.4",
     "animate.css": "^3.7.2",
     "ant-design-vue": "^1.5.3",
@@ -81,7 +81,7 @@
     "xlsx": "0.14.1"
   },
   "devDependencies": {
-    "@antv/g2plot": "^1.1.16",
+    "@antv/g2plot": "^1.1.24",
     "@babel/core": "7.0.0",
     "@babel/register": "7.0.0",
     "@vue/cli-plugin-babel": "3.5.3",
