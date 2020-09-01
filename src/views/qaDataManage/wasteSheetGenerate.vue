@@ -3,16 +3,16 @@
   <div class="app-container">
     <el-row>
       <el-col :span="10">
-        <div class="grid-content">
-          <el-row :gutter="20" style="width: 100%">
+        <!-- <div class="grid-content"> -->
+        <el-row :gutter="20" style="width: 100%">
 
-            <!-- <el-col :span="6"> -->
-            <!-- <el-card class="box-card"> -->
-            <!--  <div slot="header" class="clearfix">
+          <!-- <el-col :span="6"> -->
+          <!-- <el-card class="box-card"> -->
+          <!--  <div slot="header" class="clearfix">
                   <span>整合数据操作</span>
                   <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
                 </div> -->
-            <!--            <h3>缺陷查询</h3>
+          <!--            <h3>缺陷查询</h3>
             <el-divider content-position="left">缺陷查询</el-divider>
             <el-row>
               <el-col :span="20">
@@ -63,155 +63,163 @@
 
               </el-col>
             </el-row> -->
-            <!-- <h3>数据操作</h3> -->
+          <!-- <h3>数据操作</h3> -->
 
-            <!-- <el-divider content-position="left">数据操作</el-divider> -->
-            <el-row>
-              <el-col :span="6">
-                <el-row>
-                  <el-col :span="16">
-                    缺陷合并距离
-                  </el-col>
-                  <el-col :span="8">
-                    <el-button type="warning" size="mini" class="filter-item" icon="el-icon-scissors">整合</el-button>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="16">
-                    <el-input v-model="input" size="mini" class="filter-item" placeholder="m(码)" style="width:65px;" />
-                    <!-- <el-input-number v-model="num" size="mini" class="filter-item" controls-position="right" :min="1" :max="20" @change="handleChange" /> -->
+          <!-- <el-divider content-position="left">数据操作</el-divider> -->
+          <el-row>
+            <el-col :span="8">
+              <el-row>
+                <el-col :span="9">
+                  卷号：<span style="font-size:12px;color:#13ce66">6T88891</span>
+                </el-col>
+                <el-col :span="9">
+                  缺陷合并距离
+                </el-col>
+                <el-col :span="4">
+                  <el-button type="warning" size="mini" class="filter-item" icon="el-icon-scissors">整合</el-button>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="9">
+                  品种：<span style="font-size:12px;color:#13ce66">6T</span>
+                </el-col>
+                <el-col :span="9">
+                  <el-input v-model="input" size="mini" class="filter-item" placeholder="m(码)" style="width:65px;" />
+                  <!-- <el-input-number v-model="num" size="mini" class="filter-item" controls-position="right" :min="1" :max="20" @change="handleChange" /> -->
 
-                  </el-col>
-                  <el-col :span="8">
-                    <el-button type="success" size="mini" class="filter-item" icon="el-icon-scissors">提交</el-button>
+                </el-col>
+                <el-col :span="4">
+                  <!--出单:暂时只出excel,后面再考虑图片-->
+                  <el-button type="success" size="mini" class="filter-item" icon="el-icon-upload2">出单</el-button>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="1">
+              <el-divider style="height:20px" direction="vertical" />
+            </el-col>
 
-                  </el-col>
-                </el-row>
-              </el-col>
-              <el-col :span="1">
-                <el-divider direction="vertical" />
-              </el-col>
+            <el-col :span="14">
+              <el-row>
+                <el-col :span="7">
+                  起始根
+                  <el-input v-model="input" size="mini" class="filter-item" style="width:65px;" />
+                  <!-- <el-input-number v-model="num" size="mini" class="filter-item" controls-position="right" :min="1" :max="20" /> -->
+                </el-col>
+                <el-col :span="7">
+                  起始码
+                  <el-input v-model="input" size="mini" class="filter-item" style="width:65px;" />
+                  <!-- <el-input-number v-model="num" size="mini" class="filter-item" controls-position="right" :min="1" :max="20" /> -->
+                </el-col>
+                <el-col :span="7">
+                  作废情况
+                  <el-input v-model="input" size="mini" class="filter-item" style="width:65px;" />
+                  <!-- <el-input v-model="input" size="mini" class="filter-item" style="width:65px;" /> -->
+                </el-col>
+                <el-col :span="3">
+                  <!--选中一个剔废信息进行调整,调整逻辑具体根据业务逻辑更改-->
+                  <el-button style="float: right; " type="success" size="mini" class="filter-item" icon="el-icon-edit">选中</el-button>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="7">
+                  结束根
+                  <el-input v-model="input" size="mini" class="filter-item" style="width:65px;" />
+                  <!-- <el-input-number v-model="num" size="mini" class="filter-item" controls-position="right" :min="1" :max="20" /> -->
+                </el-col>
+                <el-col :span="7">
+                  终止码
+                  <el-input v-model="input" size="mini" class="filter-item" style="width:65px;" />
+                  <!-- <el-input-number v-model="num" size="mini" class="filter-item" controls-position="right" :min="1" :max="20" /> -->
+                </el-col>
+                <el-col :span="7">
+                  作废原因
+                  <el-input v-model="input" size="mini" class="filter-item" style="width:65px;" />
+                </el-col>
+                <el-col :span="3">
+                  <!--选中一个剔废信息进行调整,更改外作废的区域面积后点击调整,区域图上面的面积要更新-->
+                  <el-button style="float: right; " type="success" size="mini" class="filter-item" icon="el-icon-check" @click="refreshData">调整</el-button>
+                </el-col>
+              </el-row>
 
-              <el-col :span="17">
-                <el-row>
-                  <el-col :span="6">
-                    起始根
-                    <el-input v-model="input" size="mini" class="filter-item" style="width:65px;" />
-                    <!-- <el-input-number v-model="num" size="mini" class="filter-item" controls-position="right" :min="1" :max="20" /> -->
-                  </el-col>
-                  <el-col :span="7">
-                    起始码
-                    <el-input v-model="input" size="mini" class="filter-item" style="width:65px;" />
-                    <!-- <el-input-number v-model="num" size="mini" class="filter-item" controls-position="right" :min="1" :max="20" /> -->
-                  </el-col>
-                  <el-col :span="7">
-                    作废情况
-                    <el-input v-model="input" size="mini" class="filter-item" style="width:65px;" />
-                    <!-- <el-input v-model="input" size="mini" class="filter-item" style="width:65px;" /> -->
-                  </el-col>
-                  <el-col :span="4">
-                    <el-button style="float: right; " type="success" size="mini" class="filter-item" icon="el-icon-scissors">调整</el-button>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="6">
-                    结束根
-                    <el-input v-model="input" size="mini" class="filter-item" style="width:65px;" />
-                    <!-- <el-input-number v-model="num" size="mini" class="filter-item" controls-position="right" :min="1" :max="20" /> -->
-                  </el-col>
-                  <el-col :span="7">
-                    终止码
-                    <el-input v-model="input" size="mini" class="filter-item" style="width:65px;" />
-                    <!-- <el-input-number v-model="num" size="mini" class="filter-item" controls-position="right" :min="1" :max="20" /> -->
-                  </el-col>
-                  <el-col :span="7">
-                    作废原因
-                    <el-input v-model="input" size="mini" class="filter-item" style="width:65px;" />
-                  </el-col>
-                  <el-col :span="4">
-                    <el-button style="float: right; " type="success" size="mini" class="filter-item" icon="el-icon-scissors">出单</el-button>
-                  </el-col>
-                </el-row>
-
-              </el-col>
-            </el-row>
-
-            <!-- </el-card> -->
-
-            <!-- </el-col> -->
+            </el-col>
           </el-row>
-          <el-row :gutter="20" style="width: 100%">
-            <el-table
-              ref="tableData"
-              :key="tableKeyCan"
-              empty-text="整合后才有剔废单数据"
-              height="300"
-              stripe
-              fit
-              highlight-current-row
-              :data="tableData"
-              tooltip-effect="dark"
-              style="width: 100%"
-              @selection-change="handleAlreadyAuditSelectionChange"
-            >
-              <el-table-column prop="id" type="selection" width="30" />
-              <!-- <el-table-column prop="data1" sortable label="缺陷序号" width="120" class="link-type">
+
+          <!-- </el-card> -->
+
+          <!-- </el-col> -->
+        </el-row>
+        <el-row :gutter="20" style="width: 100%">
+          <el-table
+            ref="tableData"
+            :key="tableKeyCan"
+            empty-text="整合后才有剔废单数据"
+            height="300"
+            stripe
+            fit
+            highlight-current-row
+            :data="tableData"
+            tooltip-effect="dark"
+            style="width: 100%"
+            @selection-change="handleAlreadyAuditSelectionChange"
+          >
+            <el-table-column prop="id" type="selection" width="30" />
+            <!-- <el-table-column prop="data1" sortable label="缺陷序号" width="120" class="link-type">
               <template slot-scope="{row}">
                 <span class="link-type" @click="handleEditNoteAlready(row)">{{ row.wipJobs.cartNumber }}</span>
               </template>
             </el-table-column> -->
-              <el-table-column prop="data1" sortable label="剔废序号" width="80" />
-              <!-- <el-table-column prop="data2" sortable label="缺陷等级" width="100" :filters="filterFei" :filter-method="filterHandler">
+            <el-table-column prop="data1" sortable label="剔废序号" width="80" />
+            <!-- <el-table-column prop="data2" sortable label="缺陷等级" width="100" :filters="filterFei" :filter-method="filterHandler">
                 <template slot-scope="scope">
                   <el-tag v-if="scope.row.data2===1" effect="plain" type="success">轻微废</el-tag>
                   <el-tag v-else-if="scope.row.data2===2" effect="plain">一般废</el-tag>
                   <el-tag v-else-if="scope.row.data2===3" effect="plain" type="danger">严重废</el-tag>
                 </template>
               </el-table-column> -->
-              <el-table-column prop="data3" sortable label="幅" width="70" :filters="filterFu" :filter-method="filterHandler" />
-              <el-table-column prop="data3" sortable label="起始根" width="80" />
-              <el-table-column prop="data4" sortable label="结束根" width="80" />
-              <el-table-column prop="data5" sortable label="起始码" width="80" />
-              <el-table-column prop="data6" sortable label="结束码" width="80" />
-              <el-table-column prop="data7" sortable label="质量描述" min-width="80" :filters="filterErrorType" :filter-method="filterHandler" />
-            </el-table>
-          </el-row>
-          <el-row :gutter="20" style="width: 100%">
-            <el-table
-              ref="tableData1"
-              :key="tableKeyCan"
-              empty-text="请至少选中一条剔废信息"
-              height="440"
-              stripe
-              fit
-              highlight-current-row
-              :data="tableData1"
-              tooltip-effect="dark"
-              style="width: 100%"
-              @selection-change="handleAlreadyAuditSelectionChange"
-            >
-              <el-table-column prop="id" type="selection" width="30" />
-              <!-- <el-table-column prop="data1" sortable label="缺陷序号" width="120" class="link-type">
+            <el-table-column prop="data3" sortable label="幅" width="70" :filters="filterFu" :filter-method="filterHandler" />
+            <el-table-column prop="data3" sortable label="起始根" width="80" />
+            <el-table-column prop="data4" sortable label="结束根" width="80" />
+            <el-table-column prop="data5" sortable label="起始码" width="80" />
+            <el-table-column prop="data6" sortable label="结束码" width="80" />
+            <el-table-column prop="data7" sortable label="作废原因" min-width="80" :filters="filterErrorType" :filter-method="filterHandler" />
+          </el-table>
+        </el-row>
+        <el-row :gutter="20" style="width: 100%">
+          <el-table
+            ref="tableData1"
+            :key="tableKeyCan"
+            empty-text="请至少选中一条剔废信息"
+            height="440"
+            stripe
+            fit
+            highlight-current-row
+            :data="tableData1"
+            tooltip-effect="dark"
+            style="width: 100%"
+            @selection-change="handleAlreadyAuditSelectionChange"
+          >
+            <el-table-column prop="id" type="selection" width="30" />
+            <!-- <el-table-column prop="data1" sortable label="缺陷序号" width="120" class="link-type">
               <template slot-scope="{row}">
                 <span class="link-type" @click="handleEditNoteAlready(row)">{{ row.wipJobs.cartNumber }}</span>
               </template>
             </el-table-column> -->
-              <el-table-column prop="data1" sortable label="缺陷序号" width="80" />
-              <el-table-column prop="data2" sortable label="缺陷等级" width="100" :filters="filterFei" :filter-method="filterHandler">
-                <template slot-scope="scope">
-                  <el-tag v-if="scope.row.data2===1" effect="plain" type="success">轻微废</el-tag>
-                  <el-tag v-else-if="scope.row.data2===2" effect="plain">一般废</el-tag>
-                  <el-tag v-else-if="scope.row.data2===3" effect="plain" type="danger">严重废</el-tag>
-                </template>
-              </el-table-column>
-              <el-table-column prop="data3" sortable label="幅" width="70" :filters="[{text: '第一幅', value: '1'}, {text: '第二幅', value: '2'}]" :filter-method="filterHandler" />
-              <el-table-column prop="data4" sortable label="根" width="50" />
-              <el-table-column prop="data5" sortable label="起始码" width="80" />
-              <el-table-column prop="data6" sortable label="结束码" width="80" />
-              <el-table-column prop="data7" sortable label="质量描述" min-width="80" :filters="filterErrorType" :filter-method="filterHandler" />
-            </el-table>
-          </el-row>
-        </div>
+            <el-table-column prop="data1" sortable label="缺陷序号" width="80" />
+            <el-table-column prop="data2" sortable label="缺陷等级" width="100" :filters="filterFei" :filter-method="filterHandler">
+              <template slot-scope="scope">
+                <el-tag v-if="scope.row.data2===1" effect="plain" type="success">轻微废</el-tag>
+                <el-tag v-else-if="scope.row.data2===2" effect="plain">一般废</el-tag>
+                <el-tag v-else-if="scope.row.data2===3" effect="plain" type="danger">严重废</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column prop="data3" sortable label="幅" width="70" :filters="[{text: '第一幅', value: '1'}, {text: '第二幅', value: '2'}]" :filter-method="filterHandler" />
+            <el-table-column prop="data4" sortable label="根" width="50" />
+            <el-table-column prop="data5" sortable label="起始码" width="80" />
+            <el-table-column prop="data6" sortable label="结束码" width="80" />
+            <el-table-column prop="data7" sortable label="质量描述" min-width="80" :filters="filterErrorType" :filter-method="filterHandler" />
+          </el-table>
+        </el-row>
+        <!-- </div> -->
       </el-col>
       <el-col offset="1" :span="13" class="row-right">
         <div class="grid-content">
@@ -233,8 +241,8 @@ import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 // import { getToken } from '@/utils/auth'
 import { Chart } from '@antv/g2'
-import button from 'ant-design-vue/lib/button/button'
-import { type } from 'jquery'
+// import button from 'ant-design-vue/lib/button/button'
+// import { type } from 'jquery'
 
 export default {
   name: 'WasteSheetGenerate',
@@ -244,39 +252,41 @@ export default {
   filters: {},
   data() {
     return {
+      // 所有数据为测试数据,请根据实际情况更改
       filterFei: [{ text: '轻微废', value: 1 }, { text: '一般废', value: 2 }, { text: '严重废', value: 3 }],
       filterFu: [{ text: '第一幅', value: 1 }, { text: '第二幅', value: 2 }, { text: '第三幅', value: 3 }, { text: '第四幅', value: 4 }, { text: '第五幅', value: 5 }, { text: '第六幅', value: 6 }],
       filterErrorType: [{ text: '白斑', value: '白斑' }, { text: '破洞', value: '破洞' }],
       // input: '10',
-      tableData: [{
-        id: 0,
-        data1: '1000',
-        data2: 1,
-        data3: 2,
-        data4: '49',
-        data5: '2000',
-        data6: '2005',
-        data7: '破洞'
-      }, {
-        id: 1,
-        data1: '1001',
-        data2: 2,
-        data3: 2,
-        data4: '49',
-        data5: '2000',
-        data6: '2005',
-        data7: '白斑'
-      }, {
-        id: 2,
-        data1: '1002',
-        data2: 3,
-        data3: 2,
-        data4: '49',
-        data5: '2000',
-        data6: '2005',
-        data7: '白斑'
+      tableData: [
+        {
+          id: 0,
+          data1: '1000',
+          data2: 1,
+          data3: 2,
+          data4: '49',
+          data5: '2000',
+          data6: '2005',
+          data7: '破洞'
+        }, {
+          id: 1,
+          data1: '1001',
+          data2: 2,
+          data3: 2,
+          data4: '49',
+          data5: '2000',
+          data6: '2005',
+          data7: '白斑'
+        }, {
+          id: 2,
+          data1: '1002',
+          data2: 3,
+          data3: 2,
+          data4: '49',
+          data5: '2000',
+          data6: '2005',
+          data7: '白斑'
 
-      }],
+        }],
       tableData1: [
         {
           id: 0,
@@ -690,91 +700,11 @@ export default {
       value3: '0',
       checkList: ['缺陷溢出', '光异', '镂空', '正面缺陷', '背面缺陷'],
       num: 1,
-      zhenghevalue: true
-    }
-  },
-  created() {
-    this.getList()
-  },
-  mounted() {
-    this.scatterList()
-    // this.areaList()
-  },
-  methods: {
-    // 有加载圈的加载数据列表
-    getList() {
-      this.refresh()
-    },
-    resetListQuery() {
-
-    },
-    filterHandler(value, row, column) {
-      const property = column['property']
-      return row[property] === value
-    },
-    // 区间面积图
-    areaList() {
-      const data = [
-        { row: 100, col: [1000, 2000] },
-        { row: 200, col: [1000, 2000] }
-      ]
-
-      const chart = new Chart({
-        container: 'container',
-        autoFit: true,
-        height: 500
-      })
-
-      chart.scale({
-        col: {
-          sync: true,
-          nice: true
-        },
-        row: {
-          sync: true,
-          nice: true
-        }
-      })
-      chart.tooltip({
-        shared: true,
-        showMarkers: false,
-        showCrosshairs: true
-      })
-
-      const v1 = chart.createView({
-        padding: 32
-      })
-      v1.data(data)
-      v1.scale('col', {
-        alias: '温度区间'
-      })
-      v1.area()
-        .position('row*col')
-
-      const v2 = chart.createView({
-        padding: 32
-      })
-      // v2.data(averages)
-      v2.axis(false)
-      v2.scale('col', {
-        alias: '平均温度'
-      })
-      v2.line().position('row*col')
-      v2.point()
-        .position('row*col')
-        .size(4)
-        .shape('circle')
-        .style({
-          stroke: '#fff',
-          lineWidth: 1,
-          fillOpacity: 1
-        })
-
-      chart.render()
-    },
-    // 散点图
-    scatterList() {
-      const data = [
+      zhenghevalue: true,
+      chart: undefined,
+      v: undefined,
+      v1: undefined,
+      data: [
         {
           'type': '轻微废',
           'row': 100,
@@ -805,28 +735,61 @@ export default {
           'row': 660,
           'col': 8876
         }
+      ],
+      data1: [
+        { 'row': 100, 'col': [800, 3000] },
+        { 'row': 400, 'col': [800, 3000] }
       ]
-      const data1 = [
-        { row: 100, col: [800, 3000] },
-        { row: 400, col: [800, 3000] }
-      ]
+    }
+  },
+  created() {
 
+  },
+  mounted() {
+    this.createChart()
+    this.chart.render()
+
+    // 捕获剔废面积点击事件
+    /** 根据(a,b,c,d) a:最小根 b:最大根 c:最小码(米) d:最大码(米)
+       * 基本逻辑:点击一个剔废面积,左侧剔废table中勾选checkbox,并排序显示在table的前面
+       * 缺陷table则勾选当前点击的剔废长方形中的缺陷并排序显示在table前面
+       * 注意:勾选的剔废信息,才在右边显示长方形;
+       *      勾选和没有勾选的缺陷信息都要在右边显示出来
+       */
+    this.v = this.scatterList(this.chart)
+    this.v1 = this.areaList(this.chart)
+    this.loadChart(this.chart)
+  },
+  methods: {
+    // 有加载圈的加载数据列表
+    getList() {
+      this.refresh()
+    },
+    resetListQuery() {
+
+    },
+    filterHandler(value, row, column) {
+      const property = column['property']
+      return row[property] === value
+    },
+    // 创建图表
+    createChart() {
       // 入口chart
-      const chart = new Chart({
+      this.chart = new Chart({
         container: 'container',
         autoFit: true,
         // width:500,
-        height: 800,
+        height: 815,
         padding: [20, 20, 50, 50]
-        // appendPadding: [20, 20, 50, 50]
+      // appendPadding: [20, 20, 50, 50]
       })
 
-      /*   chart.scale({
+      /*   this.chart.scale({
         row: { sync: 'value', nice: true },
         col: { sync: 'value', nice: true }
       }) */
       // x轴设置
-      chart.axis('row', {
+      this.chart.axis('row', {
         position: 'bottom',
         nice: true,
         title: {
@@ -837,7 +800,7 @@ export default {
         line: {
           lineWidth: 8 // 设置线的宽度
 
-          // lineDash: [3, 3] // 设置虚线样式
+        // lineDash: [3, 3] // 设置虚线样式
         },
         grid: {
           align: 'center', // 声明网格顶点从两个刻度中间开始，默认从刻度点开始
@@ -859,7 +822,7 @@ export default {
         }
 
       })
-      chart.scale('row', {
+      this.chart.scale('row', {
         min: 0,
         max: 996,
         alias: '幅/根',
@@ -868,7 +831,7 @@ export default {
         ticks: [0, 166, 332, 498, 664, 830, 996]
       })
       // y轴刻度绘制
-      chart.axis('col', {
+      this.chart.axis('col', {
         position: 'left',
         nice: true,
         title: {
@@ -882,24 +845,24 @@ export default {
           lineDash: [3, 3] // 设置虚线样式
         }
       })
-      chart.scale('col', {
+      this.chart.scale('col', {
         alias: '码',
         min: 0,
         max: 10000,
         tickCount: 10,
         type: 'linear'// 度量方式
-        // tickCount: 6 // 多少个坐标轴
-        // tickInterval: 1000 // 间隔多少
-        // ticks: [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000]
-        // formatter: (val) => `￥${val}`
+      // tickCount: 6 // 多少个坐标轴
+      // tickInterval: 1000 // 间隔多少
+      // ticks: [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000]
+      // formatter: (val) => `￥${val}`
       })
-      chart.tooltip({
+      this.chart.tooltip({
         shared: true, // 合并数据
         showCrosshairs: true // 展示辅助线
       })
 
       // 起始位置（左上角）
-      chart.guide().text({
+      this.chart.guide().text({
         top: true, // 指定 giude 是否绘制在 canvas 最上层，默认为 false, 即绘制在最下层
         position: ['start', 'end'], // 文本的起始位置，值为原始数据值，支持 callback
         content: '(m)', // 显示的文本内容
@@ -907,27 +870,67 @@ export default {
           fill: '#9BB7EF', // 文本颜色
           fontSize: '12' // 文本大小
         } // 文本的图形样式属性
-        // offsetX: -25, // x 方向的偏移量
-        // offsetY: -20 // y 方向偏移量
+      // offsetX: -25, // x 方向的偏移量
+      // offsetY: -20 // y 方向偏移量
       })
       // 结束位置（右下角）
-      chart.guide().text({
+      this.chart.guide().text({
         top: true, // 指定 giude 是否绘制在 canvas 最上层，默认为 false, 即绘制在最下层
         position: ['end', 'start'], // 文本的起始位置，值为原始数据值，支持 callback
         content: '(幅/根)', // 显示的文本内容
         style: { // 文本的图形样式属性
           fill: '#9BB7EF', // 文本颜色
-          fontSize: '12' // 文本大小
+          fontSize: '10' // 文本大小
         }, // 文本的图形样式属性
         offsetX: -40 // x 方向的偏移量
-        // offsetY: -20 // y 方向偏移量
+      // offsetY: -20 // y 方向偏移量
       })
+      return this.chart
+    // chart.render()
+    },
+    // 加载图表
+    loadChart(chart) {
+      chart.render()
+    },
 
+    // 区间面积图
+    areaList(chart) {
+      // 面积图
+      const v1 = chart.createView({
+        padding: 32
+      })
+      v1.scale({
+        row: {
+          alias: '根'
+        },
+        col: {
+        // alias: '码区间',
+          nice: true
+        }
+      })
+      v1.tooltip({
+        showTitle: false,
+        showMarkers: false
+      })
+      v1.area()// 面积图
+        .position('row*col').tooltip('type*row*col')
+      v1.data(this.data1)
+
+      // 监听面积点击事件
+      v1.on('element:click', (ev) => {
+        const lineElement = ev.target.get('element')
+        const data = lineElement.getModel().data // 数组
+        console.log('面积:', data)
+      })
+      return v1
+    },
+    // 散点图
+    scatterList(chart) {
       const v = chart.createView({
         padding: 32
       })
 
-      v.data(data)
+      v.data(this.data)
       v.scale({
         type: {
           alias: '类型'
@@ -946,10 +949,10 @@ export default {
         shared: true, // 合并数据项
         follow: true, // tooltip 跟随鼠标
         crosshairs: {
-          // 配置 crosshairs 样式
+        // 配置 crosshairs 样式
           type: 'xy', // crosshairs 类型
           line: {
-            // crosshairs 线样式
+          // crosshairs 线样式
             style: {
               stroke: '#565656',
               lineDash: [4]
@@ -960,7 +963,7 @@ export default {
       v.point()// 点图
         .position('row*col')
         .tooltip('type*row*col')
-        // 文本标签配置
+      // 文本标签配置
         .label('col', {
           layout: { type: 'overlap' }, offset: 0,
           style: {
@@ -969,67 +972,13 @@ export default {
             lineWidth: 2
           }
         })
-        // .adjust('dodge')// 重叠的缺陷分组显示开
+      // .adjust('dodge')// 重叠的缺陷分组显示开
         .color('type')
         .shape('type', ['circle', 'square', 'triangle'])
-        .size(6)
+        .size(4)
         .style({
           fillOpacity: 0.85
         })
-
-      // 面积图
-      const v1 = chart.createView({
-        padding: 32
-      })
-      v1.scale({
-        row: {
-          alias: '根'
-        },
-        col: {
-          // alias: '码区间',
-          nice: true
-        }
-      })
-      v1.tooltip({
-        showTitle: false,
-        showMarkers: false
-      })
-      // v1.tooltip(true, {
-      //   showTitle: true,
-      //   inPlot: false,
-      //   showCrosshairs: true,
-      //   crosshairs: {
-      //     type: 'xy'
-      //   },
-      //   useHtml: true,
-
-      //   htmlContent: function(title, items) {
-      //     return '<div><ul><li>.....</li></ul></div>'
-      //   }
-      // })
-      // v1.tooltip({
-
-      //   // useHtml: true // true or false
-
-      // })
-      v1.area()// 面积图
-        .position('row*col').tooltip('type*row*col')
-      v1.data(data1)
-      // chart.interaction('legend-highlight')
-      // chart.interaction('tooltip') // 使用交互
-      // chart.interaction('element-active')
-      // chart.interaction('legend-visible-filter')
-      // chart.interaction('active-region')
-      // chart.interaction('drag-move')
-      // chart.interaction('view-zoom')
-      /*       chart.option('slider', {
-        start: 0.1,
-        end: 0.8,
-        trendCfg: {
-          isArea: false
-        }
-      }) */
-      chart.render()
 
       // 捕获缺陷点击事件
       v.on('point:click', (ev) => {
@@ -1037,21 +986,20 @@ export default {
         const data = lineElement.getModel().data // 数组
         console.log('点:', data)
       })
-      // 捕获剔废面积点击事件
-      v1.on('element:click', (ev) => {
-        const lineElement = ev.target.get('element')
-        const data = lineElement.getModel().data // 数组
-        console.log('面积:', data)
-      })
-
-      chart.on('dragstart', (ev) => {
-        const target = ev.target
-        if (target.isShape()) {
-          // target 可能是 canvas
-          // to do
-          console.log('dragstart', ev.target)
-        }
-      })
+      return v
+    },
+    // 重画区间面积图,该表区间的大小,根据需要构建区间面积函数
+    /**
+     * 这里简写了一个改变面积的函数,剔废table中选中的剔废信息,
+     * 都要在右侧换出对应的面积区间(长方形)
+     */
+    refreshData(v1) {
+      this.data1 = [
+        { 'row': 500, 'col': [800, 3000] },
+        { 'row': 800, 'col': [800, 3000] }
+      ]
+      this.v1.changeData(this.data1)
+      // this.v1.changeData(this.data1)
     }
 
   }
@@ -1171,6 +1119,14 @@ export default {
       }
     }
 
+}
+.el-divider--vertical {
+    display: inline-block;
+    width: 1px;
+    height: 4em;
+    margin: 0 8px;
+    vertical-align: middle;
+    position: relative;
 }
 .el-input-number{
   width:65px;

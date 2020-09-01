@@ -14,8 +14,8 @@ import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 // import { getToken } from '@/utils/auth'
 import { Chart } from '@antv/g2'
-import button from 'ant-design-vue/lib/button/button'
-import { type } from 'jquery'
+// import button from 'ant-design-vue/lib/button/button'
+// import { type } from 'jquery'
 
 export default {
   name: 'WasteSheetGenerate',
